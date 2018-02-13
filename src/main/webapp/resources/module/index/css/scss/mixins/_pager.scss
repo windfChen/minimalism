@@ -1,0 +1,51 @@
+.pager {
+  padding-left: 0;
+  list-style: none;
+  text-align: center;
+  @include clearfix;
+  li {
+    display: inline;
+    > a,
+    > span {
+      display: inline-block;
+      padding: 5px 14px;
+      background-color: $pagin-linkBg;
+      border: 1px solid $pagin-linkBorder;
+      color: $pagin-linkColor;
+      border-radius: 5px;
+    }
+
+    > a:hover,
+    > a:focus {
+      text-decoration: none;
+      background-color: $pagin-curBg;
+      border: 1px solid $pagin-curBorder;
+      color: $pagin-curColor;
+    }
+  }
+
+  .next {
+    > a,
+    > span {
+      float: right;
+    }
+  }
+
+  .previous {
+    > a,
+    > span {
+      float: left;
+    }
+  }
+
+  .disabled {
+    > a,
+    > a:hover,
+    > a:focus,
+    > span {
+      color: red;
+      background-color: $pagin-otherBorder;
+      cursor:pointer;
+    }
+  }
+}

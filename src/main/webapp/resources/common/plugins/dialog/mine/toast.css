@@ -1,0 +1,18 @@
+@charset "utf-8";
+.alert_window {
+	display:inline-block; 
+	position: fixed;
+    top: 20px;
+    left: 50%;
+    margin-left: -100px;
+}
+.alert_window .display {
+	box-sizing:border-box;
+	text-align: center;
+	font-size: 16px;
+	width:200px; height:50px;
+    padding: 12px;
+	/*background-image:url('./images/alert.png');*/
+	background-color: #fbf2f2;
+	color: #be1f24;
+}

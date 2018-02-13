@@ -1,0 +1,37 @@
+@mixin m($t:10px,$r:10px,$b:10px,$l:10px){
+    margin:$t $r $b $l;
+}
+@mixin mt($size:10px){
+     margin-top:$size ;
+}
+
+@mixin ml($size:10px){
+     margin-left:$size ;
+}
+
+@mixin mr($size:10px){
+     margin-left:$size ;
+}
+
+@mixin mb($size:10px){
+     padding-left:$size ;
+}
+
+@mixin p($t:10px,$r:10px,$b:10px,$l:10px){
+    padding:$t $r $b $l;
+}
+@mixin pt($size:10px){
+     padding-top:$size ;
+}
+
+@mixin pl($size:10px){
+     padding-left:$size ;
+}
+
+@mixin pr($size:10px){
+     padding-left:$size ;
+}
+
+@mixin pb($size:10px){
+     padding-left:$size ;
+}

@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAkDA,MAAM,GAAC,KAAK,EAFI,OAAW;;AAG3B,OAAO,GAAC,KAAK,EARG,OAAO",
+"sources": ["scss/mixins/_variables.scss"],
+"names": [],
+"file": "_variables.css"
+}

@@ -1,0 +1,6 @@
+//块级元素中心对齐
+@mixin center-block() {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}

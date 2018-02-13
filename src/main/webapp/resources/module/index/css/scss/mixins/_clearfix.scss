@@ -1,0 +1,18 @@
+//对于现代浏览器
+// 1.空间内容是避免Opera bug的一种方法
+// contenteditable属性包含在文档的其他地方。
+//否则会导致空格出现在元素的顶部和底部
+// clearfixed
+// 2.只有使用`table`而不是`block`才可以使用
+//`：before`包含子元素的顶部边距。
+
+@mixin clearfix() {
+  &:before,
+  &:after {
+    content: " "; // 1
+    display: table; // 2
+  }
+  &:after {
+    clear: both;
+  }
+}

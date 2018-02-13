@@ -86,6 +86,7 @@ public class PageReturn extends AbstractResponseRetrun {
 	@SuppressWarnings({"rawtypes" })
 	@Override
 	public String returnData(boolean success, String message, Object data) {
+
 		baseControler.paramenter.setValue(RESULT_SUCCESS_KEY, success);
 		if (data != null) {
 			baseControler.paramenter.setValue(RESULT_DATA_KEY, data);

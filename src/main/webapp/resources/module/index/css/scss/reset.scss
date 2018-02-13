@@ -1,0 +1,77 @@
+@import "mixins/image";
+@import "mixins/variables";
+@import "mixins/text-overflow";
+
+body,h1,h2,h3,h4,h5,h6,p,ul,ol,form { margin:0;}
+body { color:$linkColor; background:$bodyColor; font-size:14px; line-height:1.5;}
+body,input,textarea,select { font-family:"Microsoft YaHei", Helvetica, "Helvetica Neue", "SimSun", Tahoma, Arial, sans-serif;}
+ul,ol,li { padding-left:0; list-style-type:none;}
+img { border:0; vertical-align:bottom;}
+input,textarea,select { font-size:14px; outline:none; border:none; margin:0; padding:0;}
+input::-ms-clear{ display:none;} /* 去除IE下input自带的叉 */
+input:-webkit-autofill { -webkit-box-shadow: 0 0 0px 1000px white inset !important;} /* 去除chrome下输入框默认背景色 */
+input:focus, /* 去除chrome浏览器下文本框默认发光边框 */
+textarea:focus { outline:none; -webkit-tap-highlight-color:rgba(0,0,0,0); -webkit-user-modify:read-write-plaintext-only; }
+h1,h2,h3,h4,h5,h6 { font-weight:normal;}
+h4,h5,h6{ font-size:1em;}
+a {text-decoration:none;}
+
+input, input[type="text"], input[type="button"], input[type="submit"], input[type="reset"] { -webkit-appearance: none;}
+textarea {  -webkit-appearance: none;} 
+
+/*文字对齐*/
+.tl{ text-align: left;}.tc{ text-align: center;}.tr{ text-align: right;}
+
+.img-responsive{
+     width: 100%; height: auto;max-width: 100%; display: block; 
+}   
+/*公共适配--移动优先*/
+@for $i from 1 through 4{
+        $mz:5*$i;
+        .mt#{$mz}{margin-top:5px*$i};
+        .mb#{$mz}{margin-bottom: 5px*$i;};
+        .ml#{$mz}{margin-left: 5px*$i;};
+        .mr#{$mz}{margin-right: 5px*$i;}
+        .pt#{$mz}{padding-top:5px*$i}
+        .pb#{$mz}{padding-bottom:5px*$i}
+        .pl#{$mz}{padding-left:5px*$i}
+        .pr#{$mz}{padding-right:5px*$i}
+}
+
+/*小屏适配*/
+@media (max-width: $screen-sm-min) { 
+    m-hidden{
+         display: none;
+    }
+}
+/*大屏适配*/
+@media (min-width: $screen-sm-min) { 
+    @for $i from 1 through 20{
+        $mz:5*$i;
+        .mt-sm#{$mz}{margin-top:5px*$i};
+        .mb-sm#{$mz}{margin-bottom: 5px*$i;};
+        .ml-sm#{$mz}{margin-left: 5px*$i;};
+        .mr-sm#{$mz}{margin-right: 5px*$i;}
+        .pt-sm#{$mz}{padding-top:5px*$i}
+        .pb-sm#{$mz}{padding-bottom:5px*$i}
+        .pl-sm#{$mz}{padding-left:5px*$i}
+        .pr-sm#{$mz}{padding-right:5px*$i}
+    }
+}
+
+@media (min-width: $screen-md-min) { 
+    
+}
+
+@media (min-width: $screen-lg-min) { 
+   .lg-ml15{ margin-left: 15px;}
+ }
+
+/*N 行文字显示*/
+.title_p1{@include colp-overflow(1)}
+.title_p2{@include colp-overflow(2)}
+.title_p3{@include colp-overflow(3)}
+
+/* 单行文字溢出省略号显示 */
+.ell { text-overflow:ellipsis; white-space:nowrap; overflow:hidden;}
+.rel{ position: relative;}.abs{ position: absolute;}

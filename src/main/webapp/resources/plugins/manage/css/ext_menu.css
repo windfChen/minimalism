@@ -1,0 +1,106 @@
+
+.icon-cls {
+    background-image: url(../images/ext/class.gif) !important;
+}
+.icon-event {
+    background-image: url(../images/ext/event.gif) !important;
+}
+.icon-config {
+    background-image: url(../images/ext/config.gif) !important;
+}
+.icon-prop {
+    background-image: url(../images/ext/prop.gif) !important;
+}
+.icon-method {
+    background-image: url(../images/ext/method.gif) !important;
+}
+.icon-cmp {
+    background-image: url(../images/ext/cmp.gif) !important;
+}
+.icon-pkg {
+    background-image: url(../images/ext/pkg.gif) !important;
+}
+.icon-fav {
+    background-image: url(../images/ext/fav.gif) !important;
+}
+.icon-static {
+    background-image: url(../images/ext/static.gif) !important;
+}
+.icon-docs {
+    background-image: url(../images/ext/docs.gif) !important;
+}
+.icon-expand-all {
+    background-image: url(../images/ext/expand-all.gif) !important;
+}
+.icon-collapse-all {
+    background-image: url(../images/ext/collapse-all.gif) !important;
+}
+.icon-expand-members {
+    background-image: url(../images/ext/expand-members.gif) !important;
+}
+.icon-hide-inherited {
+    background-image: url(../images/ext/hide-inherited.gif) !important;
+}
+
+#legend li {
+	line-height:16px;
+}
+.item-icon {
+	vertical-align:top;
+	width:16px;
+	height:16px;
+	margin-right:6px;
+}
+.ext-ie .item-icon {
+	vertical-align:middle;
+}
+h3.home-title {
+	margin:5px 0;
+	font:bold 13px tahoma,arial,sans-serif;
+	color:#444;
+}
+
+.search-item {
+	margin:5px 5px 9px;
+	padding:0 5px 10px 0;
+}
+
+.search-item .member {
+	font:bold 12px tahoma,arial,sans-serif;
+	color:#444;
+	margin:5px;
+	overflow:hidden;
+	white-space:nowrap;
+	zoom:1;
+}
+
+.search-item .cls {
+	font:normal 12px tahoma,arial,sans-serif;
+	color:#444;
+	margin:5px;
+	overflow:hidden;
+	text-align:left;
+	white-space:nowrap;
+	zoom:1;
+}
+.search-item p {
+	font:normal 11px tahoma,arial,sans-serif;
+	clear:both;
+	margin: 0 5px 5px 28px;
+	color:#444;
+	zoom:1;
+}
+#search .loading-indicator {
+	position:static !important;
+}
+#search h3 {
+	font:normal 12px tahoma,arial,sans-serif;
+	color:#444;
+	margin:10px;
+}
+.inner-link .item-icon, .bookmark .item-icon{
+	margin-right:3px;
+}
+.inner-link, .bookmark {
+	margin-left:10px;
+}

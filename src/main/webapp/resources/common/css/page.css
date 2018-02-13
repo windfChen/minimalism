@@ -1,0 +1,9 @@
+.pagin { display: block;text-align: center; padding-top: 20px; }
+.pagin-link { display: inline-block; padding: 5px 10px; margin: 0 2px; border-radius: 3px; border: 1px #ddd solid; background: #fff; line-height: 18px; font-size: 12px; color: #c10000; text-decoration: none; -webkit-transition: all .3s ease-in-out; -moz-transition: all .3s ease-in-out; -o-transition: all .3s ease-in-out; transition: all .3s ease-in-out; }
+.pagin-cur, .pagin-cur:hover { border-color: #c10000; background: #c10000; color: #fff; }
+.pagin-txt { display: inline-block; padding: 5px 8px; line-height: 18px; font-size: 12px; color: #666; }
+.pagin-jump, .pagin-jump-focus { display: inline-block; border: 1px #ddd solid; -webkit-transition: all .3s ease-in-out; -moz-transition: all .3s ease-in-out; -o-transition: all .3s ease-in-out; transition: all .3s ease-in-out; }
+.pagin-input { width: 40px; height: 26px; border: none; outline: none; background: #fff; line-height: 26px\9; text-align: center; font-size: 12px; color: #c10000; }
+.pagin-jump-focus { border-color: #c10000; background: #c10000; }
+.pagin-jump-focus .pagin-btn { display: inline-block; } 
+.pagin-btn { display: none; padding: 0 10px; line-height: 26px; font-size: 12px; color: #fff; text-decoration: none; }

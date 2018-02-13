@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<moduleInfo>
+  <basePath>/index</basePath>
+  <services/>
+  <name>首页</name>
+  <controlers/>
+  <code>index</code>
+  <info>用户首页，根据不同用户跳转不同首页</info>
+</moduleInfo>

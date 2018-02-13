@@ -1,0 +1,53 @@
+[{
+    task:'ColumnTree Example',
+    all:'',
+    add:'',
+    uiProvider:'col',
+    cls:'master-task',
+    iconCls:'task-folder',
+    children:[{
+        task:'Abstract rendering in TreeNodeUI',
+        uiProvider:'col',
+        leaf:false,
+        children:[{
+        	task:'Abstract rendering in TreeNodeUI',
+       	 	all:'<input type="checkbox"  name="nodeName" value="123"/>all',
+       		add:'1111111',
+       		del:'123',
+        	uiProvider:'col',
+        	leaf:true,
+        	iconCls:'task'
+        }]
+    },{
+        task:'Create TreeNodeUI with column knowledge',
+        all:'<input type="checkbox"  name="nodeName" value="321" />all',
+        add:'Jack Slocum',
+        del:'123',
+        uiProvider:'col',
+        leaf:true,
+        iconCls:'task'
+    },{
+        task:'Create TreePanel to render and lock headers',
+        all:'30 min',
+        add:'Jack Slocum',
+        look:'yinxu',
+        uiProvider:'col',
+        leaf:true,
+        iconCls:'task'
+    },{
+        task:'Add CSS to make it look fly',
+        all:'30 min',
+        add:'Jack Slocum',
+        up:'tyxl',
+        uiProvider:'col',
+        leaf:true,
+        iconCls:'task'
+    },{
+        task:'Test and make sure it works',
+        all:'1 hour',
+        add:'Jack Slocum',
+        uiProvider:'col',
+        leaf:true,
+        iconCls:'task'
+    }]
+}]

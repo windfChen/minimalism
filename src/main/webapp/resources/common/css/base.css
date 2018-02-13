@@ -1,0 +1,11 @@
+body,h1,h2,h3,h4,h5,h6,p,ul,ol,form { margin:0;}
+body { color:#666; background:white; font-size:14px; line-height:1.5;}
+body,input,textarea,select { font-family:"PingFang SC", Helvetica, "Helvetica Neue", "Microsoft YaHei", "SimSun", Tahoma, Arial, sans-serif;}
+ul,ol,li { padding-left:0; list-style-type:none;}
+img { border:0;}
+input,textarea,select { font-size:12px; outline:none; border:none; margin:0; padding:0;}
+input::-ms-clear{ display:none;} /* 去除IE下input自带的叉 */
+input:-webkit-autofill { -webkit-box-shadow: 0 0 0px 1000px white inset !important;} /* 去除chrome下输入框默认背景色 */
+h1,h2,h3,h4,h5,h6 { font-weight:normal;}
+h4,h5,h6{ font-size:1em;}
+a { font-size:12px; text-decoration:none;}
