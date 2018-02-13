@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context" 
+    xmlns:aop="http://www.springframework.org/schema/aop"  xmlns:tx="http://www.springframework.org/schema/tx" 
+	xsi:schemaLocation="
+           http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd  
+        http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx-3.1.xsd  
+        http://www.springframework.org/schema/aop  http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+       "
+	default-autowire="byName">
+
+	<context:property-placeholder location="classpath:jdbc.properties" />
+	
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close"> 
+	     <property name="url" value="${jdbc.url}" />
+	     <property name="username" value="${jdbc.username}" />
+	     <property name="password" value="${jdbc.password}" />
+	     <property name="filters"><value>wall,stat</value></property>
+	     <property name="maxActive" value="${jdbc.maxActive}" />
+	     <property name="initialSize" value="${jdbc.initialSize}" />
+	     <property name="maxWait" value="${jdbc.maxWait}" />
+	     <property name="minIdle" value="${jdbc.minIdle}" />
+	     <property name="timeBetweenEvictionRunsMillis"><value>60000</value></property>
+	     <property name="minEvictableIdleTimeMillis"><value>300000</value></property>
+	     <property name="validationQuery"><value>SELECT 1</value></property>
+	     <property name="testWhileIdle"><value>true</value></property>
+	     <property name="testOnBorrow"><value>false</value></property>
+	     <property name="testOnReturn"><value>false</value></property>
+	     <property name="poolPreparedStatements"><value>true</value></property>
+	     <property name="maxOpenPreparedStatements"><value>20</value></property>
+	 </bean>
+	 
+	<bean id="mySqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
+		<property name="dataSource" ref="dataSource" />  
+		<property name="configLocation" value="classpath:config/plugins/database/mybatis-config.xml"></property>
+		<property name="mapperLocations"  value="classpath:config/module/*/database/sqlmap/*.xml" />  
+	</bean> 
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+       <constructor-arg index="0" ref="mySqlSessionFactory" />
+    </bean>
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+       <property name="basePackage" value="com.windf.module.*.dao" />
+    </bean> 
+	<bean id="transactionManager"  
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">  
+        <property name="dataSource" ref="dataSource" />  
+    </bean>
+    
+    <!-- 事务相关控制配置：例如配置事务的传播机制 -->  
+    <tx:advice id="iccardTxAdvice" transaction-manager="transactionManager">  
+        <tx:attributes>  
+          <tx:method name="insert*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />  
+          <tx:method name="add*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />  
+          <tx:method name="create*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />  
+          <tx:method name="save*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />  
+          <tx:method name="update*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />  
+          <tx:method name="delete*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />  
+            
+          <tx:method name="find*" propagation="SUPPORTS" />  
+          <tx:method name="get*" propagation="SUPPORTS" />  
+          <tx:method name="select*" propagation="SUPPORTS" />  
+          <tx:method name="query*" propagation="SUPPORTS" />  
+        </tx:attributes>  
+    </tx:advice>  
+      
+    <!-- 把事务控制在service层 -->  
+    <aop:config>      
+        <aop:pointcut id="iccardTerm" expression="execution(public * com.windf.*.*.service.*.*(..))" />  
+        <aop:advisor pointcut-ref="iccardTerm" advice-ref="iccardTxAdvice" />  
+    </aop:config> 
+</beans>

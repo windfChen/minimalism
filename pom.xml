@@ -17,7 +17,6 @@
 		<freemarker.version>2.3.20</freemarker.version>
 	</properties>
 
-
 	<dependencies>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -185,10 +184,8 @@
 		</profile>
 	</profiles>
 
-
-
 	<build>
-		<finalName>windf</finalName>
+		<finalName>minimalism</finalName>
 		<defaultGoal>package</defaultGoal>
 		<filters>
 			<filter>src/main/filters/filter-${env}.properties</filter>	
@@ -200,14 +197,14 @@
 			</resource>
 		</resources>
 
-		<plugins>
+		<plugins> 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.3.2</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 					<encoding>${project.build.sourceEncoding}</encoding>
 					<sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
 				</configuration>
