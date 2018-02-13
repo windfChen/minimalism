@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<moduleInfo>
+  <basePath>/dev</basePath>
+  <services/>
+  <name>开发模块</name>
+  <controlers/>
+  <code>development</code>
+  <info>用于项目开发</info>
+</moduleInfo>

@@ -147,4 +147,17 @@ public class SQLUtil {
 	public static Integer javaType2dbLength(String javaType) {
 		return defaultDatabaseLengthMap.get(javaType);
 	}
+	
+	/**
+	 * 将多行sql转换到一行，方便正则解析
+	 * @param lines
+	 * @return
+	 */
+	public static String sqls2OneLine(String[] lines) {
+		String result = null;
+		if (lines != null) {
+			result = StringUtil.join(lines, "  ").toLowerCase();
+		}
+		return result;
+	}
 }

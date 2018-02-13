@@ -1,7 +1,12 @@
 package com.windf.core.util;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.windf.core.util.reflect.ReflectUtil;
 
 public class RegularUtil {
 	public static final String ID_NUMBER = "^([0-9]{15})|([0-9]{17}[xX]{1})([0-9]{18})$";
@@ -44,5 +49,32 @@ public class RegularUtil {
 		Pattern p = Pattern.compile(pattern);
 		Matcher matcher = p.matcher(str);
 		return matcher.matches();
+	}
+
+	/**
+	 * 反射获得ReflectUtil中所有正则表达式的常量
+	 * @return 常量备注-变量名
+	 */
+	public static Map<String, String> getAllPattern() {
+		Map<String, String> result = new HashMap<String, String>();
+		
+		Map<String, Object> constantValues = ReflectUtil.getAllConstantValue(RegularUtil.class);
+		if (CollectionUtil.isNotEmpty(constantValues)) {
+			Iterator<String> iterator = constantValues.keySet().iterator();
+			while (iterator.hasNext()) {
+				 String noteName = iterator.next();
+				 Object noteValue = constantValues.get(noteName);
+				 
+				 if (noteName.endsWith("_NOTE") && noteValue != null) {
+					String patternName = noteName.substring(0, noteName.length() -"_NOTE".length() );
+					if (constantValues.get(patternName) != null) {
+						result.put((String) noteValue, patternName);
+					}
+				}
+				
+			}
+		}
+		
+		return result;
 	}
 }

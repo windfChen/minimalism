@@ -25,6 +25,8 @@ public abstract class ManagerGridControler extends BaseControler {
 	
 	@RequestMapping(value = "", method = {RequestMethod.GET})
 	public String index() {
+		SessionContext.set(Constant.SESSION_TEMPLATE, "ext");
+		
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("queryString", request.getQueryString());
 		data.put(Constant.SESSION_TEMPLATE, SessionContext.get(Constant.SESSION_TEMPLATE));

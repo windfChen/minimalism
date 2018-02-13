@@ -6,7 +6,7 @@ public interface ResponseReturn {
 	public static final String RESULT_DATA_KEY = "data";
 	public static final String RESULT_MESSAGE_KEY = "message";
 
-	public static final String JSON_PAGE = "/common/json";
+	public static final String JSON_PAGE = "/common/info/json";
 	public static final String PARAMETER_ERROR_PAGE = "/common/error/parameter";
 	public static final String ERROR_PAGE = "/common/error";
 	public static final String SUCCESS_MESSAGE_PAGE = "/common/info/success";

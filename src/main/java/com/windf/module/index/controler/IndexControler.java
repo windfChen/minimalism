@@ -20,7 +20,7 @@ public class IndexControler extends BaseControler{
 	 */
 	@RequestMapping(value = {"/", ""}, method = {RequestMethod.GET})
 	public String index() {
-		return responseReturn.redirect("/manage/dev");
+		return responseReturn.redirect("/dev");
 	}
 	
 }

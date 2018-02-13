@@ -20,6 +20,7 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
 import com.windf.core.Constant;
+import com.windf.core.exception.CodeException;
 import com.windf.core.exception.UserException;
 import com.windf.core.util.StringUtil;
 import com.windf.core.util.reflect.BeanUtil;
@@ -34,7 +35,7 @@ public class XmlFileUtil {
 	 * @param xmlFile
 	 * @throws UserException 
 	 */
-	public static <T> T readXml2Object(File xmlFile, Class<T> clazz) throws UserException {
+	public static <T> T readXml2Object(File xmlFile, Class<T> clazz) throws CodeException {
 		T result = null;
 		SAXReader saxReader = new SAXReader();
 		Document document;
@@ -56,7 +57,7 @@ public class XmlFileUtil {
 	 * @throws UserException 
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static <T> T readXml2Object(Element element, Class<T> clazz, Type type) throws UserException {
+	public static <T> T readXml2Object(Element element, Class<T> clazz, Type type) throws CodeException {
 		
 		Object result = null;
 		
@@ -102,7 +103,7 @@ public class XmlFileUtil {
 						if (ReflectUtil.isGeneric(type)) {	// 如果是，获取泛型中的类型
 							 Type keyType = ReflectUtil.getGenericOfMapKey(type);
 							 if (keyType != String.class) {
-								 throw new UserException("map的key必须是String类型");
+								 throw new CodeException("map的key必须是String类型");
 							 }
 							 valueType = ReflectUtil.getGenericOfMapValue(type);
 							 genericClass = ReflectUtil.getRawType(type);
