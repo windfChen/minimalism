@@ -1,57 +1,55 @@
 package com.windf.module.development.service.impl;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
 import com.windf.core.bean.Page;
-import com.windf.core.exception.ParameterException;
 import com.windf.core.util.SQLUtil;
 import com.windf.module.development.entity.Entity;
 import com.windf.module.development.entity.Module;
-import com.windf.module.development.entity.ModuleMaster;
+import com.windf.module.development.fdao.EntityDao;
+import com.windf.module.development.fdao.ModuleDao;
 import com.windf.module.development.modle.component.EntityCoder;
 import com.windf.module.development.service.EntityService;
 
 @Service
-public class EntityServiceImpl extends BaseManageGridServiceImpl implements EntityService{
+public class EntityServiceImpl extends BaseManageGridServiceImpl<Entity> implements EntityService{
+	
+	@Resource
+	private EntityDao entityDao;
+	@Resource
+	private ModuleDao moduleDao;
 
 	@Override
-	public Page<? extends Object> list(Map<String, Object> condition, Integer pageNo, Integer pageSize) throws Exception {
-		ModuleMaster moduleMaster = ModuleMaster.getInstance();
-		Module module = moduleMaster.findModuleByCode((String) condition.get("moduleCode"));
-		if (module == null) {
-			throw new ParameterException("模块不存在！");
-		}
+	public Page<Entity> list(Map<String, Object> condition, Integer pageNo, Integer pageSize) throws Exception {
+		List<Entity> entityList = entityDao.listByModuleCode((String) condition.get("moduleCode"));
 		
 		Page<Entity> page = new Page<Entity>(Long.valueOf(pageNo) , pageSize);
-		if (module.listEntitys().size() > 0) {
-			page.setTotal(Long.valueOf(module.listEntitys().size()));
-			page.setData(module.listEntitys().subList(page.getStartIndex().intValue(), page.getEndIndex().intValue()));
+		if (entityList.size() > 0) {
+			page.setTotal(Long.valueOf(entityList.size()));
+			page.setData(entityList.subList(page.getStartIndex().intValue(), page.getEndIndex().intValue()));
 		}
 		
 		return page;
 	}
 
 	@Override
-	public int save(Object bean) throws Exception {
-		/*
-		 * 转换参数
-		 */
-		Entity entity = (Entity) bean;	
+	public int save(Entity entity) throws Exception {
 		/*
 		 * 设置默认参数
 		 */
 		entity.setTableName(SQLUtil.entityName2TableName(entity.getName()));
+		Module module = moduleDao.read(entity.getModule().getCode());
+		entity.setModule(module);
 		/*
 		 * 数据模型创建更新
 		 */
-		Module module = ModuleMaster.getInstance().findModuleByCode(entity.getModule().getCode());
-		entity.setModule(module);
-		module.listEntitys().add(entity);
+		entityDao.create(entity);
 		/*
 		 * 代码更新
 		 */
@@ -61,13 +59,19 @@ public class EntityServiceImpl extends BaseManageGridServiceImpl implements Enti
 	}
 
 	@Override
-	public Object detail(Serializable id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public Entity detail(Serializable id) throws Exception {
+		Entity result = null;
+		
+		String[] strs = ((String) id).split(".");
+		if (strs.length == 2) {
+			result = entityDao.read(strs[0], strs[1]);
+		}
+		
+		return result;
 	}
 
 	@Override
-	public int update(Object bean) throws Exception {
+	public int update(Entity bean) throws Exception {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -81,14 +85,7 @@ public class EntityServiceImpl extends BaseManageGridServiceImpl implements Enti
 	@Override
 	public List<Entity> getMyList() {
 		// TODO Auto-generated method stub
-		List<Entity> result = new ArrayList<Entity>();
-		result.addAll(ModuleMaster.getInstance().getCore().listEntitys());
-		List<Module> modules = ModuleMaster.getInstance().getModules();
-		for (int i = 0; i < modules.size(); i++) {
-			Module module = modules.get(i);
-			result.addAll(module.listEntitys());
-		}
-		return result;
+		return null;
 	}
 
 }

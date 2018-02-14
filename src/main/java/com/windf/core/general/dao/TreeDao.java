@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @param <T>
  */
-public interface TreeDao<T> extends CrudDao {
+public interface TreeDao<T> {
 
 	/**
 	 * 找到所有子节点和孙子节点

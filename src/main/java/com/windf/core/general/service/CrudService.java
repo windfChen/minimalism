@@ -8,7 +8,7 @@ import com.windf.core.bean.Page;
 import com.windf.core.exception.DataAccessException;
 import com.windf.core.exception.UserException;
 
-public interface CrudService extends BaseService{
+public interface CrudService<T> extends BaseService{
 
 	/**
 	 * 分页搜索
@@ -19,7 +19,7 @@ public interface CrudService extends BaseService{
 	 * @throws UserException
 	 * @throws DataAccessException 
 	 */
-	Page<? extends Object> list(Map<String, Object> condition, Integer pageNo, Integer pageSize) throws Exception;
+	Page<T> list(Map<String, Object> condition, Integer pageNo, Integer pageSize) throws Exception;
 
 	/**
 	 * 添加
@@ -28,7 +28,7 @@ public interface CrudService extends BaseService{
 	 * @return
 	 * @throws Exception
 	 */
-	int save(Object bean)  throws Exception;
+	int save(T bean)  throws Exception;
 
 	/**
 	 * 详情
@@ -37,7 +37,7 @@ public interface CrudService extends BaseService{
 	 * @return
 	 * @throws Exception
 	 */
-	Object detail(Serializable id)  throws Exception;
+	T detail(Serializable id)  throws Exception;
 	
 	/**
 	 * 修改
@@ -46,7 +46,7 @@ public interface CrudService extends BaseService{
 	 * @return
 	 * @throws Exception
 	 */
-	int update(Object bean)  throws Exception;
+	int update(T bean)  throws Exception;
 
 	/**
 	 * 删除

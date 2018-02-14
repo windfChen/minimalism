@@ -184,27 +184,13 @@
 		"canOrder" : false,
 		"display" : "${param.moduleCode}",
 		"orderNum" : 4
-	},
-	{
-		"name" : "操作",
-		"dataIndex" : "info",
-		"type" : "TextField",
-		"canList" : true,
-		"canSearch" : false,
-		"canAdd" : false,
-		"canBatchAdd" : false,
-		"canUpdate" : false,
-		"canReport" : false,
-		"canOrder" : false,
-		"display" : "<a>编辑</a>&nbsp;&nbsp;<a href='detail?id=${id}'>管理</a>",
-		"orderNum" : 6
 	}],
 	"menus" : [{
 		"name" : "返回",
 		"canSelect" : false,
 		"isSingleSelect" : false,
 		"checkColumn" : '',
-		"actionAddress" : 'entity/?moduleCode=${param.moduleCode}',
+		"actionAddress" : '../entity/?moduleCode=${param.moduleCode}',
 		"ajaxReturn" : false,
 		"confirm": false,
 		"title" : null,

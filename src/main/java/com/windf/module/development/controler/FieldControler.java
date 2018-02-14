@@ -15,19 +15,19 @@ import com.windf.plugins.manage.web.controler.ManagerGridControler;
 @Controller
 @Scope("prototype")
 @RequestMapping(value = FieldControler.CONTROLER_PATH)
-public class FieldControler extends ManagerGridControler{
+public class FieldControler extends ManagerGridControler<Field> {
 	protected final static String CONTROLER_PATH = Constant.MODULE_WEB_PATH + "/field";
 	
 	@Resource
 	private FieldService fieldService;
 
 	@Override
-	protected ManageGirdService getManagerGridService() {
+	protected ManageGirdService<Field> getManagerGridService() {
 		return fieldService;
 	}
 
 	@Override
-	protected Class<? extends Object> getEntity() {
+	protected Class<Field> getEntity() {
 		return Field.class;
 	}
 

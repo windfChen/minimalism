@@ -92,6 +92,14 @@ public class Module {
 
 	private Map<String, String> dependent;
 
+	public Module() {
+		
+	}
+
+	public Module(String code) {
+		this.code = code;
+	}
+	
 	/**
 	 * 获得模块的配置文件路径
 	 * 
@@ -105,10 +113,6 @@ public class Module {
 		String result = configPath + "/module/" + this.getCode();
 		result = result.replace("//", "/");
 		return result;
-	}
-
-	public Module(String code) {
-		this.code = code;
 	}
 
 	public String getCode() {

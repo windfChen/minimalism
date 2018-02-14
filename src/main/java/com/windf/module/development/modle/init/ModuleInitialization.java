@@ -1,16 +1,14 @@
 package com.windf.module.development.modle.init;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.windf.core.util.file.ModuleFile;
 import com.windf.core.util.reflect.Scanner;
 import com.windf.core.util.reflect.ScannerHandler;
 import com.windf.module.development.entity.Module;
-import com.windf.module.development.entity.ModuleMaster;
+import com.windf.module.development.modle.ModuleMaster;
 import com.windf.module.development.util.file.SourceFileUtil;
 
 public class ModuleInitialization implements ScannerHandler {
@@ -21,10 +19,7 @@ public class ModuleInitialization implements ScannerHandler {
 		Scanner scanner = new Scanner(SourceFileUtil.getJavaPath(), this);
 		scanner.run();
 		
-		// TODO 待排序
-		List<Module> moduleList = new ArrayList<Module>(modules.values());
-		
-		ModuleMaster.getInstance().setModules(moduleList);
+		// TODO 模块排序
 	}
 	
 	@Override
@@ -39,13 +34,13 @@ public class ModuleInitialization implements ScannerHandler {
 				if ("module".equals(moduleFile.getModuleType())) {
 					currentModule = modules.get(moduleFile.getModuleCode());
 					if (currentModule == null) {
-						currentModule = ModuleMaster.getInstance().loadModule(moduleFile.getModuleCode());
+						currentModule = ModuleMaster.getInstance().getModule(moduleFile.getModuleCode());
 						modules.put(moduleFile.getModuleCode(), currentModule);
 					}
 				} else if ("plugins".equals(moduleFile.getModuleType())) {
 					return;
-				} else if ("core".equals(moduleFile.getModuleType())) {
-					currentModule = ModuleMaster.getInstance().getCore();
+				} else {
+					return;
 				}
 			}
 		}

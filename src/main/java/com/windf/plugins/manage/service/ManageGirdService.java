@@ -12,7 +12,7 @@ import com.windf.plugins.manage.entity.GridConfig;
  * @author chenyafeng
  *
  */
-public interface ManageGirdService extends CrudService {
+public interface ManageGirdService<T> extends CrudService<T> {
 	/**
 	 * 获得表格配置
 	 * @param code

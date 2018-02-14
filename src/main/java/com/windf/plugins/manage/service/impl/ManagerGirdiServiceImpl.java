@@ -7,18 +7,17 @@ import java.util.Map;
 import com.windf.core.bean.Page;
 import com.windf.core.exception.DataAccessException;
 import com.windf.core.exception.UserException;
-import com.windf.core.general.dao.CrudDao;
-import com.windf.core.general.dao.WritableDao;
+import com.windf.core.general.dao.ManageGridDao;
 import com.windf.plugins.manage.entity.GridConfig;
 import com.windf.plugins.manage.service.ManageGirdService;
 
-public abstract class ManagerGirdiServiceImpl implements ManageGirdService{
+public abstract class ManagerGirdiServiceImpl<T> implements ManageGirdService<T>{
 	
 	/**
 	 * 获取gridDao
 	 * @return
 	 */
-	public abstract CrudDao getGridDao() ;
+	public abstract ManageGridDao<T> getGridDao() ;
 
 	@Override
 	public GridConfig getGridConfig(String code, String roleId, Map<String, Object> condition) throws UserException {
@@ -38,7 +37,7 @@ public abstract class ManagerGirdiServiceImpl implements ManageGirdService{
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public Page<? extends Object> list(Map<String, Object> condition, Integer pageNo, Integer pageSize)
+	public Page<T> list(Map<String, Object> condition, Integer pageNo, Integer pageSize)
 			throws UserException, DataAccessException {
 		
 		Page page = new Page(Long.valueOf(pageNo), pageSize);
@@ -50,28 +49,24 @@ public abstract class ManagerGirdiServiceImpl implements ManageGirdService{
 	}
 
 	@Override
-	public int save(Object bean) throws Exception {
-		WritableDao writableDao = this.getGridDao();
-		return writableDao.insert(bean);
+	public int save(T bean) throws Exception {
+		return this.getGridDao().create(bean);
 	}
 
 	@Override
-	public Object detail(Serializable id) throws Exception {
-		WritableDao writableDao = this.getGridDao();
-		return writableDao.find(id);
+	public T detail(Serializable id) throws Exception {
+		return this.getGridDao().read(id);
 	}
 
 	@Override
-	public int update(Object bean) throws Exception {
-		WritableDao writableDao = this.getGridDao();
-		return writableDao.update(bean);
+	public int update(T bean) throws Exception {
+		return this.getGridDao().update(bean);
 		
 	}
 
 	@Override
 	public int delete(List<? extends Serializable> id) throws Exception {
-		WritableDao writableDao = this.getGridDao();
-		return writableDao.delete(id);
+		return this.getGridDao().delete(id);
 	}
 
 }

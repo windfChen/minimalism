@@ -20,7 +20,7 @@ import com.windf.plugins.manage.entity.GridConfig;
 import com.windf.plugins.manage.service.ManageGirdService;
 import com.windf.plugins.web.BaseControler;
 
-public abstract class ManagerGridControler extends BaseControler {
+public abstract class ManagerGridControler<T> extends BaseControler {
 	protected final static String MANAGE_PATH = Constant.WEB_BASE_PATH;
 	
 	@RequestMapping(value = "", method = {RequestMethod.GET})
@@ -98,7 +98,7 @@ public abstract class ManagerGridControler extends BaseControler {
 	
 	@RequestMapping(value = "/save", method = {RequestMethod.POST})
 	public String save() {
-		Object entity = this.getParamenterEntity();
+		T entity = paramenter.getObject("entity", this.getEntity());
 		
 		try {
 			this.getManagerGridService().save(entity);
@@ -111,7 +111,7 @@ public abstract class ManagerGridControler extends BaseControler {
 	
 	@RequestMapping(value = "/update", method = {RequestMethod.POST})
 	public String update() {
-		Object entity = this.getParamenterEntity();
+		T entity = paramenter.getObject("entity", this.getEntity());
 		
 		try {
 			this.getManagerGridService().update(entity);
@@ -181,13 +181,13 @@ public abstract class ManagerGridControler extends BaseControler {
 	 * 获取管理表格服务
 	 * @return
 	 */
-	protected abstract ManageGirdService getManagerGridService();
+	protected abstract ManageGirdService<T> getManagerGridService();
 	
 	/**
 	 * 获取实体类，如果不为空，则用实体初始化表格
 	 * @return
 	 */
-	protected Class<? extends Object> getEntity() {
+	protected Class<T> getEntity() {
 		return null;
 	}
 

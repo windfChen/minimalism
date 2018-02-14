@@ -5,7 +5,7 @@ import java.util.List;
 import com.windf.module.development.entity.Entity;
 import com.windf.plugins.manage.service.ManageGirdService;
 
-public interface EntityService extends ManageGirdService{
+public interface EntityService extends ManageGirdService<Entity>{
 
 	/**
 	 * 查询的所有列表

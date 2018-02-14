@@ -19,19 +19,19 @@ import com.windf.plugins.manage.web.controler.ManagerGridControler;
 @Controller
 @Scope("prototype")
 @RequestMapping(value = EntityControler.CONTROLER_PATH)
-public class EntityControler extends ManagerGridControler{
+public class EntityControler extends ManagerGridControler<Entity>{
 	protected final static String CONTROLER_PATH = Constant.MODULE_WEB_PATH + "/entity";
 
 	@Resource
 	private EntityService entityService;
 	
 	@Override
-	protected ManageGirdService getManagerGridService() {
+	protected ManageGirdService<Entity> getManagerGridService() {
 		return entityService;
 	}
 
 	@Override
-	protected Class<? extends Object> getEntity() {
+	protected Class<Entity> getEntity() {
 		return Entity.class;
 	}
 

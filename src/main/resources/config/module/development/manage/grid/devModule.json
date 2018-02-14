@@ -70,7 +70,21 @@
 		"orderNum" : 3
 	},
 	{
-		"name" : "操作",
+		"name" : "DAO",
+		"dataIndex" : "info",
+		"type" : "TextField",
+		"canList" : true,
+		"canSearch" : false,
+		"canAdd" : false,
+		"canBatchAdd" : false,
+		"canUpdate" : false,
+		"canReport" : false,
+		"canOrder" : false,
+		"display" : "<a href='../dao/?moduleCode=${code}'>管理dao</a>",
+		"orderNum" : 6
+	},
+	{
+		"name" : "实体",
 		"dataIndex" : "info",
 		"type" : "TextField",
 		"canList" : true,

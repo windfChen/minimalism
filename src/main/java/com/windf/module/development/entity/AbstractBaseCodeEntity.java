@@ -1,6 +1,6 @@
 package com.windf.module.development.entity;
 
-public abstract class AbstractBaseCodeBean {
+public abstract class AbstractBaseCodeEntity {
 	private String id;
 	private String name;
 	private String parent;

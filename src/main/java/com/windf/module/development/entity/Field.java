@@ -3,7 +3,7 @@ package com.windf.module.development.entity;
 import com.windf.core.util.StringUtil;
 import com.windf.module.development.util.JavaCodeUtil;
 
-public class Field extends AbstractBaseCodeBean {
+public class Field extends AbstractBaseCodeEntity {
 	private String databaseName;
 	private String databaseType;
 	private String type;
@@ -11,7 +11,6 @@ public class Field extends AbstractBaseCodeBean {
 	private boolean isNotNull;
 	private String defaultValue;
 	private boolean isAutoIncrement;
-	private String comment;
 	private boolean isPrimaryKey;
 	/*
 	 * 反向引用
@@ -86,14 +85,6 @@ public class Field extends AbstractBaseCodeBean {
 
 	public void setIsAutoIncrement(boolean isAutoIncrement) {
 		this.isAutoIncrement = isAutoIncrement;
-	}
-
-	public String getComment() {
-		return comment;
-	}
-
-	public void setComment(String comment) {
-		this.comment = comment;
 	}
 
 	public String getDatabaseName() {
