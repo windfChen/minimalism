@@ -1,9 +1,13 @@
 package com.windf.module.development.entity;
 
+import java.util.List;
+
 public class DaoMethod extends AbstractBaseCodeEntity {
 
 	private String type; // insert,select,update,delete
 	private Entity entity;
+	private List<Parameter> parameters;
+	
 	private String sqlStr; // sql字符串，先在前台构建，直接传过来
 
 	private Dao dao;
@@ -40,4 +44,11 @@ public class DaoMethod extends AbstractBaseCodeEntity {
 		this.dao = dao;
 	}
 
+	public List<Parameter> getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(List<Parameter> parameters) {
+		this.parameters = parameters;
+	}
 }

@@ -76,9 +76,9 @@ public class Method extends AbstractType {
 	boolean isStatic;
 	boolean isSynchronized;
 	String t;
-	Return ret;
+	MethodReturn ret;
 	String methodName;
-	List<Parameter> parameters = new ArrayList<Parameter>();
+	List<MethodParameter> parameters = new ArrayList<MethodParameter>();
 	ExceptionType exceptionType;
 	boolean unImplement;
 
@@ -104,7 +104,7 @@ public class Method extends AbstractType {
 	 * @param exception
 	 * @param b
 	 */
-	public Method(String methodName, Return ret, List<Parameter> parameters, ExceptionType exception,
+	public Method(String methodName, MethodReturn ret, List<MethodParameter> parameters, ExceptionType exception,
 			boolean unImplement) {
 		this.methodName = methodName;
 		this.ret = ret;
@@ -121,8 +121,8 @@ public class Method extends AbstractType {
 	 * @param parameter
 	 * @return 如果已存在参数，返回false，表示为添加成功
 	 */
-	public boolean addParameter(Parameter parameter) {
-		Parameter oldParameter = this.getParameter(parameter.getName());
+	public boolean addParameter(MethodParameter parameter) {
+		MethodParameter oldParameter = this.getParameter(parameter.getName());
 
 		if (oldParameter != null) {
 			return false;
@@ -132,10 +132,10 @@ public class Method extends AbstractType {
 		return true;
 	}
 
-	protected Parameter getParameter(String name) {
-		Parameter result = null;
+	protected MethodParameter getParameter(String name) {
+		MethodParameter result = null;
 
-		for (Parameter parameter : parameters) {
+		for (MethodParameter parameter : parameters) {
 			if (name.equals(parameter.getName())) {
 				result = parameter;
 			}
@@ -289,7 +289,7 @@ public class Method extends AbstractType {
 					if (s.startsWith("<")) {
 						t = s;
 					} else if (ret == null) {
-						this.ret = new Return(s);
+						this.ret = new MethodReturn(s);
 					} else {
 						methodName = s;
 					}
@@ -306,7 +306,7 @@ public class Method extends AbstractType {
 					String s = parameterStrs[i];
 					String[] ss2 = s.split("\\s");
 
-					Parameter parameter = new Parameter();
+					MethodParameter parameter = new MethodParameter();
 					parameter.setType(ss2[0]);
 					parameter.setName(ss2[1]);
 					parameters.add(parameter);
@@ -333,7 +333,7 @@ public class Method extends AbstractType {
 		methodCodes.append("(");
 		if (CollectionUtil.isNotEmpty(parameters)) {
 			for (int i = 0; i < parameters.size(); i++) {
-				Parameter parameter = parameters.get(i);
+				MethodParameter parameter = parameters.get(i);
 				if (i != 0) {
 					methodCodes.append("," + Constant.WORD_SPLIT);
 				}
@@ -394,19 +394,19 @@ public class Method extends AbstractType {
 		this.methodName = methodName;
 	}
 
-	public List<Parameter> getParameters() {
+	public List<MethodParameter> getParameters() {
 		return parameters;
 	}
 
-	public void setParameters(List<Parameter> parameters) {
+	public void setParameters(List<MethodParameter> parameters) {
 		this.parameters = parameters;
 	}
 
-	public Return getRet() {
+	public MethodReturn getRet() {
 		return ret;
 	}
 
-	public void setRet(Return ret) {
+	public void setRet(MethodReturn ret) {
 		this.ret = ret;
 	}
 

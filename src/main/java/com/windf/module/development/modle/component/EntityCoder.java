@@ -13,8 +13,8 @@ import com.windf.module.development.modle.file.java.Attribute;
 import com.windf.module.development.modle.file.java.CodeBlock;
 import com.windf.module.development.modle.file.java.JavaCoder;
 import com.windf.module.development.modle.file.java.Method;
-import com.windf.module.development.modle.file.java.Parameter;
-import com.windf.module.development.modle.file.java.Return;
+import com.windf.module.development.modle.file.java.MethodParameter;
+import com.windf.module.development.modle.file.java.MethodReturn;
 import com.windf.module.development.modle.file.java.code.FieldCoder;
 
 public class EntityCoder {
@@ -72,7 +72,7 @@ public class EntityCoder {
 		/*
 		 * getter方法
 		 */
-		Return getterRet = new Return(field.getType());
+		MethodReturn getterRet = new MethodReturn(field.getType());
 		Method getterMethod = new Method("get" + StringUtil.firstLetterUppercase(field.getName()), getterRet, null, null, false);
 		javaCoder.createMethod(getterMethod);
 		CodeBlock<Field> fieldGetterCoderBlock = new CodeBlock<Field>();
@@ -84,9 +84,9 @@ public class EntityCoder {
 		/*
 		 * setter方法
 		 */
-		Return setterRet = new Return(Return.VOID);
-		List<Parameter> parameters = new ArrayList<Parameter>();
-		Parameter parameter = new Parameter();
+		MethodReturn setterRet = new MethodReturn(MethodReturn.VOID);
+		List<MethodParameter> parameters = new ArrayList<MethodParameter>();
+		MethodParameter parameter = new MethodParameter();
 		parameter.setType(field.getType());
 		parameter.setName(field.getName());
 		parameters.add(parameter);

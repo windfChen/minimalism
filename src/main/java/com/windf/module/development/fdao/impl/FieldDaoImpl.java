@@ -42,7 +42,7 @@ public class FieldDaoImpl implements FieldDao{
 	public int create(Field bean) throws DataAccessException {
 		Entity entity = this.getEntityByCode(bean.getEntity().getModule().getCode(), bean.getEntity().getName());
 		/*
-		 * 删除之前的同名模块
+		 * 删除之前的同名字段
 		 */
 		List<Field> fieldList = entity.getFields();
 		Iterator<Field> iterator = fieldList.iterator();
@@ -54,7 +54,7 @@ public class FieldDaoImpl implements FieldDao{
 			}
 		}
 		/*
-		 * 添加新的模块
+		 * 添加新的字段
 		 */
 		entity.getFields().add(bean);
 		return 1;

@@ -1,4 +1,4 @@
-package com.windf.module.development.modle.file.java;
+package com.windf.module.development.entity;
 
 import java.util.HashMap;
 import java.util.Map;
