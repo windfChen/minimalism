@@ -21,9 +21,22 @@ public class DaoMethodDaoImpl implements DaoMethodDao {
 	private DaoDao daoDao;
 
 	@Override
-	public DaoMethod read(String moduleCode, String entityName, String fieldName) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+	public DaoMethod read(String moduleCode, String daoName, String daoMethodName) throws DataAccessException {
+		Dao dao = this.getDao(moduleCode, daoName);
+		/*
+		 * 查找DaoMethod
+		 */
+		DaoMethod result = null;
+		List<DaoMethod> daoMethodList = dao.getDaoMethods();
+		for (int i = 0; i < daoMethodList.size(); i++) {
+			DaoMethod daoMethod = daoMethodList.get(i);
+			if (daoMethodName.equals(daoMethod.getName())) {
+				result = daoMethod;
+				break;
+			}
+		}
+		
+		return result;
 	}
 
 	@Override
@@ -31,7 +44,7 @@ public class DaoMethodDaoImpl implements DaoMethodDao {
 		Dao dao = this.getDao(bean.getDao().getModule().getCode(), bean.getDao().getName());
 		bean.setDao(dao);
 		/*
-		 * 删除之前的同名字段
+		 * 删除之前的同名DaoMethod
 		 */
 		List<DaoMethod> daoMethodList = dao.getDaoMethods();
 		Iterator<DaoMethod> iterator = daoMethodList.iterator();
@@ -43,7 +56,7 @@ public class DaoMethodDaoImpl implements DaoMethodDao {
 			}
 		}
 		/*
-		 * 添加新的字段
+		 * 添加新的DaoMethod
 		 */
 		daoMethodList.add(bean);
 		return 1;

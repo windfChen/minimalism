@@ -1,5 +1,5 @@
 {
-	"title": "Dao方法管理",
+	"title": "ServiceMethod管理",
 	"columns": [{
 		"name" : "id",
 		"dataIndex" : "code",
@@ -15,6 +15,21 @@
 		"orderNum" : 2
 	},
 	{
+		"name" : "父类",
+		"dataIndex" : "parent",
+		"type" : "ComboBox",
+		"canList" : true,
+		"canSearch" : true,
+		"canAdd" : true,
+		"canBatchAdd" : true,
+		"canUpdate" : true,
+		"canReport" : true,
+		"canOrder" : true,
+		"comboUrl" : "/dev/service/method/myList.json",
+		"display" : null,
+		"orderNum" : 3
+	},
+	{
 		"name" : "名称",
 		"dataIndex" : "name",
 		"type" : "TextField",
@@ -28,24 +43,10 @@
 		"display" : null,
 		"orderNum" : 4
 	},
+	
 	{
-		"name" : "类型",
-		"dataIndex" : "type",
-		"type" : "ComboBox",
-		"canList" : true,
-		"canSearch" : true,
-		"canAdd" : true,
-		"canBatchAdd" : true,
-		"canUpdate" : true,
-		"comboDataArray":[{"id":"inert","name":"inert"},{"id":"delete","name":"delete"},{"id":"update","name":"update"},{"id":"select","name":"select"}],
-		"canReport" : true,
-		"canOrder" : true,
-		"display" : null,
-		"orderNum" : 4
-	},
-	{
-		"name" : "实体",
-		"dataIndex" : "entity.name",
+		"name" : "返回",
+		"dataIndex" : "ret.name",
 		"type" : "TextField",
 		"canList" : true,
 		"canSearch" : true,
@@ -55,7 +56,7 @@
 		"canReport" : true,
 		"canOrder" : true,
 		"display" : null,
-		"orderNum" : 4
+		"orderNum" : 5
 	},
 	{
 		"name" : "参数",
@@ -69,10 +70,10 @@
 		"canReport" : true,
 		"canOrder" : true,
 		"display" : null,
-		"orderNum" : 5
+		"orderNum" : 6
 	},
 	{
-		"name" : "sql",
+		"name" : "流程",
 		"dataIndex" : "sqlStr",
 		"type" : "TextField",
 		"canList" : true,
@@ -83,7 +84,7 @@
 		"canReport" : true,
 		"canOrder" : true,
 		"display" : null,
-		"orderNum" : 6
+		"orderNum" : 7
 	},
 	{
 		"name" : "备注",
@@ -97,11 +98,11 @@
 		"canReport" : true,
 		"canOrder" : true,
 		"display" : null,
-		"orderNum" : 4
+		"orderNum" : 8
 	},
 	{
-		"name" : "Dao名称",
-		"dataIndex" : "dao.name",
+		"name" : "Service名称",
+		"dataIndex" : "service.name",
 		"type" : "Hidden",
 		"canList" : false,
 		"canSearch" : false,
@@ -110,12 +111,12 @@
 		"canUpdate" : true,
 		"canReport" : false,
 		"canOrder" : false,
-		"display" : "${param.daoName}",
+		"display" : "${param.serviceName}",
 		"orderNum" : 4
 	},
 	{
 		"name" : "模块code",
-		"dataIndex" : "dao.module.code",
+		"dataIndex" : "service.module.code",
 		"type" : "Hidden",
 		"canList" : false,
 		"canSearch" : false,
@@ -126,20 +127,6 @@
 		"canOrder" : false,
 		"display" : "${param.moduleCode}",
 		"orderNum" : 4
-	},
-	{
-		"name" : "操作",
-		"dataIndex" : "info",
-		"type" : "TextField",
-		"canList" : true,
-		"canSearch" : false,
-		"canAdd" : false,
-		"canBatchAdd" : false,
-		"canUpdate" : false,
-		"canReport" : false,
-		"canOrder" : false,
-		"display" : "<a href='../field/?moduleCode=${param.moduleCode}&entityName=${name}'>管理参数</a>",
-		"orderNum" : 6
 	}],
 	"menus" : [{
 		"name" : "返回",

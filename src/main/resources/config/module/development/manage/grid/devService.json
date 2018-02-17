@@ -1,5 +1,5 @@
 {
-	"title": "模块管理",
+	"title": "Service管理",
 	"columns": [{
 		"name" : "id",
 		"dataIndex" : "code",
@@ -13,19 +13,21 @@
 		"canOrder" : true,
 		"display" : null,
 		"orderNum" : 2
-	},{
-		"name" : "code",
-		"dataIndex" : "code",
-		"type" : "TextField",
+	},
+	{
+		"name" : "父类",
+		"dataIndex" : "parent",
+		"type" : "ComboBox",
 		"canList" : true,
 		"canSearch" : true,
 		"canAdd" : true,
 		"canBatchAdd" : true,
-		"canUpdate" : false,
+		"canUpdate" : true,
 		"canReport" : true,
 		"canOrder" : true,
+		"comboUrl" : "/dev/service/myList.json",
 		"display" : null,
-		"orderNum" : 1
+		"orderNum" : 4
 	},
 	{
 		"name" : "名称",
@@ -42,8 +44,8 @@
 		"orderNum" : 4
 	},
 	{
-		"name" : "路径",
-		"dataIndex" : "basePath",
+		"name" : "备注",
+		"dataIndex" : "comment",
 		"type" : "TextField",
 		"canList" : true,
 		"canSearch" : true,
@@ -53,24 +55,24 @@
 		"canReport" : true,
 		"canOrder" : true,
 		"display" : null,
-		"orderNum" : 3
+		"orderNum" : 4
 	},
 	{
-		"name" : "描述",
-		"dataIndex" : "info",
-		"type" : "TextArea",
-		"canList" : true,
+		"name" : "模块code",
+		"dataIndex" : "module.code",
+		"type" : "Hidden",
+		"canList" : false,
 		"canSearch" : false,
 		"canAdd" : true,
 		"canBatchAdd" : false,
 		"canUpdate" : true,
-		"canReport" : true,
-		"canOrder" : true,
-		"display" : null,
-		"orderNum" : 3
+		"canReport" : false,
+		"canOrder" : false,
+		"display" : "${param.moduleCode}",
+		"orderNum" : 4
 	},
 	{
-		"name" : "Service",
+		"name" : "操作",
 		"dataIndex" : "info",
 		"type" : "TextField",
 		"canList" : true,
@@ -80,38 +82,21 @@
 		"canUpdate" : false,
 		"canReport" : false,
 		"canOrder" : false,
-		"display" : "<a href='../service/?moduleCode=${code}'>管理service</a>",
-		"orderNum" : 6
-	},
-	{
-		"name" : "DAO",
-		"dataIndex" : "info",
-		"type" : "TextField",
-		"canList" : true,
-		"canSearch" : false,
-		"canAdd" : false,
-		"canBatchAdd" : false,
-		"canUpdate" : false,
-		"canReport" : false,
-		"canOrder" : false,
-		"display" : "<a href='../dao/?moduleCode=${code}'>管理dao</a>",
-		"orderNum" : 6
-	},
-	{
-		"name" : "实体",
-		"dataIndex" : "info",
-		"type" : "TextField",
-		"canList" : true,
-		"canSearch" : false,
-		"canAdd" : false,
-		"canBatchAdd" : false,
-		"canUpdate" : false,
-		"canReport" : false,
-		"canOrder" : false,
-		"display" : "<a href='../entity/?moduleCode=${code}'>管理实体</a>",
+		"display" : "<a href='../service/method/?moduleCode=${param.moduleCode}&serviceName=${name}'>管理</a>",
 		"orderNum" : 6
 	}],
-	"menus" : [],
+	"menus" : [{
+		"name" : "返回",
+		"canSelect" : false,
+		"isSingleSelect" : false,
+		"checkColumn" : '',
+		"actionAddress" : '../module/',
+		"ajaxReturn" : false,
+		"confirm": false,
+		"title" : null,
+		"fields" : null,
+		"orderNum" : 1
+	}],
 	"isPrepared" : true,
 	"canAdd" : true,
 	"canBatchAdd" : false,

@@ -45,7 +45,7 @@ public class EntityDaoImpl implements EntityDao{
 	public int create(Entity bean) throws DataAccessException {
 		Module module = moduleDao.read(bean.getModule().getCode());
 		/*
-		 * 删除之前的同名模块
+		 * 删除之前的同名Entity
 		 */
 		List<Entity> entityList = module.getEntitys();
 		Iterator<Entity> iterator = entityList.iterator();
@@ -57,7 +57,7 @@ public class EntityDaoImpl implements EntityDao{
 			}
 		}
 		/*
-		 * 添加新的模块
+		 * 添加新的Entity
 		 */
 		module.getEntitys().add(bean);
 		return 1;

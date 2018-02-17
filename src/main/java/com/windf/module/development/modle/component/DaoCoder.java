@@ -66,10 +66,4 @@ public class DaoCoder {
 		 */
 		dmlMapper.write();
 	}
-
-	public void write() {
-		javaCoder.write();
-		dmlMapper.write();
-	}
-
 }

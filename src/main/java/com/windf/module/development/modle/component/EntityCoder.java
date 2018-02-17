@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.windf.core.exception.UserException;
-import com.windf.core.util.SQLUtil;
 import com.windf.core.util.StringUtil;
 import com.windf.module.development.Constant;
 import com.windf.module.development.entity.Entity;
@@ -36,17 +35,6 @@ public class EntityCoder {
 			javaCoder = new JavaCoder(Constant.JAVA_MODULE_BASE_PACKAGE + "/" + entity.getModule().getCode() + "/entity", entity.getName());
 			javaCoder.setExtend(entity.getParent());
 			javaCoder.write();
-			
-			if (StringUtil.isNotEmpty(entity.getParent())) {
-				JavaCoder parent = JavaCoder.getJavaCoderByName(entity.getParent());
-				List<Attribute> attributes = parent.getAllAttributes();
-				for (int i = 0; i < attributes.size(); i++) {
-					Attribute attribute = attributes.get(i);
-					if (!attribute.isStatic()) {
-						this.addField(this.changeAttribute2Field(attributes.get(i)));
-					}
-				}
-			}
 		}
 	}
 	
@@ -60,7 +48,6 @@ public class EntityCoder {
 		 * 对象模型建立
 		 */
 		entity.getFields().add(field);
-		
 		/*
 		 * field属性
 		 */
@@ -68,7 +55,6 @@ public class EntityCoder {
 		attribute.setModifier(Constant.MODIFY_PRIVATE);
 		attribute.setLineComment(field.getComment());
 		javaCoder.createAttribute(attribute);
-		
 		/*
 		 * getter方法
 		 */
@@ -80,7 +66,6 @@ public class EntityCoder {
 		fieldGetterCoderBlock.setTabCount(2);
 		fieldGetterCoderBlock.serialize(field);
 		getterMethod.addCodeBlock(0, fieldGetterCoderBlock);
-		
 		/*
 		 * setter方法
 		 */
@@ -97,28 +82,12 @@ public class EntityCoder {
 		fieldSetterCoderBlock.serialize(field);
 		setterMethod.addCodeBlock(0, fieldSetterCoderBlock);
 		javaCoder.createMethod(setterMethod);
-	}
-	
-	public void write() {
+		/*
+		 * 写入
+		 */
 		javaCoder.write();
 	}
 	
-	public Field changeAttribute2Field(Attribute b) {
-		Field result = new Field();
-		result.setName(b.getName());
-		result.setType(b.getType());
-		result.setDatabaseType(SQLUtil.javaType2dbType(result.getType()));
-		result.setDatabaseName(SQLUtil.javaName2DbName(result.getName()));
-		result.setLength(SQLUtil.javaType2dbLength(result.getType()));
-		/*
-		 * TODO 默认ID为主键
-		 */
-		if ("id".equals(result.getName())) {
-			result.setIsPrimaryKey(true);
-		}
-		
-		return result;
+	public void write() {
 	}
-	
-
 }

@@ -21,7 +21,7 @@ public class FieldDaoImpl implements FieldDao{
 
 	@Override
 	public Field read(String moduleCode, String entityName, String fieldName) throws DataAccessException {
-		Entity entity = this.getEntityByCode(moduleCode, entityName);
+		Entity entity = this.getEntity(moduleCode, entityName);
 		/*
 		 * 查找Field
 		 */
@@ -40,9 +40,9 @@ public class FieldDaoImpl implements FieldDao{
 
 	@Override
 	public int create(Field bean) throws DataAccessException {
-		Entity entity = this.getEntityByCode(bean.getEntity().getModule().getCode(), bean.getEntity().getName());
+		Entity entity = this.getEntity(bean.getEntity().getModule().getCode(), bean.getEntity().getName());
 		/*
-		 * 删除之前的同名字段
+		 * 删除之前的同名Field
 		 */
 		List<Field> fieldList = entity.getFields();
 		Iterator<Field> iterator = fieldList.iterator();
@@ -54,7 +54,7 @@ public class FieldDaoImpl implements FieldDao{
 			}
 		}
 		/*
-		 * 添加新的字段
+		 * 添加新的Field
 		 */
 		entity.getFields().add(bean);
 		return 1;
@@ -62,11 +62,11 @@ public class FieldDaoImpl implements FieldDao{
 
 	@Override
 	public List<Field> listByEntityName(String moduleCode, String entityName) throws DataAccessException {
-		Entity entity = this.getEntityByCode(moduleCode, entityName);
+		Entity entity = this.getEntity(moduleCode, entityName);
 		return entity.getFields();
 	}
 	
-	private Entity getEntityByCode(String moduleCode, String entityName) throws DataAccessException {
+	private Entity getEntity(String moduleCode, String entityName) throws DataAccessException {
 		Entity entity = entityDao.read(moduleCode, entityName);
 		if (entity == null) {
 			throw new DataAccessException("找不到实体");
