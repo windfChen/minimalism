@@ -1,5 +1,5 @@
 {
-	"title": "Dao方法管理",
+	"title": "ControlerMethod管理",
 	"columns": [{
 		"name" : "id",
 		"dataIndex" : "code",
@@ -29,37 +29,23 @@
 		"orderNum" : 4
 	},
 	{
-		"name" : "类型",
-		"dataIndex" : "type",
+		"name" : "请求方式",
+		"dataIndex" : "requestMethod",
 		"type" : "ComboBox",
 		"canList" : true,
 		"canSearch" : true,
 		"canAdd" : true,
 		"canBatchAdd" : true,
 		"canUpdate" : true,
-		"comboDataArray":[{"id":"inert","name":"inert"},{"id":"delete","name":"delete"},{"id":"update","name":"update"},{"id":"select","name":"select"}],
 		"canReport" : true,
 		"canOrder" : true,
-		"display" : null,
+		"display" : "",
+		"comboDataArray" : [{"id":"","name":"不限制"},{"id":"GET","name":"GET"},{"id":"POST","name":"POST"}],
 		"orderNum" : 4
 	},
 	{
-		"name" : "实体",
-		"dataIndex" : "entity.name",
-		"type" : "TextField",
-		"canList" : true,
-		"canSearch" : true,
-		"canAdd" : true,
-		"canBatchAdd" : true,
-		"canUpdate" : true,
-		"canReport" : true,
-		"canOrder" : true,
-		"display" : null,
-		"orderNum" : 4
-	},
-	{
-		"name" : "参数",
-		"dataIndex" : "paramStr",
+		"name" : "访问地址",
+		"dataIndex" : "urlPath",
 		"type" : "TextField",
 		"canList" : true,
 		"canSearch" : true,
@@ -70,20 +56,6 @@
 		"canOrder" : true,
 		"display" : null,
 		"orderNum" : 5
-	},
-	{
-		"name" : "sql",
-		"dataIndex" : "sqlStr",
-		"type" : "TextField",
-		"canList" : true,
-		"canSearch" : true,
-		"canAdd" : true,
-		"canBatchAdd" : true,
-		"canUpdate" : true,
-		"canReport" : true,
-		"canOrder" : true,
-		"display" : null,
-		"orderNum" : 6
 	},
 	{
 		"name" : "备注",
@@ -100,8 +72,8 @@
 		"orderNum" : 4
 	},
 	{
-		"name" : "Dao名称",
-		"dataIndex" : "dao.name",
+		"name" : "Controler名称",
+		"dataIndex" : "controler.name",
 		"type" : "Hidden",
 		"canList" : false,
 		"canSearch" : false,
@@ -110,12 +82,12 @@
 		"canUpdate" : true,
 		"canReport" : false,
 		"canOrder" : false,
-		"display" : "${param.daoName}",
+		"display" : "${param.controlerName}",
 		"orderNum" : 4
 	},
 	{
 		"name" : "模块code",
-		"dataIndex" : "dao.module.code",
+		"dataIndex" : "controler.module.code",
 		"type" : "Hidden",
 		"canList" : false,
 		"canSearch" : false,
@@ -132,7 +104,7 @@
 		"canSelect" : false,
 		"isSingleSelect" : false,
 		"checkColumn" : '',
-		"actionAddress" : '../../dao/?moduleCode=${param.moduleCode}',
+		"actionAddress" : '../../controler/?moduleCode=${param.moduleCode}',
 		"ajaxReturn" : false,
 		"confirm": false,
 		"title" : null,

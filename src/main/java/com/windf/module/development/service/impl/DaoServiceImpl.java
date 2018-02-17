@@ -73,7 +73,7 @@ public class DaoServiceImpl extends BaseManageGridServiceImpl<Dao> implements Da
 	}
 
 	@Override
-	public List<Dao> getMyList() {
+	public List<Dao> getAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}

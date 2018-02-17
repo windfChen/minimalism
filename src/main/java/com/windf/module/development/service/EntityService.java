@@ -11,5 +11,5 @@ public interface EntityService extends ManageGirdService<Entity>{
 	 * 查询的所有列表
 	 * @return
 	 */
-	List<Entity> getMyList();
+	List<Entity> getAll();
 }

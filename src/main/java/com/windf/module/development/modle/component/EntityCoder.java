@@ -30,7 +30,7 @@ public class EntityCoder {
 	 * 前提：javaCoder为空
 	 * @throws UserException
 	 */
-	public void createEntity() throws UserException {
+	public void create() throws UserException {
 		if (javaCoder == null) {
 			javaCoder = new JavaCoder(Constant.JAVA_MODULE_BASE_PACKAGE + "/" + entity.getModule().getCode() + "/entity", entity.getName());
 			javaCoder.setExtend(entity.getParent());
@@ -44,10 +44,6 @@ public class EntityCoder {
 	 * @throws UserException 
 	 */
 	public void addField(Field field) throws UserException {
-		/*
-		 * 对象模型建立
-		 */
-		entity.getFields().add(field);
 		/*
 		 * field属性
 		 */
@@ -86,8 +82,5 @@ public class EntityCoder {
 		 * 写入
 		 */
 		javaCoder.write();
-	}
-	
-	public void write() {
 	}
 }

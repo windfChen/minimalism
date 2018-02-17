@@ -8,6 +8,7 @@ public class Module extends com.windf.core.bean.Module {
 	private List<Entity> entitys = new ArrayList<Entity>();
 	private List<Dao> daos = new ArrayList<Dao>();
 	private List<Service> services = new ArrayList<Service>();
+	private List<Controler> controlers = new ArrayList<Controler>();
 
 	public List<Entity> getEntitys() {
 		return entitys;
@@ -33,5 +34,12 @@ public class Module extends com.windf.core.bean.Module {
 		this.services = services;
 	}
 
+	public List<Controler> getControlers() {
+		return controlers;
+	}
+
+	public void setControlers(List<Controler> controlers) {
+		this.controlers = controlers;
+	}
 
 }

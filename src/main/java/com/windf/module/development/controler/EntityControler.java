@@ -37,7 +37,7 @@ public class EntityControler extends ManagerGridControler<Entity>{
 
 	@RequestMapping(value = "/myList", method = {RequestMethod.GET})
 	public String myList() {
-		List<Entity> data = entityService.getMyList();
+		List<Entity> data = entityService.getAll();
 		List<String[]> result = new ArrayList<String[]>();
 		for (int i = 0; i < data.size(); i++) {
 			Entity entity = data.get(i);

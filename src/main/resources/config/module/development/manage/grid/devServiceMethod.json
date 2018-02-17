@@ -133,7 +133,7 @@
 		"canSelect" : false,
 		"isSingleSelect" : false,
 		"checkColumn" : '',
-		"actionAddress" : '../../module/',
+		"actionAddress" : '../../service/?moduleCode=${param.moduleCode}',
 		"ajaxReturn" : false,
 		"confirm": false,
 		"title" : null,

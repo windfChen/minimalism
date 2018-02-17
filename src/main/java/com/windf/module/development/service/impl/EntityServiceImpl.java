@@ -54,7 +54,7 @@ public class EntityServiceImpl extends BaseManageGridServiceImpl<Entity> impleme
 		 * 代码更新
 		 */
 		EntityCoder entityCoder = new EntityCoder(entity);
-		entityCoder.createEntity();
+		entityCoder.create();
 		return 0;
 	}
 
@@ -83,7 +83,7 @@ public class EntityServiceImpl extends BaseManageGridServiceImpl<Entity> impleme
 	}
 
 	@Override
-	public List<Entity> getMyList() {
+	public List<Entity> getAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}

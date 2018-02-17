@@ -33,7 +33,7 @@ public class ServiceCoder {
 	 * 如果service对应的JavaCoder不存在，创建；否则不做任何操作
 	 * @throws UserException
 	 */
-	public void createService() {
+	public void create() {
 		if (javaCoder == null) {
 			/*
 			 * 创建java接口和实现类
@@ -59,11 +59,7 @@ public class ServiceCoder {
 	}
 	
 	/**
-	 * 创建一个方法
-	 * @param ret
-	 * @param name
-	 * @param parameters 所有的参数
-	 * @param exceptionName 所有抛出的异常
+	 * 添加方法
 	 * @return
 	 * @throws UserException 
 	 */

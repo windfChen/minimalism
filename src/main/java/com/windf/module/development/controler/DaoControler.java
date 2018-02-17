@@ -37,7 +37,7 @@ public class DaoControler extends ManagerGridControler<Dao>{
 
 	@RequestMapping(value = "/myList", method = {RequestMethod.GET})
 	public String myList() {
-		List<Dao> data = daoService.getMyList();
+		List<Dao> data = daoService.getAll();
 		List<String[]> result = new ArrayList<String[]>();
 		for (int i = 0; i < data.size(); i++) {
 			Dao dao = data.get(i);

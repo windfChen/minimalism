@@ -20,7 +20,7 @@ public class ServiceServiceImpl extends BaseManageGridServiceImpl<Service> imple
 	private ServiceDao serviceDao;
 	
 	@Override
-	public List<Service> getAllService(String moduleCode) throws UserException {
+	public List<Service> getAll(String moduleCode) throws UserException {
 		return serviceDao.listByModuleCode(moduleCode);
 	}
 
@@ -47,7 +47,7 @@ public class ServiceServiceImpl extends BaseManageGridServiceImpl<Service> imple
 		 * 创建代码
 		 */
 		ServiceCoder serviceCoder = new ServiceCoder(service);
-		serviceCoder.createService();
+		serviceCoder.create();
 		return 0;
 	}
 

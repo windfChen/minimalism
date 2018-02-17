@@ -14,5 +14,5 @@ public interface ServiceService extends ManageGirdService<Service> {
 	 * @return
 	 * @throws UserException
 	 */
-	List<Service> getAllService(String moduleCode) throws UserException;
+	List<Service> getAll(String moduleCode) throws UserException;
 }

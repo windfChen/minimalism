@@ -50,7 +50,6 @@ public class FieldServiceImpl extends BaseManageGridServiceImpl<Field> implement
 		 */
 		EntityCoder entityCoder = new EntityCoder(field.getEntity());
 		entityCoder.addField(field);
-		entityCoder.write();
 		
 		return 0;
 	}

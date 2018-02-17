@@ -10,5 +10,5 @@ public interface DaoService extends ManageGirdService<Dao> {
 	 * 查询的所有列表
 	 * @return
 	 */
-	List<Dao> getMyList();
+	List<Dao> getAll();
 }

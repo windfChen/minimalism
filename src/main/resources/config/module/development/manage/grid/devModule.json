@@ -70,6 +70,20 @@
 		"orderNum" : 3
 	},
 	{
+		"name" : "Controler",
+		"dataIndex" : "info",
+		"type" : "TextField",
+		"canList" : true,
+		"canSearch" : false,
+		"canAdd" : false,
+		"canBatchAdd" : false,
+		"canUpdate" : false,
+		"canReport" : false,
+		"canOrder" : false,
+		"display" : "<a href='../controler/?moduleCode=${code}'>管理Controler</a>",
+		"orderNum" : 6
+	},
+	{
 		"name" : "Service",
 		"dataIndex" : "info",
 		"type" : "TextField",
