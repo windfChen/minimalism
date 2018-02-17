@@ -8,7 +8,11 @@ public class Parameter {
 	private String descript;
 	private String type;
 	private boolean notEmpty;
-	private Map<String, String> patterns;
+	private Map<String, String> patterns = new HashMap<String, String>();
+	
+	private AbstractBaseCodeEntity codeEntity;// 反向关联
+	private String methodName;
+	private Module module;
 	
 	public Parameter() {
 		
@@ -17,13 +21,6 @@ public class Parameter {
 	public Parameter(String type, String name) {
 		this.name = name;
 		this.type = type;
-	}
-	
-	public void addPattern(String pattern, String errorMsg) {
-		if (patterns == null) {
-			patterns = new HashMap<String, String>();
-		}
-		patterns.put(pattern, errorMsg);
 	}
 
 	public String getName() {
@@ -58,12 +55,36 @@ public class Parameter {
 		this.patterns = patterns;
 	}
 
-	public boolean isNotEmpty() {
+	public boolean getNotEmpty() {
 		return notEmpty;
 	}
 
 	public void setNotEmpty(boolean notEmpty) {
 		this.notEmpty = notEmpty;
+	}
+
+	public AbstractBaseCodeEntity getCodeEntity() {
+		return codeEntity;
+	}
+
+	public void setCodeEntity(AbstractBaseCodeEntity codeEntity) {
+		this.codeEntity = codeEntity;
+	}
+
+	public String getMethodName() {
+		return methodName;
+	}
+
+	public void setMethodName(String methodName) {
+		this.methodName = methodName;
+	}
+
+	public Module getModule() {
+		return module;
+	}
+
+	public void setModule(Module module) {
+		this.module = module;
 	}
 
 }

@@ -3,6 +3,7 @@ package com.windf.module.development.modle.file.java;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -181,12 +182,23 @@ public class JavaCoder extends AbstractType{
 	 * @return
 	 */
 	public Method createMethod(Method method) throws UserException{
-		if (this.getMethod(method.methodName) != null) {
-			throw new UserException("方法已存在");
+		/*
+		 * 移除之前已存在的方法
+		 */
+		if (CollectionUtil.isNotEmpty(methods)) {
+			Iterator<Method> iterator = methods.iterator();
+			while (iterator.hasNext()) {
+				Method m = (Method) iterator.next();
+				if (m.methodName.equals(method.getMethodName())) {
+					iterator.remove();
+					break;
+				}
+			}
 		}
-		
+		/*
+		 * 添加方法
+		 */
 		this.methods.add(method);
-		
 		return method;
 	}
 

@@ -1,13 +1,19 @@
 package com.windf.module.development.modle.component;
 
+import java.util.List;
+
 import com.windf.core.exception.UserException;
 import com.windf.module.development.Constant;
 import com.windf.module.development.entity.Controler;
 import com.windf.module.development.entity.ControlerMethod;
+import com.windf.module.development.entity.Parameter;
 import com.windf.module.development.modle.file.java.Annotation;
+import com.windf.module.development.modle.file.java.CodeBlock;
+import com.windf.module.development.modle.file.java.Comment;
 import com.windf.module.development.modle.file.java.JavaCoder;
 import com.windf.module.development.modle.file.java.Method;
 import com.windf.module.development.modle.file.java.MethodReturn;
+import com.windf.module.development.modle.file.java.code.ParameterVerifyCoder;
 
 public class ControlerCoder {
 	private JavaCoder javaCoder;
@@ -82,6 +88,17 @@ public class ControlerCoder {
 			requestMappingAnnotation.addValue("method", "{RequestMethod.POST}");
 		}
 		method.addAnnotation(requestMappingAnnotation);
+		/*
+		 * 参数验证
+		 */
+		CodeBlock<List<Parameter>> codeBlock = new CodeBlock<List<Parameter>>();
+		codeBlock.setCodeable(new ParameterVerifyCoder());
+		codeBlock.setTabCount(2);
+		codeBlock.serialize(controlerMehtod.getParameters());
+		Comment comment =  new Comment(2, false);
+		comment.addLine("验证参数");
+		codeBlock.setComment(comment);
+		method.addCodeBlock(0, codeBlock);
 		/*
 		 * 写入
 		 */

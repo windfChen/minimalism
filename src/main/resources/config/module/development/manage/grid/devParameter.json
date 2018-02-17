@@ -1,5 +1,5 @@
 {
-	"title": "ControlerMethod管理",
+	"title": "ControlerMethod参数管理",
 	"columns": [{
 		"name" : "id",
 		"dataIndex" : "code",
@@ -13,6 +13,21 @@
 		"canOrder" : true,
 		"display" : null,
 		"orderNum" : 2
+	},
+	{
+		"name" : "类型",
+		"dataIndex" : "type",
+		"type" : "ComboBox",
+		"canList" : true,
+		"canSearch" : true,
+		"canAdd" : true,
+		"canBatchAdd" : true,
+		"canUpdate" : true,
+		"canReport" : true,
+		"canOrder" : true,
+		"display" : null,
+		"comboDataArray" : [{"id":"String","name":"String"},{"id":"Integer","name":"Integer"},{"id":"Double","name":"Double"},{"id":"Boolean","name":"Boolean"},{"id":"Date","name":"Date"}],
+		"orderNum" : 3
 	},
 	{
 		"name" : "名称",
@@ -29,8 +44,8 @@
 		"orderNum" : 4
 	},
 	{
-		"name" : "请求方式",
-		"dataIndex" : "requestMethod",
+		"name" : "是否可以为空",
+		"dataIndex" : "notEmpty",
 		"type" : "ComboBox",
 		"canList" : true,
 		"canSearch" : true,
@@ -40,26 +55,12 @@
 		"canReport" : true,
 		"canOrder" : true,
 		"display" : "",
-		"comboDataArray" : [{"id":"","name":"不限制"},{"id":"GET","name":"GET"},{"id":"POST","name":"POST"}],
-		"orderNum" : 4
-	},
-	{
-		"name" : "访问地址",
-		"dataIndex" : "urlPath",
-		"type" : "TextField",
-		"canList" : true,
-		"canSearch" : true,
-		"canAdd" : true,
-		"canBatchAdd" : true,
-		"canUpdate" : true,
-		"canReport" : true,
-		"canOrder" : true,
-		"display" : null,
+		"comboDataArray" : [{"id":"true","name":"可以为空"},{"id":"false","name":"不能为空"}],
 		"orderNum" : 5
 	},
 	{
-		"name" : "备注",
-		"dataIndex" : "comment",
+		"name" : "验证",
+		"dataIndex" : "patterns",
 		"type" : "TextField",
 		"canList" : true,
 		"canSearch" : true,
@@ -69,25 +70,25 @@
 		"canReport" : true,
 		"canOrder" : true,
 		"display" : null,
-		"orderNum" : 4
+		"orderNum" : 6
 	},
 	{
-		"name" : "操作",
-		"dataIndex" : "info",
+		"name" : "描述",
+		"dataIndex" : "descript",
 		"type" : "TextField",
 		"canList" : true,
-		"canSearch" : false,
-		"canAdd" : false,
-		"canBatchAdd" : false,
-		"canUpdate" : false,
-		"canReport" : false,
-		"canOrder" : false,
-		"display" : "<a href='../../parameter/?moduleCode=${param.moduleCode}&codeEntityName=${param.controlerName}&methodName=${name}'>管理参数</a>",
-		"orderNum" : 8
-	}
+		"canSearch" : true,
+		"canAdd" : true,
+		"canBatchAdd" : true,
+		"canUpdate" : true,
+		"canReport" : true,
+		"canOrder" : true,
+		"display" : null,
+		"orderNum" : 7
+	},
 	{
-		"name" : "Controler名称",
-		"dataIndex" : "controler.name",
+		"name" : "方法名称",
+		"dataIndex" : "methodName",
 		"type" : "Hidden",
 		"canList" : false,
 		"canSearch" : false,
@@ -96,12 +97,26 @@
 		"canUpdate" : true,
 		"canReport" : false,
 		"canOrder" : false,
-		"display" : "${param.controlerName}",
-		"orderNum" : 4
+		"display" : "${param.methodName}",
+		"orderNum" : 8
+	},
+	{
+		"name" : "codeEntity名称",
+		"dataIndex" : "codeEntity.name",
+		"type" : "Hidden",
+		"canList" : false,
+		"canSearch" : false,
+		"canAdd" : true,
+		"canBatchAdd" : false,
+		"canUpdate" : true,
+		"canReport" : false,
+		"canOrder" : false,
+		"display" : "${param.codeEntityName}",
+		"orderNum" : 8
 	},
 	{
 		"name" : "模块code",
-		"dataIndex" : "controler.module.code",
+		"dataIndex" : "module.code",
 		"type" : "Hidden",
 		"canList" : false,
 		"canSearch" : false,
@@ -111,20 +126,9 @@
 		"canReport" : false,
 		"canOrder" : false,
 		"display" : "${param.moduleCode}",
-		"orderNum" : 4
+		"orderNum" : 9
 	}],
-	"menus" : [{
-		"name" : "返回",
-		"canSelect" : false,
-		"isSingleSelect" : false,
-		"checkColumn" : '',
-		"actionAddress" : '../../controler/?moduleCode=${param.moduleCode}',
-		"ajaxReturn" : false,
-		"confirm": false,
-		"title" : null,
-		"fields" : null,
-		"orderNum" : 1
-	}],
+	"menus" : [],
 	"isPrepared" : true,
 	"canAdd" : true,
 	"canBatchAdd" : false,

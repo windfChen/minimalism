@@ -1,7 +1,10 @@
 package com.windf.module.development.entity;
 
+import java.util.List;
+
 public class ControlerMethod extends AbstractBaseCodeEntity{
 
+	private List<Parameter> parameters;
 	private String urlPath;
 	private String requestMethod;
 	private Controler controler;
@@ -28,6 +31,14 @@ public class ControlerMethod extends AbstractBaseCodeEntity{
 
 	public void setControler(Controler controler) {
 		this.controler = controler;
+	}
+
+	public List<Parameter> getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(List<Parameter> parameters) {
+		this.parameters = parameters;
 	}
 	
 	
