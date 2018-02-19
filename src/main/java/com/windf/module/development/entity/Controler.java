@@ -3,14 +3,13 @@ package com.windf.module.development.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.windf.core.util.reflect.UnSerializable;
+
 public class Controler extends AbstractBaseCodeEntity {
-	// 基本信息
 	private String urlPath;
-	// 方法列表
-	private List<ControlerMethod> controlerMehthods = new ArrayList<ControlerMethod>();
-	
-	// 反向引用
-	private Module module;
+	private List<ControlerMethod> controlerMehthods = new ArrayList<ControlerMethod>();	// 方法列表
+	@UnSerializable
+	private Module module;	// 反向引用
 
 	public String getUrlPath() {
 		return urlPath;

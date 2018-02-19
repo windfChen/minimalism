@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.windf.core.exception.DataAccessException;
 import com.windf.core.exception.ParameterException;
+import com.windf.module.development.Constant;
 import com.windf.module.development.entity.Service;
 import com.windf.module.development.entity.ServiceMethod;
 import com.windf.module.development.fdao.ServiceDao;
@@ -22,6 +23,9 @@ public class ServiceMethodDaoImpl implements ServiceMethodDao {
 
 	@Override
 	public ServiceMethod read(String moduleCode, String serviceName, String serviceMethodName) throws DataAccessException {
+		/*
+		 * 读取Service
+		 */
 		Service service = this.getService(moduleCode, serviceName);
 		/*
 		 * 查找ServiceMethod
@@ -35,12 +39,18 @@ public class ServiceMethodDaoImpl implements ServiceMethodDao {
 				break;
 			}
 		}
-		
 		return result;
 	}
 
 	@Override
 	public int create(ServiceMethod bean) throws DataAccessException {
+		/*
+		 * 设置id
+		 */
+		bean.setId(Constant.JAVA_MODULE_BASE_PACKAGE_POINT + "." + bean.getService().getModule().getCode() + ".service." + bean.getService().getName() + "." + bean.getName());
+		/*
+		 * 读取Service
+		 */
 		Service service = this.getService(bean.getService().getModule().getCode(), bean.getService().getName());
 		bean.setService(service);
 		/*
@@ -59,6 +69,10 @@ public class ServiceMethodDaoImpl implements ServiceMethodDao {
 		 * 添加新的serviceName
 		 */
 		serviceMethodList.add(bean);
+		/*
+		 * 持久化文件
+		 */
+		serviceDao.create(service);
 		return 1;
 	}
 

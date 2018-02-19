@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.windf.core.exception.DataAccessException;
 import com.windf.core.exception.ParameterException;
+import com.windf.module.development.Constant;
 import com.windf.module.development.entity.Dao;
 import com.windf.module.development.entity.DaoMethod;
 import com.windf.module.development.fdao.DaoDao;
@@ -22,6 +23,9 @@ public class DaoMethodDaoImpl implements DaoMethodDao {
 
 	@Override
 	public DaoMethod read(String moduleCode, String daoName, String daoMethodName) throws DataAccessException {
+		/*
+		 * 读取Dao
+		 */
 		Dao dao = this.getDao(moduleCode, daoName);
 		/*
 		 * 查找DaoMethod
@@ -35,12 +39,18 @@ public class DaoMethodDaoImpl implements DaoMethodDao {
 				break;
 			}
 		}
-		
 		return result;
 	}
 
 	@Override
 	public int create(DaoMethod bean) throws DataAccessException {
+		/*
+		 * 设置id
+		 */
+		bean.setId(Constant.JAVA_MODULE_BASE_PACKAGE_POINT + "." + bean.getDao().getModule().getCode() + ".dao." + bean.getDao().getName() + "." + bean.getName());
+		/*
+		 * 读取Dao
+		 */
 		Dao dao = this.getDao(bean.getDao().getModule().getCode(), bean.getDao().getName());
 		bean.setDao(dao);
 		/*
@@ -59,6 +69,10 @@ public class DaoMethodDaoImpl implements DaoMethodDao {
 		 * 添加新的DaoMethod
 		 */
 		daoMethodList.add(bean);
+		/*
+		 * 持久化文件
+		 */
+		daoDao.create(dao);
 		return 1;
 	}
 

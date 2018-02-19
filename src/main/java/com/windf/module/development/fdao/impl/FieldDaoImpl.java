@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Repository;
 
 import com.windf.core.exception.DataAccessException;
+import com.windf.module.development.Constant;
 import com.windf.module.development.entity.Entity;
 import com.windf.module.development.entity.Field;
 import com.windf.module.development.fdao.EntityDao;
@@ -21,6 +22,9 @@ public class FieldDaoImpl implements FieldDao{
 
 	@Override
 	public Field read(String moduleCode, String entityName, String fieldName) throws DataAccessException {
+		/*
+		 * 读取模块
+		 */
 		Entity entity = this.getEntity(moduleCode, entityName);
 		/*
 		 * 查找Field
@@ -34,12 +38,18 @@ public class FieldDaoImpl implements FieldDao{
 				break;
 			}
 		}
-		
 		return result;
 	}
 
 	@Override
 	public int create(Field bean) throws DataAccessException {
+		/*
+		 * 设置id
+		 */
+		bean.setId(Constant.JAVA_MODULE_BASE_PACKAGE_POINT + "." + bean.getEntity().getModule().getCode() + ".entity." + bean.getEntity().getName() + "." + bean.getName());
+		/*
+		 * 读取实体
+		 */
 		Entity entity = this.getEntity(bean.getEntity().getModule().getCode(), bean.getEntity().getName());
 		/*
 		 * 删除之前的同名Field
@@ -66,7 +76,13 @@ public class FieldDaoImpl implements FieldDao{
 
 	@Override
 	public List<Field> listByEntityName(String moduleCode, String entityName) throws DataAccessException {
+		/*
+		 * 读取模块
+		 */
 		Entity entity = this.getEntity(moduleCode, entityName);
+		/*
+		 * 读取列表
+		 */
 		return entity.getFields();
 	}
 	

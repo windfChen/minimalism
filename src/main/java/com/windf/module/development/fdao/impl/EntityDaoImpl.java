@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.windf.core.exception.DataAccessException;
 import com.windf.core.util.file.FileUtil;
 import com.windf.core.util.file.XmlFileUtil;
+import com.windf.module.development.Constant;
 import com.windf.module.development.entity.Entity;
 import com.windf.module.development.entity.Module;
 import com.windf.module.development.fdao.EntityDao;
@@ -25,6 +26,9 @@ public class EntityDaoImpl implements EntityDao {
 
 	@Override
 	public Entity read(String moduleCode, String entityName) throws DataAccessException {
+		/*
+		 * 读取模块
+		 */
 		Module module = moduleDao.read(moduleCode);
 		/*
 		 * 查找Entity
@@ -48,13 +52,20 @@ public class EntityDaoImpl implements EntityDao {
 		 * 设置初始化属性
 		 */
 		if (result.getModule() == null) {
-			result.setModule(moduleDao.read(moduleCode));
+			result.setModule(module);
 		}
 		return result;
 	}
 
 	@Override
 	public int create(Entity bean) throws DataAccessException {
+		/*
+		 * 设置id
+		 */
+		bean.setId(Constant.JAVA_MODULE_BASE_PACKAGE_POINT + "." + bean.getModule().getCode() + ".dao." + bean.getName());
+		/*
+		 * 获取对应模块
+		 */
 		Module module = moduleDao.read(bean.getModule().getCode());
 		/*
 		 * 删除之前的同名Entity
@@ -79,7 +90,7 @@ public class EntityDaoImpl implements EntityDao {
 		/*
 		 * 更新模块配置文件
 		 */
-		moduleDao.update(bean.getModule());
+		moduleDao.update(module);
 		return 1;
 	}
 
@@ -90,7 +101,7 @@ public class EntityDaoImpl implements EntityDao {
 		 */
 		Module module = moduleDao.read(moduleCode);
 		/*
-		 * 获取模块列表
+		 * 获取列表
 		 */
 		return module.getEntitys();
 	}

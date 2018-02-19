@@ -13,11 +13,8 @@ public class Field extends AbstractBaseCodeEntity {
 	private String defaultValue;
 	private boolean isAutoIncrement;
 	private boolean isPrimaryKey;
-	/*
-	 * 反向引用
-	 */
 	@UnSerializable
-	private Entity entity;
+	private Entity entity;	// 反向引用
 
 	/**
 	 * 转化为字符串

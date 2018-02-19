@@ -3,12 +3,13 @@ package com.windf.module.development.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.windf.core.util.reflect.UnSerializable;
+
 public class Service extends AbstractBaseCodeEntity{
 
 	private String path;
-
 	private List<ServiceMethod> serviceMethods = new ArrayList<ServiceMethod>();
-
+	@UnSerializable
 	private Module module;
 
 	public String getPath() {
