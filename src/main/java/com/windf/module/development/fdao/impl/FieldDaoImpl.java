@@ -57,6 +57,10 @@ public class FieldDaoImpl implements FieldDao{
 		 * 添加新的Field
 		 */
 		entity.getFields().add(bean);
+		/*
+		 * 持久化文件
+		 */
+		entityDao.create(entity);
 		return 1;
 	}
 
@@ -73,5 +77,4 @@ public class FieldDaoImpl implements FieldDao{
 		}
 		return entity;
 	}
-
 }

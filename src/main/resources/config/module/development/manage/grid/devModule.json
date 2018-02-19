@@ -42,7 +42,7 @@
 		"orderNum" : 4
 	},
 	{
-		"name" : "路径",
+		"name" : "参考路径",
 		"dataIndex" : "basePath",
 		"type" : "TextField",
 		"canList" : true,
@@ -58,7 +58,7 @@
 	{
 		"name" : "描述",
 		"dataIndex" : "info",
-		"type" : "TextArea",
+		"type" : "TextField",
 		"canList" : true,
 		"canSearch" : false,
 		"canAdd" : true,

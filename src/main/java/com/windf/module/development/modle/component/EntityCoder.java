@@ -45,6 +45,10 @@ public class EntityCoder {
 	 */
 	public void addField(Field field) throws UserException {
 		/*
+		 * 检查javaCoder是否存在，如果存在就读取，否则创建
+		 */
+		create();
+		/*
 		 * field属性
 		 */
 		Attribute attribute = new Attribute(field.getType(), field.getName());

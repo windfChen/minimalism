@@ -9,7 +9,6 @@ import com.windf.core.frame.Filter;
 import com.windf.core.frame.Initializationable;
 import com.windf.core.frame.Session;
 import com.windf.core.util.file.FileUtil;
-import com.windf.core.util.reflect.UnSerializable;
 
 public class Module {
 
@@ -107,7 +106,6 @@ public class Module {
 	 * @param yourPath
 	 * @return
 	 */
-	@UnSerializable
 	public String getConfigFilePath() {
 		String configPath = FileUtil.getConfigPath();
 		String result = configPath + "/module/" + this.getCode();

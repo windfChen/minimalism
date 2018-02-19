@@ -9,7 +9,6 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.windf.core.bean.Page;
-import com.windf.core.util.SQLUtil;
 import com.windf.module.development.entity.Entity;
 import com.windf.module.development.entity.Module;
 import com.windf.module.development.fdao.EntityDao;
@@ -43,7 +42,6 @@ public class EntityServiceImpl extends BaseManageGridServiceImpl<Entity> impleme
 		/*
 		 * 设置默认参数
 		 */
-		entity.setTableName(SQLUtil.entityName2TableName(entity.getName()));
 		Module module = moduleDao.read(entity.getModule().getCode());
 		entity.setModule(module);
 		/*

@@ -54,6 +54,14 @@ public class FileUtil {
 	}
 	
 	/**
+	 * 获得WEB-INF文件位置
+	 * @return
+	 */
+	public static String getWEBINFPath() {
+		return getWebappPath() + File.separator + "WEB-INF";
+	}
+	
+	/**
 	 * 获得文件的真实路径
 	 * 
 	 * @param filePath

@@ -1,6 +1,7 @@
 package com.windf.module.development.entity;
 
 import com.windf.core.util.StringUtil;
+import com.windf.core.util.reflect.UnSerializable;
 import com.windf.module.development.util.JavaCodeUtil;
 
 public class Field extends AbstractBaseCodeEntity {
@@ -15,6 +16,7 @@ public class Field extends AbstractBaseCodeEntity {
 	/*
 	 * 反向引用
 	 */
+	@UnSerializable
 	private Entity entity;
 
 	/**

@@ -1,14 +1,11 @@
 package com.windf.module.development.modle;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.windf.core.exception.CodeException;
 import com.windf.core.exception.UserException;
-import com.windf.core.util.file.XmlFileUtil;
 import com.windf.module.development.entity.Module;
 
 /**
@@ -33,18 +30,7 @@ public class ModuleMaster {
 	 * @throws UserException
 	 */
 	public Module getModule(String moduleCode) {
-		Module result = modules.get(moduleCode);
-		if (result == null) {
-			File exampleDescriptFile = Module.getMoudleConfigFileByCode(moduleCode);
-			if (!exampleDescriptFile.exists()) {
-				 throw new CodeException("模板模块：[" + moduleCode + "]的配置文件不存在");
-			}
-
-			result = XmlFileUtil.readXml2Object(exampleDescriptFile, Module.class);
-			modules.put(moduleCode, result);
-		}
-
-		return result;
+		return modules.get(moduleCode);
 	}
 	
 	/**
@@ -52,7 +38,7 @@ public class ModuleMaster {
 	 * @param module
 	 */
 	public void addModule(Module module) {
-		modules.put(module.getName(), module);
+		modules.put(module.getCode(), module);
 	}
 	
 	/**

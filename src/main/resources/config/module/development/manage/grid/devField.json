@@ -38,7 +38,6 @@
 		"canBatchAdd" : true,
 		"canUpdate" : true,
 		"canReport" : true,
-		"canOrder" : true,
 		"display" : null,
 		"orderNum" : 4
 	},
@@ -59,7 +58,7 @@
 	{
 		"name" : "数据库类型",
 		"dataIndex" : "databaseType",
-		"type" : "TextField",
+		"type" : "ComboBox",
 		"canList" : true,
 		"canSearch" : true,
 		"canAdd" : true,
@@ -67,6 +66,7 @@
 		"canUpdate" : true,
 		"canReport" : true,
 		"canOrder" : true,
+		"comboDataArray" : [{"id":"varchar","name":"varchar"},{"id":"int","name":"int"},{"id":"text","name":"text"},{"id":"date","name":"date"}],
 		"display" : null,
 		"orderNum" : 4
 	},

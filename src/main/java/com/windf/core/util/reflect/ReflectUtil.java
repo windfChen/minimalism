@@ -6,6 +6,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -316,5 +317,19 @@ public class ReflectUtil {
 		
 		return result;
 	}
-
+	
+	/**
+	 * 获取包括父类在内的所有字段
+	 * @param clazz
+	 * @return
+	 */
+	public static Field[] getAllField(Class<? extends Object> clazz) {
+		List<Field> fieldList = new ArrayList<>() ;
+		while (clazz != null) {//当父类为null的时候说明到达了最上层的父类(Object类).
+		      fieldList.addAll(Arrays.asList(clazz .getDeclaredFields()));
+		      clazz = clazz.getSuperclass(); //得到父类,然后赋给自己
+		}
+		
+		return fieldList.toArray(new Field[fieldList.size()]);
+	}
 }

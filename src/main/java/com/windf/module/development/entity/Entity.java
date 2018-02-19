@@ -3,19 +3,13 @@ package com.windf.module.development.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.windf.core.util.reflect.UnSerializable;
+
 public class Entity extends AbstractBaseCodeEntity {
 
-	private String tableName;
 	private List<Field> fields = new ArrayList<Field>();
+	@UnSerializable
 	private Module module;
-
-	public String getTableName() {
-		return tableName;
-	}
-
-	public void setTableName(String tableName) {
-		this.tableName = tableName;
-	}
 
 	public List<Field> getFields() {
 		return fields;

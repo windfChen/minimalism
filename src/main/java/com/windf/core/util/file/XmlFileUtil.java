@@ -3,6 +3,8 @@ package com.windf.core.util.file;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.HashSet;
@@ -25,7 +27,10 @@ import com.windf.core.exception.UserException;
 import com.windf.core.util.StringUtil;
 import com.windf.core.util.reflect.BeanUtil;
 import com.windf.core.util.reflect.ReflectUtil;
+import com.windf.core.util.reflect.SerializableBaseTypeParameter;
+import com.windf.core.util.reflect.SerializableParameterName;
 import com.windf.core.util.reflect.SimpleField;
+import com.windf.core.util.reflect.UnSerializable;
 
 public class XmlFileUtil {
 	private static final String DEFAULT_LIST_ITEM_ELEMENT_NAME = "item";
@@ -173,7 +178,7 @@ public class XmlFileUtil {
 		Document document = DocumentHelper.createDocument(); 
 		Element element = document.addElement(fileName);
         
-        writeObject2Xml(obj, element, null);
+        writeObject2Xml(obj, element, null, null, false);
 
         // 创建输出格式(OutputFormat对象)
         OutputFormat format = OutputFormat.createPrettyPrint();
@@ -207,7 +212,7 @@ public class XmlFileUtil {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	public static boolean writeObject2Xml(Object object, Element element, Set<Class> stopDeadlock) {
+	public static boolean writeObject2Xml(Object object, Element element, Set<Class> stopDeadlock, String[] serializableParameterNames, boolean onlyBaseParameter) {
 		
 		if (ReflectUtil.isBaseType(object.getClass())) {
 			element.setText(object.toString());
@@ -217,7 +222,7 @@ public class XmlFileUtil {
 			while (iterator.hasNext()) {
 				Element subElement = element.addElement(DEFAULT_LIST_ITEM_ELEMENT_NAME);
 				Object obj = (Object) iterator.next();
-				writeObject2Xml(obj, subElement, null);
+				writeObject2Xml(obj, subElement, null, serializableParameterNames, onlyBaseParameter);
 			}
 		} else if (ReflectUtil.isMap(object.getClass())) {
 			Map map = (Map) object;
@@ -227,7 +232,7 @@ public class XmlFileUtil {
 				Object obj = map.get(key);
 				
 				Element subElement = element.addElement(key);
-				writeObject2Xml(obj, subElement, null);
+				writeObject2Xml(obj, subElement, null, serializableParameterNames, onlyBaseParameter);
 				
 			}
 		} else {
@@ -236,28 +241,90 @@ public class XmlFileUtil {
 			 */
 			if (stopDeadlock == null) {
 				stopDeadlock = new HashSet<Class>();
-			} 
+			}
 			if (!stopDeadlock.add(object.getClass())) {	
 				element.getParent().remove(element);
 				return false;
 			}
-
 			/*
-			 *  获得对象的所有非空属性
+			 *  遍历对象的所有属性
 			 */
-			Map<String, Object> getterMethodValueMap = BeanUtil.getAllGetterMethods(object);
-			
-			/*
-			 * 遍历对象的getter属性对应的值，把属性名和值放到xml文件里
-			 */
-			Iterator<String> getterMethodValueMapKeysIterator = getterMethodValueMap.keySet().iterator();
-			while (getterMethodValueMapKeysIterator.hasNext()) {
-				String methodName = getterMethodValueMapKeysIterator.next();
-				Object result = getterMethodValueMap.get(methodName);
-				
-				Element subElement = element.addElement(methodName);
-				writeObject2Xml(result, subElement, stopDeadlock);
-				
+			Field[] fields = ReflectUtil.getAllField(object.getClass());
+			for (int i = 0; i < fields.length; i++) {
+				Field field = fields[i];
+				/*
+				 * 静态属性不序列化
+				 */
+				int modifiers = field.getModifiers();
+				if (Modifier.isStatic(modifiers)) {
+					continue;
+				}
+				/*
+				 * 如果指定了序列化的字段，需要验证是否在该序列化中
+				 */
+				if (serializableParameterNames != null) {
+					boolean hasParameterName = false;
+					/*
+					 * 遍历指定的序列化字段名称数组
+					 */
+					for (int j = 0; j < serializableParameterNames.length; j++) {
+						if (field.getName().equals(serializableParameterNames[j])) {
+							hasParameterName = true;
+							break;
+						}
+					}
+					/*
+					 * 如果没有找到，不再进行
+					 */
+					if (!hasParameterName) {
+						continue;
+					}
+				}
+				/*
+				 * 检查是否可以序列化基本属性
+				 */
+				if (onlyBaseParameter && !ReflectUtil.isBaseType(field.getClass())) {
+					continue;
+				}
+				/*
+				 * 不能是非序列化的属性
+				 */
+				if (field.getAnnotation(UnSerializable.class) != null) {
+					continue;
+				}
+				/*
+				 * 读取属性的值
+				 */
+				Object result = BeanUtil.invockeGetterMethod(object, BeanUtil.getGetterMethodName(field.getName()));
+				/*
+				 * 如果属性值为空，不再写入
+				 */
+				if (result == null) {
+					continue;
+				}
+				/*
+				 * 检查字段是否拥有参数序列化注解，只是序列化对象的部分属性
+				 */
+				SerializableParameterName serializableParameterName = field.getAnnotation(SerializableParameterName.class);
+				String[] newSerializableParameterNames = null;
+				if (serializableParameterName != null) {
+					newSerializableParameterNames = serializableParameterName.value();	
+				}
+				/*
+				 * 检查字段是是否拥有值序列化基础实行的注解
+				 */
+				boolean newOnlyBaseParameter = false;
+				if (field.getAnnotation(SerializableBaseTypeParameter.class) != null) {
+					newOnlyBaseParameter = true;
+				}
+				/*
+				 * 根据属性名创建元素
+				 */
+				Element subElement = element.addElement(field.getName());
+				/*
+				 * 递归，读取Object到subElement
+				 */
+				writeObject2Xml(result, subElement, stopDeadlock, newSerializableParameterNames, newOnlyBaseParameter);
 			}
 		}
 		

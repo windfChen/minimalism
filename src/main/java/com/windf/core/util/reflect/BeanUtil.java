@@ -43,30 +43,22 @@ public class BeanUtil {
 				Method method = methods[i];
 				String methodName = method.getName();
 
-				// 是getter方法，而且不是不序列化方法的
+				// 是getter方法
 				if (isGetterMethod(method)) {
-					boolean isUnSerializable = false;
-					try {
-						isUnSerializable = method.getAnnotation(UnSerializable.class) != null;
-					} catch (Exception e) {
-						isUnSerializable = false;
-					}
 					
-					if (!isUnSerializable) {
-						Object result = null;
-						try {
-							result = method.invoke(object);
-						} catch (IllegalAccessException e) {
-							e.printStackTrace();
-						} catch (IllegalArgumentException e) {
-							e.printStackTrace();
-						} catch (InvocationTargetException e) {
-							e.printStackTrace();
-						}
-						if (result != null) {
-							methodName = getNameByGetterOrSetter(methodName);
-							getterMethodValueMap.put(methodName, result);
-						}
+					Object result = null;
+					try {
+						result = method.invoke(object);
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+					} catch (IllegalArgumentException e) {
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						e.printStackTrace();
+					}
+					if (result != null) {
+						methodName = getNameByGetterOrSetter(methodName);
+						getterMethodValueMap.put(methodName, result);
 					}
 				}
 			}
@@ -135,6 +127,7 @@ public class BeanUtil {
 		if (result != null) {
 			result = (T) setValueByMap(result, values);
 		}
+		
 		
 		return result;
 	}
@@ -211,7 +204,7 @@ public class BeanUtil {
 	}
 	
 	/**
-	 * 根据属性名称，获得getter方法名称
+	 * 根据属性名称，获得setter方法名称
 	 * 只是拼接字符串，不做任何验证
 	 * @param name
 	 * @return
@@ -254,6 +247,28 @@ public class BeanUtil {
 			e1.printStackTrace();
 		}
 		
+		return result;
+	}
+	
+	/*
+	 * 执行对象的方法，获得返回值
+	 */
+	public static Object invockeGetterMethod(Object object, String methodName) {
+		Object result = null;
+		try {
+			Method method = object.getClass().getMethod(methodName);
+			result = method.invoke(object);
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
 		return result;
 	}
 }
