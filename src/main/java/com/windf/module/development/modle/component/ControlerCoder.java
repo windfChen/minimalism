@@ -42,13 +42,11 @@ public class ControlerCoder {
 			/*
 			 * 设置control注解
 			 */
-			Annotation controllerAnnotation = new Annotation("Controller");
-			javaCoder.setAnnotation(controllerAnnotation);
+			javaCoder.setAnnotation(new Annotation("Controller"));
 			/*
 			 * 设置scope多例注解
 			 */
-			Annotation scopeAnnotation = new Annotation("Scope", "prototype");
-			javaCoder.addAnnotation(scopeAnnotation);
+			javaCoder.addAnnotation(new Annotation("Scope", "prototype"));
 			/*
 			 * 设置webPath
 			 */
@@ -68,6 +66,10 @@ public class ControlerCoder {
 	 * @throws UserException 
 	 */
 	public void addMethod(ControlerMethod controlerMehtod) throws UserException {
+		/*
+		 * 检查javaCoder是否存在，如果存在就读取，否则创建
+		 */
+		create();
 		/*
 		 * 设置返回值为String
 		 */

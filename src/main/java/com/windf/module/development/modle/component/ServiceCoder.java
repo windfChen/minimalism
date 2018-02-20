@@ -43,6 +43,10 @@ public class ServiceCoder {
 			javaCoder = new JavaCoder(Constant.JAVA_MODULE_BASE_PACKAGE + "/" + moduleCode + "/service", serviceName);
 			javaImplCoder = new JavaCoder(Constant.JAVA_MODULE_BASE_PACKAGE + "/" + moduleCode + "/service/impl", serviceName + "Impl");
 			/*
+			 * 设置javaCode为接口
+			 */
+			javaCoder.setInterfaceType();
+			/*
 			 * 设置注解
 			 */
 			Annotation serviceAnnotation = javaImplCoder.getAnnotationByName("Service");
@@ -64,6 +68,10 @@ public class ServiceCoder {
 	 * @throws UserException 
 	 */
 	public void addMethod(ServiceMethod serviceMethod) throws UserException {
+		/*
+		 * 检查javaCoder是否存在，如果存在就读取，否则创建
+		 */
+		create();
 		/*
 		 * 返回值
 		 */
@@ -93,6 +101,10 @@ public class ServiceCoder {
 		Method javaImplCoderMethod = new Method(name, methodReturn, methodParameters, exceptionType, false);
 		javaCoderMethod = javaCoder.createMethod(javaCoderMethod);
 		javaImplCoderMethod = javaImplCoder.createMethod(javaImplCoderMethod);
+		/*
+		 * 设置Overrid注解
+		 */
+		javaImplCoderMethod.setAnnotation(new Annotation("Override"));
 		/*
 		 * 写入java文件
 		 */

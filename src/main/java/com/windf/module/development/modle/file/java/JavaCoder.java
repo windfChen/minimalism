@@ -20,6 +20,7 @@ import com.windf.module.development.util.file.TextFileUtil;
 public class JavaCoder extends AbstractType{
 	
 	private static Map<String, JavaCoder> allJavaCoders = new HashMap<String, JavaCoder>();
+	
 	public static JavaCoder getJavaCoderByName(String name) {
 		return allJavaCoders.get(name);
 	}
@@ -49,24 +50,43 @@ public class JavaCoder extends AbstractType{
 	
 	public JavaCoder(String packagePath, String className) {
 		this.classPath = SourceFileUtil.getJavaPath() + "/" + packagePath + "/" + className + ".java";
-		
-		File javaFile = new File(this.classPath);
-		
 		/*
-		 * 如果不存在，创建java 
+		 * 读取java文件
 		 */
-		if (javaFile.exists()) {
+		File javaFile = new File(this.classPath);
+		/*
+		 * 判断文件是否存在
+		 */
+		if (javaFile.exists()) {	// 如果存在，读取文件内容
 			readCodes(javaFile);
-		} else {
+		} else {	// 如果不存在，默认类的属性内容
+			/*
+			 * 设置包的信息
+			 */
 			String newPackagePath = packagePath.replace("/", ".");
 			if (newPackagePath.startsWith(".")) {
 				newPackagePath = newPackagePath.substring(1);
 			}
 			this.packageInfo = "package" + Constant.WORD_SPLIT + newPackagePath + ";";
+			/*
+			 * 设置className
+			 */
 			this.className = className;
+			/*
+			 * 设置访问修饰符
+			 */
 			this.modifier = Constant.MODIFY_PUBLIC;
+			/*
+			 * 默认类型为Class
+			 */
 			this.classType = Constant.TYPE_CLASS;
+			/*
+			 * 默认方法结尾标志
+			 */
 			this.classEnd = "}";
+			/*
+			 * 写入文件中
+			 */
 			this.write();
 		}
 		
@@ -76,7 +96,7 @@ public class JavaCoder extends AbstractType{
 		allJavaCoders.put(className, this);
 	}
 
-	private void readCodes(File javaFile) {
+	public void readCodes(File javaFile) {
 		
 		TextFileUtil.readLine(javaFile, new LineReader() {
 			
@@ -88,10 +108,19 @@ public class JavaCoder extends AbstractType{
 			
 			@Override
 			public String readLine(List<String> oldLines, String lineContent, int lineNo) {
-				
-				// 统一制表符
+				/*
+				 * 跳过空白行
+				 */
+				if (lineContent.trim().length() == 0) {
+					return lineContent;
+				}
+				/*
+				 *  统一制表符
+				 */
 				lineContent = lineContent.replace("\t", Constant.TAB);
-			
+				/*
+				 * 处理package和import信息
+				 */
 				if (lineContent.startsWith("package ")) {
 					packageInfo = lineContent;
 					return lineContent;
@@ -99,11 +128,18 @@ public class JavaCoder extends AbstractType{
 					imports.addLine(lineContent);
 					return lineContent;
 				} 
-				
+				/*
+				 * 发现未导入的类
+				 */
 				imports.recognitionNewClass(lineContent);
-				
+				/*
+				 * 解析类的正文
+				 */
 				String classLinePatternStr = "^\\s*(public|private|protected)?\\s*(abstract)?\\s*(class|interface|@interface){1}\\s*(\\w*)(<(\\w*)>)?\\s*(extends ((?!implements)[^\\{])*)?\\s*(implements\\s*[^\\{]*)?\\s*\\{\\s*$";
 				if (RegularUtil.match(lineContent, classLinePatternStr)) {
+					/*
+					 * 处理类的头部
+					 */
 					String[] ss = JavaCodeUtil.getInnerString(lineContent, classLinePatternStr);
 					modifier = ss[0];
 					if (ss[1] != null) {
@@ -114,47 +150,107 @@ public class JavaCoder extends AbstractType{
 					classGenre = ss[5];
 					extend = ss[6] == null? null: ss[6].substring("extends ".length());
 					implementsStr = ss[7];
-					
+					/*
+					 * 设置并且重置注解和注释
+					 */
 					setComment(comment);
 					setAnnotations(annotations);
 					reset();
 				} else if (Method.isMethodEnd(lineContent)) {
+					/*
+					 * 方法结束处理
+					 */
 					isInMethod = false;
-					
+					/*
+					 * 处理方法内部信息
+					 */
+					method.initCodeBlocks();
+					/*
+					 * 设置并且重置注解和注释
+					 */
 					method.setComment(comment);
 					method.setAnnotations(annotations);
-					method.initCodeBlocks();
 					reset();
 				} else if (isInMethod) {
+					/*
+					 * 如果是方法中，全部放到方法代码里面
+					 */
 					method.addLine(lineContent);
 				} else if (Comment.isCommentEnd(lineContent)) {
+					/*
+					 * 注释结尾处理
+					 */
 					inComments = false;
 					comment.end(lineContent);
 				} else if (inComments) {
+					/*
+					 * 注释内容处理
+					 */
 					comment.addLine(lineContent);
 				} else if (Comment.isCommentStart(lineContent)) {
+					/*
+					 * 注释开始处理
+					 */
 					inComments = true;
 					comment = new Comment(lineContent);
 				} else if (Annotation.isAnnotationLine(lineContent)) {
+					/*
+					 * 注解处理
+					 */
 					annotations.add(lineContent);
 				} else if (Method.isMethodStart(lineContent)) {
+					/*
+					 * 方法开始处理
+					 */
 					isInMethod = true;
+					/*
+					 * 创建新的方法
+					 */
 					method = new Method(lineContent);
+					/*
+					 * 添加到方法列表中
+					 */
 					methods.add(method);
 				} else if (Method.isInterfaceMethod(lineContent)) {
+					/*
+					 * abstract方法识别
+					 * 创建新的方法
+					 */
 					method = new Method(lineContent);
+					/*
+					 * 添加到方法列表
+					 */
 					methods.add(method);
+					/*
+					 * 初始化方法内部信息
+					 */
+					method.initCodeBlocks();
+					/*
+					 * 设置并重置注解和注释
+					 */
 					method.setComment(comment);
 					method.setAnnotations(annotations);
-					method.initCodeBlocks();
 					reset();
 				} else if (Attribute.isAttributeLine(lineContent)) {
+					/*
+					 * 属性处理
+					 * 创建新的属性
+					 */
 					Attribute attribute = new Attribute(lineContent);
+					/*
+					 * 添加到属性列表
+					 */
 					attributes.add(attribute);
+					/*
+					 * 设置并重置注解和注释
+					 */
 					attribute.setAnnotations(annotations);
 					attribute.setComment(comment);
 					reset();
-				} else if (isClassEnd(lineContent)) {
+				} else if (isClassEndLine(lineContent)) {
+					/*
+					 * 方法结尾处理
+					 */
 					classEnd = lineContent;
 				}
 				
@@ -167,13 +263,66 @@ public class JavaCoder extends AbstractType{
 			}
 		}, true);
 	}
-
+	
 	/**
-	 * 类是否存在
-	 * @return
+	 * 把类写到文件中
 	 */
-	public boolean isExist() {
-		return methods != null && methods.size() > 0;
+	public List<String> write() {
+		List<String> result = new ArrayList<String>();
+		/*
+		 * 头部
+		 */
+		result.add(packageInfo);
+		result.add("");
+		/*
+		 * 类注释、注解、方法头部
+		 */
+		result.addAll(getComment());
+		result.addAll(getAnnotationsString(0));
+		result.add(this.getClassNameLine());
+		result.add("");
+		/*
+		 * 所有属性
+		 */
+		for (int i = 0; i < attributes.size(); i++) {
+			Attribute attribute = attributes.get(i);
+			result.addAll(attribute.write());
+		}
+		if (attributes.size() > 0) {
+			result.add("");
+		}
+		/*
+		 * 所有方法
+		 */
+		for (int i = 0; i < methods.size(); i++) {
+			Method method = methods.get(i);
+			result.addAll(method.write());
+			result.add("");
+		}
+		/*
+		 * 类结尾
+		 */
+		result.add(classEnd);
+		/*
+		 * 更新导入，插入导入行
+		 */
+		for (String line : result) {
+			imports.recognitionNewClass(line);
+		}
+		result.add(2, "");
+		result.addAll(2, imports.write());
+		/*
+		 * 输出文件
+		 */
+		TextFileUtil.writeFile(new File(this.classPath), result);
+		/*
+		 * 返回类的代码
+		 */
+		return result;
+	}
+	
+	public void setInterfaceType() {
+		this.classType = Constant.TYPE_INTERFACE;
 	}
 	
 	/**
@@ -221,100 +370,11 @@ public class JavaCoder extends AbstractType{
 		
 		return result;
 	}
-	
+
 	/**
-	 * 创建一个属性
-	 * @param name
+	 * 获得所有方法，包括父类
 	 * @return
 	 */
-	public Attribute createAttribute(String type, String name) throws UserException {
-		Attribute attribute = new Attribute(type, name);
-		this.createAttribute(attribute);
-		return attribute;
-	}
-	
-	public Attribute createAttribute(Attribute attribute) throws UserException {
-		if (this.getAttribute(attribute.getName()) != null) {
-			throw new UserException("属性已存在");
-		}
-		this.attributes.add(attribute);
-		return attribute;
-	}
-	
-	/**
-	 * 获得一个属性
-	 * @param name
-	 * @return
-	 */
-	public Attribute getAttribute(String name) {
-		Attribute result = null;
-		
-		if (CollectionUtil.isNotEmpty(attributes)) {
-			for (Attribute attribute : attributes) {
-				if (attribute.name.equals(name)) {
-					result = attribute;
-					break;
-				}
-			}
-		}
-		
-		return result;
-	}
-	
-	/**
-	 * 写类
-	 */
-	public List<String> write() {
-		List<String> result = new ArrayList<String>();
-		/*
-		 * 头部
-		 */
-		result.add(packageInfo);
-		result.add("");
-		/*
-		 * 类注释、注解、方法头部
-		 */
-		result.addAll(getComment());
-		result.addAll(getAnnotationsString(0));
-		result.add(this.getClassNameLine());
-		result.add("");
-		/*
-		 * 所有属性
-		 */
-		for (int i = 0; i < attributes.size(); i++) {
-			Attribute attribute = attributes.get(i);
-			result.addAll(attribute.write());
-		}
-		if (attributes.size() > 0) {
-			result.add("");
-		}
-		/*
-		 * 所有方法
-		 */
-		for (int i = 0; i < methods.size(); i++) {
-			Method method = methods.get(i);
-			result.addAll(method.write());
-			result.add("");
-		}
-		/*
-		 * 类结尾
-		 */
-		result.add(classEnd);
-		
-		/*
-		 * 更新导入，插入导入行
-		 */
-		for (String line : result) {
-			imports.recognitionNewClass(line);
-		}
-		result.add(2, "");
-		result.addAll(2, imports.write());
-		
-		TextFileUtil.writeFile(new File(this.classPath), result);
-		
-		return result;
-	}
-	
 	public List<Method> getAllMethods() {
 		List<JavaCoder> parents = this.getParent();
 		
@@ -332,6 +392,39 @@ public class JavaCoder extends AbstractType{
 		return result;
 	}
 	
+	public Attribute createAttribute(String type, String name) throws UserException {
+		Attribute attribute = new Attribute(type, name);
+		this.createAttribute(attribute);
+		return attribute;
+	}
+	
+	public Attribute createAttribute(Attribute attribute) throws UserException {
+		if (this.getAttribute(attribute.getName()) != null) {
+			throw new UserException("属性已存在");
+		}
+		this.attributes.add(attribute);
+		return attribute;
+	}
+	
+	public Attribute getAttribute(String name) {
+		Attribute result = null;
+		
+		if (CollectionUtil.isNotEmpty(attributes)) {
+			for (Attribute attribute : attributes) {
+				if (attribute.name.equals(name)) {
+					result = attribute;
+					break;
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * 获得所有属性，包括父类
+	 * @return
+	 */
 	public List<Attribute> getAllAttributes() {
 		List<JavaCoder> parents = this.getParent();
 		
@@ -344,6 +437,16 @@ public class JavaCoder extends AbstractType{
 			result.addAll(this.attributes);
 		} else {
 			result = this.attributes;
+		}
+		
+		return result;
+	}
+	
+	private static boolean isClassEndLine(String lineContent) {
+		boolean result = false;
+		
+		if (JavaCodeUtil.lineStartTabCount(lineContent) == 0 && lineContent.equals("}")) {
+			result = true; 
 		}
 		
 		return result;
@@ -366,21 +469,6 @@ public class JavaCoder extends AbstractType{
 		return classNameLine.toString();
 	}
 
-	/**
-	 * 是否是类的结尾
-	 * @param lineContent
-	 * @return
-	 */
-	protected boolean isClassEnd(String lineContent) {
-		boolean result = false;
-		
-		if (JavaCodeUtil.lineStartTabCount(lineContent) == 0 && lineContent.equals("}")) {
-			result = true; 
-		}
-		
-		return result;
-	}
-	
 	protected List<JavaCoder> getParent() {
 		List<JavaCoder> result = new ArrayList<JavaCoder>();
 		
@@ -396,7 +484,7 @@ public class JavaCoder extends AbstractType{
 		return result;
 	}
 	
-	public String getParentName() {
+	protected String getParentName() {
 		StringBuffer result = new StringBuffer();
 		if (StringUtil.isNotEmpty(extend)) {
 			String parentName = extend.trim();

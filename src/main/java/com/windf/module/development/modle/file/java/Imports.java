@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.windf.core.util.CollectionUtil;
 import com.windf.core.util.PropertiesUtil;
 import com.windf.core.util.RegularUtil;
 import com.windf.core.util.StringUtil;
@@ -17,18 +18,46 @@ public class Imports {
 	
 	private static Map<String, String> nameIdMap = new HashMap<String, String>();
 	static {
+		/*
+		 * 获取排除目录
+		 */
+		String excludePackageStrs = PropertiesUtil.getConfig(Imports.class, "import.packages.exclude");
+		String[] excludePackage = excludePackageStrs.split(",");
+		/*
+		 * 从配置文件中读取导入配置，定义包导入的优先级
+		 */
 		String importPackages = PropertiesUtil.getConfig(Imports.class, "import.packages");
-		if (StringUtil.isNotEmpty(importPackages)) {
-			String[] defaultImportClasse = importPackages.split(",");
-			
-			List<String> classLines = new ArrayList<String>();
-			
-			for (int i = 0; i < defaultImportClasse.length; i++) {
-				classLines.addAll(PackageUtil.getClasses(defaultImportClasse[i]));
-			}
-			
-			for (int i = 0; i < classLines.size(); i++) {
-				String classLine = classLines.get(i);
+		String[] defaultImportClasses = importPackages.split(",");
+		defaultImportClasses = CollectionUtil.reversal(defaultImportClasses);
+		for (int i = 0; i < defaultImportClasses.length; i++) {
+			/*
+			 * 读取包下面的所有内容
+			 */
+			List<String> classLines = PackageUtil.getClasses(defaultImportClasses[i]);
+			/*
+			 * 组织类名和类全路径的映射关系
+			 */
+			for (int j = 0; j < classLines.size(); j++) {
+				String classLine = classLines.get(j);
+				/*
+				 * 是否是排除目录
+				 */
+				boolean isExclude = false;
+				for (int k = 0; k < excludePackage.length; k++) {
+					if (classLine.startsWith(excludePackage[k])) {
+						isExclude = true;
+						break;
+					}
+				}
+				/*
+				 * 如果是排除目录，跳过
+				 */
+				if (isExclude) {
+					continue;
+				}
+				/*
+				 * 添加到nameIdMap中
+				 */
 				int lastPoint = classLine.lastIndexOf(".") + 1;
 				String className = classLine.substring(lastPoint);
 				nameIdMap.put(className, classLine);
@@ -112,11 +141,20 @@ public class Imports {
 	 * @return
 	 */
 	public List<String> write() {
-		sort();
-		
+		/*
+		 * 排序
+		 */
+		List<String> newLineList = sort();
+		/*
+		 * 格式化输出
+		 */
 		List<String> result = new ArrayList<String>();
-		for (int i = 0; i < classLineList.size(); i++) {
-			result.add(writeImportLine(classLineList.get(i)));
+		for (int i = 0; i < newLineList.size(); i++) {
+			String line = newLineList.get(i);
+			/*
+			 * 加入improt关键字
+			 */
+			result.add(writeImportLine(line));
 		}
 		return result;
 	}
@@ -126,7 +164,10 @@ public class Imports {
 	 * 不进行去重复
 	 * 不同包之间用，空行分开
 	 */
-	void sort() {
+	List<String> sort() {
+		/*
+		 * 根据包名排序
+		 */
 		Collections.sort(classLineList, new Comparator<String>() {
 	          @Override
 	          public int compare(String s1, String s2) {
@@ -143,22 +184,37 @@ public class Imports {
 	          }
 
 	     });
-		
+		/*
+		 * 添加空行
+		 */
 		List<String> newLines = new ArrayList<String>();
 		String frontLine = null;
 		for (String line : classLineList) {
+			/*
+			 * 切换包类别的时候，添加空行
+			 */
 			if (frontLine != null && !getImportOrg(frontLine).equals(getImportOrg(line))) {
 				newLines.add("");
 			}
+			/*
+			 * 添加包
+			 */
 			newLines.add(line);
+			/*
+			 * 记录上行内容，用于判断下次是否切换了包类别
+			 */
 			frontLine = line;
 		}
 		
-		classLineList = newLines;
+		return newLines;
 	}
 	
 	protected String writeImportLine(String classFullName) {
-		return "import" + Constant.WORD_SPLIT + classFullName + ";";
+		if (StringUtil.isEmpty(classFullName)) {
+			return "";
+		} else {
+			return "import" + Constant.WORD_SPLIT + classFullName + ";";
+		}
 	}
 	
   	/**

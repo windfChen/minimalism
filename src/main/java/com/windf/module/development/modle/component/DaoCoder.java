@@ -39,6 +39,10 @@ public class DaoCoder {
 	
 	public void addMethod(DaoMethod daoMethod) throws UserException {
 		/*
+		 * 检查javaCoder是否存在，如果存在就读取，否则创建
+		 */
+		create();
+		/*
 		 * 返回值设置为dao对应的实体
 		 */
 		MethodReturn ret = new MethodReturn(daoMethod.getEntity().getName());

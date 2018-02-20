@@ -1,8 +1,10 @@
 package com.windf.core.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.util.CollectionUtils;
@@ -43,5 +45,13 @@ public class CollectionUtil {
 		}
 		
 		return result;
+	}
+	
+	public static <T> T[] reversal(T[] array) {
+		List<T> arrayList = new ArrayList<T>();  
+        for (int i = 0; i < array.length; i++) {  
+            arrayList.add(array[array.length - i - 1]);  
+        }  
+        return arrayList.toArray(array);
 	}
 }

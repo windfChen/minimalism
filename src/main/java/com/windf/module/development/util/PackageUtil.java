@@ -27,7 +27,7 @@ public class PackageUtil {
 	 */
 	public static List<String> getClasses(String packageName) {
 		List<String> result  = new ArrayList<String>();
-		result.addAll(getClassesFromBasePackage(packageName));
+		result.addAll(getClassesFromBaseJar(packageName));
 		result.addAll(getClassesFromUserResources(packageName));
 		return result;
 	}
@@ -37,7 +37,7 @@ public class PackageUtil {
 	 * @param packageName
 	 * @return
 	 */
-	public static List<String> getClassesFromBasePackage(String packageName) {
+	public static List<String> getClassesFromBaseJar(String packageName) {
         List<String> result = new ArrayList<String>();
         /*
          * 把package变成目录的形式，方便遍历
