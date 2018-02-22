@@ -218,6 +218,9 @@ public class XmlFileUtil {
 			element.setText(object.toString());
 		} else if (ReflectUtil.isCollection(object.getClass())) {
 			Collection collection = (Collection) object;
+			/*
+			 * 拆解list，递归取值
+			 */
 			Iterator iterator = collection.iterator();
 			while (iterator.hasNext()) {
 				Element subElement = element.addElement(DEFAULT_LIST_ITEM_ELEMENT_NAME);
@@ -226,6 +229,9 @@ public class XmlFileUtil {
 			}
 		} else if (ReflectUtil.isMap(object.getClass())) {
 			Map map = (Map) object;
+			/*
+			 * 拆解map，递归取值
+			 */
 			Iterator iterator = map.keySet().iterator();
 			while (iterator.hasNext()) {
 				String key = (String) iterator.next();
@@ -233,11 +239,10 @@ public class XmlFileUtil {
 				
 				Element subElement = element.addElement(key);
 				writeObject2Xml(obj, subElement, null, serializableParameterNames, onlyBaseParameter);
-				
 			}
 		} else {
 			/*
-			 *  防止死循环
+			 * 防止死循环
 			 */
 			if (stopDeadlock == null) {
 				stopDeadlock = new HashSet<Class>();
@@ -247,7 +252,7 @@ public class XmlFileUtil {
 				return false;
 			}
 			/*
-			 *  遍历对象的所有属性
+			 * 遍历对象的所有属性
 			 */
 			Field[] fields = ReflectUtil.getAllField(object.getClass());
 			for (int i = 0; i < fields.length; i++) {
@@ -257,6 +262,12 @@ public class XmlFileUtil {
 				 */
 				int modifiers = field.getModifiers();
 				if (Modifier.isStatic(modifiers)) {
+					continue;
+				}
+				/*
+				 * 非序列化属性不序列化
+				 */
+				if (Modifier.isTransient(modifiers)) {
 					continue;
 				}
 				/*
@@ -283,7 +294,7 @@ public class XmlFileUtil {
 				/*
 				 * 检查是否可以序列化基本属性
 				 */
-				if (onlyBaseParameter && !ReflectUtil.isBaseType(field.getClass())) {
+				if (onlyBaseParameter && !ReflectUtil.isBaseType(field.getType())) {
 					continue;
 				}
 				/*

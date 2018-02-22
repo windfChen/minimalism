@@ -10,9 +10,9 @@ public class Parameter {
 	private boolean notEmpty;
 	private Map<String, String> patterns = new HashMap<String, String>();
 	
-	private AbstractBaseCodeEntity codeEntity;// 反向关联
-	private String methodName;
-	private Module module;
+	private transient AbstractBaseCodeEntity codeEntity;// 反向关联
+	private transient String methodName;
+	private transient Module module;
 	
 	public Parameter() {
 		

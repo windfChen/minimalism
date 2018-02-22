@@ -156,17 +156,8 @@ public class BeanUtil {
 					} else if (ReflectUtil.isMap(value.getClass())) {
 						setterMethod.invoke(object, getObjectByMap(getterMethod.getReturnType(), (Map) value));
 					}
-				} catch (NoSuchMethodException e) {
-					e.printStackTrace();
-				} catch (SecurityException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
-				}
+				} catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				} 
 			}
 		}
 		

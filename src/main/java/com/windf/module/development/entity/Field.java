@@ -1,7 +1,6 @@
 package com.windf.module.development.entity;
 
 import com.windf.core.util.StringUtil;
-import com.windf.core.util.reflect.UnSerializable;
 import com.windf.module.development.util.JavaCodeUtil;
 
 public class Field extends AbstractBaseCodeEntity {
@@ -13,8 +12,7 @@ public class Field extends AbstractBaseCodeEntity {
 	private String defaultValue;
 	private boolean isAutoIncrement;
 	private boolean isPrimaryKey;
-	@UnSerializable
-	private Entity entity;	// 反向引用
+	private transient Entity entity;	// 反向引用
 
 	/**
 	 * 转化为字符串

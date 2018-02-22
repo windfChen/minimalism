@@ -2,15 +2,12 @@ package com.windf.module.development.entity;
 
 import java.util.List;
 
-import com.windf.core.util.reflect.UnSerializable;
-
 public class ControlerMethod extends AbstractBaseCodeEntity{
 
 	private List<Parameter> parameters;
 	private String urlPath;
 	private String requestMethod;
-	@UnSerializable
-	private Controler controler;
+	private transient Controler controler;
 
 	public String getUrlPath() {
 		return urlPath;
