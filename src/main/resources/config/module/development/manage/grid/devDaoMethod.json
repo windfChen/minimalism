@@ -37,7 +37,7 @@
 		"canAdd" : true,
 		"canBatchAdd" : true,
 		"canUpdate" : true,
-		"comboDataArray":[{"id":"inert","name":"inert"},{"id":"delete","name":"delete"},{"id":"update","name":"update"},{"id":"select","name":"select"}],
+		"comboDataArray":[{"id":"insert","name":"insert"},{"id":"delete","name":"delete"},{"id":"update","name":"update"},{"id":"select","name":"select"}],
 		"canReport" : true,
 		"canOrder" : true,
 		"display" : null,

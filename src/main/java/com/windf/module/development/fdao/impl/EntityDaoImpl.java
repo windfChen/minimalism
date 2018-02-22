@@ -43,15 +43,10 @@ public class EntityDaoImpl implements EntityDao {
 			}
 		}
 		/*
-		 * 如果不存在，尝试从文件系统中获取
+		 * 如果不存在，或者没有详情，尝试从文件系统中获取
 		 */
-		if (result == null) {
+		if (result == null || result.getModule() == null) {
 			result = readObjectFromFile(moduleCode, entityName);
-		}
-		/*
-		 * 设置初始化属性
-		 */
-		if (result.getModule() == null) {
 			result.setModule(module);
 		}
 		return result;

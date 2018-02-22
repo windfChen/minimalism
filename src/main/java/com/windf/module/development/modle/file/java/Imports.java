@@ -65,6 +65,10 @@ public class Imports {
 		}
 	}
 	
+	public static void addImprot(JavaCoder javaCoder) {
+		nameIdMap.put(javaCoder.getClassName(), javaCoder.getFullClassName());
+	}
+	
 	private String pacakgeInfo = "";
 	private List<String> classLineList = new ArrayList<String>();
 	private Map<String, String> classLineMap = new HashMap<String, String>();

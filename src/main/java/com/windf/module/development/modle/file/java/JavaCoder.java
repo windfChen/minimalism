@@ -67,7 +67,7 @@ public class JavaCoder extends AbstractType{
 			if (newPackagePath.startsWith(".")) {
 				newPackagePath = newPackagePath.substring(1);
 			}
-			this.packageInfo = "package" + Constant.WORD_SPLIT + newPackagePath + ";";
+			this.packageInfo = newPackagePath;
 			/*
 			 * 设置className
 			 */
@@ -91,9 +91,13 @@ public class JavaCoder extends AbstractType{
 		}
 		
 		/*
-		 * 统一存储
+		 * 统一存储类
 		 */
 		allJavaCoders.put(className, this);
+		/*
+		 * 更新包引用
+		 */
+		Imports.addImprot(this);
 	}
 
 	public void readCodes(File javaFile) {
@@ -122,7 +126,8 @@ public class JavaCoder extends AbstractType{
 				 * 处理package和import信息
 				 */
 				if (lineContent.startsWith("package ")) {
-					packageInfo = lineContent;
+					lineContent = lineContent.substring(0, lineContent.length() - 1);
+					packageInfo = lineContent.substring("package ".length());
 					return lineContent;
 				} else if (lineContent.startsWith("import ")) {
 					imports.addLine(lineContent);
@@ -272,7 +277,7 @@ public class JavaCoder extends AbstractType{
 		/*
 		 * 头部
 		 */
-		result.add(packageInfo);
+		result.add("package" + Constant.WORD_SPLIT + packageInfo + ";");
 		result.add("");
 		/*
 		 * 类注释、注解、方法头部
@@ -442,6 +447,10 @@ public class JavaCoder extends AbstractType{
 		return result;
 	}
 	
+	public String getFullClassName() {
+		return this.packageInfo + "." + this.className;
+	}
+	
 	private static boolean isClassEndLine(String lineContent) {
 		boolean result = false;
 		
@@ -463,7 +472,7 @@ public class JavaCoder extends AbstractType{
 			classNameLine.append("extends " + extend + Constant.WORD_SPLIT);
 		}
 		if (StringUtil.isNotEmpty(implementsStr)) {
-			classNameLine.append(implementsStr + Constant.WORD_SPLIT);
+			classNameLine.append("implements " + implementsStr + Constant.WORD_SPLIT);
 		}
 		classNameLine.append("{");
 		return classNameLine.toString();
@@ -608,7 +617,6 @@ public class JavaCoder extends AbstractType{
 	public void setClassGenre(String classGenre) {
 		this.classGenre = classGenre;
 	}
-	
 }
 
 

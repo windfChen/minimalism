@@ -69,12 +69,7 @@ public class SimpleField {
 		try {
 			setter.invoke(object, value);
 			result = true;
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 		}
 		return result;
 	}

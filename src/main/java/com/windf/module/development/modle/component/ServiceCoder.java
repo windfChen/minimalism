@@ -47,6 +47,10 @@ public class ServiceCoder {
 			 */
 			javaCoder.setInterfaceType();
 			/*
+			 * 设置实现类实现接口
+			 */
+			javaImplCoder.setImplementsStr(javaCoder.getClassName());
+			/*
 			 * 设置注解
 			 */
 			Annotation serviceAnnotation = javaImplCoder.getAnnotationByName("Service");
