@@ -102,10 +102,11 @@ public class Annotation {
 		if (values == null) {
 			values = new HashMap<String, String>();
 		}
-		if (value instanceof String) {
-			value = "\"" + value.toString() + "\"";
-		}
 		values.put(key, value.toString());
+	}
+	
+	public void addStringValue(String key, String value) {
+		this.addValue(key, "\"" + value + "\"");
 	}
 	
 	String write(int tabCount) {

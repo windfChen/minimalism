@@ -63,6 +63,17 @@ public class Imports {
 				nameIdMap.put(className, classLine);
 			}
 		}
+		/*
+		 * 具有高优先级的class
+		 */
+		String priorityClassesStr = PropertiesUtil.getConfig(Imports.class, "import.packages.priority");
+		String[] priorityClasses = priorityClassesStr.split(",");
+		priorityClasses = CollectionUtil.reversal(priorityClasses);
+		for (int i = 0; i < priorityClasses.length; i++) {
+			String priorityClass = priorityClasses[i];
+			String className = priorityClass.substring(priorityClass.lastIndexOf(".") + 1);
+			nameIdMap.put(className, priorityClass);
+		}
 	}
 	
 	public static void addImprot(JavaCoder javaCoder) {

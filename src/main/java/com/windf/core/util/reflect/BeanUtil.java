@@ -232,10 +232,7 @@ public class BeanUtil {
 		T result = null;
 		try {
 			result = clazz.newInstance();
-		} catch (InstantiationException e1) {
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			e1.printStackTrace();
+		} catch (InstantiationException | IllegalAccessException e) {
 		}
 		
 		return result;

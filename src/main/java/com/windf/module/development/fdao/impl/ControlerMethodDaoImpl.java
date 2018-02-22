@@ -39,7 +39,12 @@ public class ControlerMethodDaoImpl implements ControlerMethodDao {
 				break;
 			}
 		}
-		
+		/*
+		 * 如果不存在，或者没有详情，尝试从文件系统中获取
+		 */
+		if (result != null && result.getControler() == null) {
+			result.setControler(controler);
+		}
 		return result;
 	}
 

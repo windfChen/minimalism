@@ -32,7 +32,7 @@ public class ControlerMethodParameterServiceImpl extends BaseManageGridServiceIm
 		/*
 		 * 获取method
 		 */
-		ControlerMethod controlerMethod = controlerMethodDao.read((String) condition.get("moduleCode"), (String) condition.get("controlerName"), (String) condition.get("methodName"));
+		ControlerMethod controlerMethod = controlerMethodDao.read((String) condition.get("moduleCode"), (String) condition.get("codeEntityName"), (String) condition.get("methodName"));
 		/*
 		 * 获得Parameter
 		 */

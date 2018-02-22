@@ -51,7 +51,7 @@ public class ControlerCoder {
 			 * 设置webPath
 			 */
 			Annotation requestMappingAnnotation = new Annotation("RequestMapping");
-			requestMappingAnnotation.addValue("value", controler.getUrlPath());
+			requestMappingAnnotation.addStringValue("value", controler.getUrlPath());
 			javaCoder.addAnnotation(requestMappingAnnotation);
 			/*
 			 * 写入文件
@@ -83,7 +83,7 @@ public class ControlerCoder {
 		 * 设置注解
 		 */
 		Annotation requestMappingAnnotation = new Annotation("RequestMapping");
-		requestMappingAnnotation.addValue("value", controlerMehtod.getUrlPath());
+		requestMappingAnnotation.addStringValue("value", controlerMehtod.getUrlPath());
 		if ("get".equalsIgnoreCase(controlerMehtod.getRequestMethod())) {
 			requestMappingAnnotation.addValue("method", "{RequestMethod.GET}");
 		} else if ("post".equalsIgnoreCase(controlerMehtod.getRequestMethod())) {
