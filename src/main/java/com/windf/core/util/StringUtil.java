@@ -23,7 +23,7 @@ public class StringUtil {
 	 * @return
 	 */
 	public static boolean isEmpty(String str) {
-		return org.apache.commons.lang.StringUtils.isEmpty(str);
+		return org.apache.commons.lang.StringUtils.isBlank(str);
 	}
 	
 	/**
@@ -32,7 +32,7 @@ public class StringUtil {
 	 * @return
 	 */
 	public static boolean isNotEmpty(String str) {
-		return org.apache.commons.lang.StringUtils.isNotEmpty(str);
+		return org.apache.commons.lang.StringUtils.isNotBlank(str);
 	}
 	
 	/**

@@ -21,4 +21,10 @@ public class Constant extends com.windf.core.Constant{
 	public static final String TYPE_INTERFACE = "interface";
 	public static final String TYPE_AT_INTERFACE = "@interface";
 	
+	public static final String TYPE_JAVA_STRING = "String";
+	public static final String TYPE_JAVA_Integer = "Integer";
+	public static final String TYPE_JAVA_DATE = "Date";
+	public static final String TYPE_JAVA_LONG = "Long";
+	public static final String TYPE_JAVA_DOUBLE = "Double";
+	
 }

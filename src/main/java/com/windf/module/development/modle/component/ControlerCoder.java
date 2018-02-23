@@ -13,6 +13,7 @@ import com.windf.module.development.modle.file.java.Comment;
 import com.windf.module.development.modle.file.java.JavaCoder;
 import com.windf.module.development.modle.file.java.Method;
 import com.windf.module.development.modle.file.java.MethodReturn;
+import com.windf.module.development.modle.file.java.code.ParameterGetCoder;
 import com.windf.module.development.modle.file.java.code.ParameterVerifyCoder;
 
 public class ControlerCoder {
@@ -91,16 +92,27 @@ public class ControlerCoder {
 		}
 		method.addAnnotation(requestMappingAnnotation);
 		/*
+		 * 参数获取
+		 */
+		CodeBlock<List<Parameter>> parameterGetBlock = new CodeBlock<List<Parameter>>();
+		parameterGetBlock.setCodeable(new ParameterGetCoder());
+		parameterGetBlock.setTabCount(2);
+		parameterGetBlock.serialize(controlerMehtod.getParameters());
+		Comment parameterGetComment =  new Comment(2, false);
+		parameterGetComment.addLine("验证获取");
+		parameterGetBlock.setComment(parameterGetComment);
+		method.addCodeBlock(0, parameterGetBlock);
+		/*
 		 * 参数验证
 		 */
-		CodeBlock<List<Parameter>> codeBlock = new CodeBlock<List<Parameter>>();
-		codeBlock.setCodeable(new ParameterVerifyCoder());
-		codeBlock.setTabCount(2);
-		codeBlock.serialize(controlerMehtod.getParameters());
-		Comment comment =  new Comment(2, false);
-		comment.addLine("验证参数");
-		codeBlock.setComment(comment);
-		method.addCodeBlock(0, codeBlock);
+		CodeBlock<List<Parameter>> parameterVerifyBlock = new CodeBlock<List<Parameter>>();
+		parameterVerifyBlock.setCodeable(new ParameterVerifyCoder());
+		parameterVerifyBlock.setTabCount(2);
+		parameterVerifyBlock.serialize(controlerMehtod.getParameters());
+		Comment parameterVerifyComment =  new Comment(2, false);
+		parameterVerifyComment.addLine("验证参数");
+		parameterVerifyBlock.setComment(parameterVerifyComment);
+		method.addCodeBlock(1, parameterVerifyBlock);
 		/*
 		 * 写入
 		 */

@@ -45,7 +45,7 @@ public class CodeBlock<T> extends AbstractType {
 	public List<String> write() {
 		List<String> result = new ArrayList<String>();
 		
-		if (comment != null) {
+		if (comment != null && codes.size() > 0) {
 			result.addAll(comment.write());
 		}
 		result.addAll(codes);

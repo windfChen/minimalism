@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.windf.core.bean.Page;
 import com.windf.core.exception.UserException;
+import com.windf.core.util.StringUtil;
 import com.windf.module.development.entity.Controler;
 import com.windf.module.development.fdao.ControlerDao;
 import com.windf.module.development.modle.component.ControlerCoder;
@@ -17,6 +18,7 @@ import com.windf.module.development.service.ControlerService;
 
 @Service
 public class ControlerServiceImpl extends BaseManageGridServiceImpl<Controler> implements ControlerService{
+	private static final String BASE_PARENT_CONTROLER = "BaseControler";
 	
 	@Resource
 	private ControlerDao controlerDao;
@@ -41,6 +43,12 @@ public class ControlerServiceImpl extends BaseManageGridServiceImpl<Controler> i
 
 	@Override
 	public int save(Controler controler) throws Exception {
+		/*
+		 * 默认参数
+		 */
+		if (StringUtil.isEmpty(controler.getParent())) {
+			controler.setParent(BASE_PARENT_CONTROLER);
+		}
 		/*
 		 * 创建对象模型
 		 */
