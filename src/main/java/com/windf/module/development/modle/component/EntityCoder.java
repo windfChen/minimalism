@@ -33,7 +33,22 @@ public class EntityCoder {
 	public void create() throws UserException {
 		if (javaCoder == null) {
 			javaCoder = new JavaCoder(Constant.JAVA_MODULE_BASE_PACKAGE + "/" + entity.getModule().getCode() + "/entity", entity.getName());
+			/*
+			 * 设置父类
+			 */
 			javaCoder.setExtend(entity.getParent());
+			/*
+			 * 设置serialVersionUID
+			 */
+			Attribute attribute = new Attribute("long", "serialVersionUID");
+			attribute.setStatic(true);
+			attribute.setFinal(true);
+			attribute.setModifier(Constant.MODIFY_PRIVATE);;
+			attribute.setValueStr("1L");
+			javaCoder.createAttribute(attribute);
+			/*
+			 * 写类
+			 */
 			javaCoder.write();
 		}
 	}

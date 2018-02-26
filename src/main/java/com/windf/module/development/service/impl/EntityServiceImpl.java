@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.windf.core.bean.Page;
+import com.windf.core.util.StringUtil;
 import com.windf.module.development.entity.Entity;
 import com.windf.module.development.entity.Module;
 import com.windf.module.development.fdao.EntityDao;
@@ -18,6 +19,8 @@ import com.windf.module.development.service.EntityService;
 
 @Service
 public class EntityServiceImpl extends BaseManageGridServiceImpl<Entity> implements EntityService{
+	
+	private static final String BASE_PARENT_ENTITY = "AbstractBean";
 	
 	@Resource
 	private EntityDao entityDao;
@@ -44,6 +47,9 @@ public class EntityServiceImpl extends BaseManageGridServiceImpl<Entity> impleme
 		 */
 		Module module = moduleDao.read(entity.getModule().getCode());
 		entity.setModule(module);
+		if (StringUtil.isEmpty(entity.getParent())) {
+			entity.setParent(BASE_PARENT_ENTITY);
+		}
 		/*
 		 * 数据模型创建更新
 		 */
