@@ -22,16 +22,19 @@ public class ModuleInitialization {
 		 */
 		List<String> moduleCodeList = new ArrayList<String>();
 		File[] subFiles = basePath.listFiles();
-		for (int i = 0; i < subFiles.length; i++) {
-			File file = subFiles[i];
-			/*
-			 * 排除隐藏文件
-			 */
-			if (file.getName().startsWith(".")) {
-				continue;
+		if (subFiles != null) {
+			for (int i = 0; i < subFiles.length; i++) {
+				File file = subFiles[i];
+				/*
+				 * 排除隐藏文件
+				 */
+				if (file.getName().startsWith(".")) {
+					continue;
+				}
+				moduleCodeList.add(file.getName());
 			}
-			moduleCodeList.add(file.getName());
 		}
+		
 		/*
 		 * 依次读取模块
 		 */
