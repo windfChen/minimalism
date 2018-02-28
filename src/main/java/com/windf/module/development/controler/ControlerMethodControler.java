@@ -27,7 +27,7 @@ public class ControlerMethodControler extends ManagerGridControler<ControlerMeth
 	}
 
 	@Override
-	protected Class<ControlerMethod> getEntity() {
+	public Class<ControlerMethod> getEntity() {
 		return ControlerMethod.class;
 	}
 

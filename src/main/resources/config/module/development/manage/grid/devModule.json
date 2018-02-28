@@ -124,6 +124,20 @@
 		"canOrder" : false,
 		"display" : "<a href='../entity/?moduleCode=${code}'>管理实体</a>",
 		"orderNum" : 6
+	},
+	{
+		"name" : "套装",
+		"dataIndex" : "info",
+		"type" : "TextField",
+		"canList" : true,
+		"canSearch" : false,
+		"canAdd" : false,
+		"canBatchAdd" : false,
+		"canUpdate" : false,
+		"canReport" : false,
+		"canOrder" : false,
+		"display" : "<a href='../entity/?moduleCode=${code}'>添加套装</a>",
+		"orderNum" : 6
 	}],
 	"menus" : [],
 	"isPrepared" : true,

@@ -27,7 +27,7 @@ public class ModuleControler extends ManagerGridControler<Module> {
 	}
 	
 	@Override
-	protected Class<Module> getEntity() {
+	public Class<Module> getEntity() {
 		return Module.class;
 	}
 

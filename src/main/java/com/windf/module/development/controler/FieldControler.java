@@ -27,7 +27,7 @@ public class FieldControler extends ManagerGridControler<Field> {
 	}
 
 	@Override
-	protected Class<Field> getEntity() {
+	public Class<Field> getEntity() {
 		return Field.class;
 	}
 

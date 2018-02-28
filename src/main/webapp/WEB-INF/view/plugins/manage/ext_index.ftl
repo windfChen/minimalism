@@ -3,19 +3,19 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<title>后台管理</title>
-	<link rel="stylesheet" type="text/css" href="${rc.contextPath}/resources/plugins/manage/css/${Session.template}_admincss.css" />
+	<link rel="stylesheet" type="text/css" href="${rc.contextPath}/resources/plugins/manage/css/ext_admincss.css" />
 	<link rel="stylesheet" type="text/css" href="${rc.contextPath}/resources/common/plugins/extjs/css/ext-all.css" />
 	<link rel="stylesheet" type="text/css" href="${rc.contextPath}/resources/common/plugins/extjs/css/ext-ext.css" />
 	<link rel="stylesheet" type="text/css" href="${rc.contextPath}/resources/common/plugins/extjs/css/cssTest.css" />
 	<link rel="stylesheet" type="text/css" href="${rc.contextPath}/resources/common/plugins/extjs/examples/Datetime/datetime.css" />
-	<link rel="stylesheet" type="text/css" href="${rc.contextPath}/resources/plugins/manage/css/${Session.template}_menu.css" />
+	<link rel="stylesheet" type="text/css" href="${rc.contextPath}/resources/plugins/manage/css/ext_menu.css" />
 	
 	<script type="text/javascript" src="${rc.contextPath}/resources/common/plugins/extjs/pub/adapter/ext/ext-base.js"></script>
 	<script type="text/javascript" src="${rc.contextPath}/resources/common/plugins/extjs/pub/ext-all.js"></script>
 	<script type="text/javascript" src="${rc.contextPath}/resources/common/plugins/extjs/examples/Datetime/Datetime.js"></script>
 	<script type="text/javascript" src="${rc.contextPath}/resources/common/plugins/extjs/pub/ext-lang-zh_CN.js"></script> 
-	<script type="text/javascript" src="${rc.contextPath}/resources/plugins/manage/js/${Session.template}_menu.js"></script>
-	<script type="text/javascript" src="${rc.contextPath}/resources/plugins/manage/js/${Session.template}_frame.js"></script>
+	<script type="text/javascript" src="${rc.contextPath}/resources/plugins/manage/js/ext_menu.js"></script>
+	<script type="text/javascript" src="${rc.contextPath}/resources/plugins/manage/js/ext_frame.js"></script>
 	<script type="text/javascript" src="${rc.contextPath}/resources/common/plugins/jquery/jquery.js"></script>
 	<script type="text/javascript" src="${rc.contextPath}/resources/common/plugins/jquery/jquery-migrate-1.1.0.js"></script>
 	<script type="text/javascript" src="${rc.contextPath}/resources/common/js/CommonUtil.js"></script>

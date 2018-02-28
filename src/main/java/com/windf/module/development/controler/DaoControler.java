@@ -31,7 +31,7 @@ public class DaoControler extends ManagerGridControler<Dao>{
 	}
 
 	@Override
-	protected Class<Dao> getEntity() {
+	public Class<Dao> getEntity() {
 		return Dao.class;
 	}
 

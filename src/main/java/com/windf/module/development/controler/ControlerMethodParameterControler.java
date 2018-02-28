@@ -31,7 +31,7 @@ public class ControlerMethodParameterControler extends ManagerGridControler<Para
 	}
 
 	@Override
-	protected Class<Parameter> getEntity() {
+	public Class<Parameter> getEntity() {
 		return Parameter.class;
 	}
 	

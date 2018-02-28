@@ -48,4 +48,19 @@ public class PropertiesUtil {
 		String classfilePath = Module.getCurrentMoudle(clazz).getConfigFilePath() + File.separator + "config.properties";
 		return get(classfilePath, key);
 	}
+	
+	/**
+	 * 读取插件的配置文件
+	 * @param code
+	 * @param fileName
+	 * @param key
+	 * @return
+	 */
+	public static String getPluginsConfig(String code, String fileName, String key) {
+		if (StringUtil.isEmpty(fileName)) {
+			fileName = "config.properties";
+		}
+		String classfilePath = FileUtil.getConfigPath() + "/plugins/" + code + "/" + fileName;
+		return get(classfilePath, key);
+	}
 }

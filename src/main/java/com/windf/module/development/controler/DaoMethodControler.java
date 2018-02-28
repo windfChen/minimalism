@@ -33,7 +33,7 @@ public class DaoMethodControler extends ManagerGridControler<DaoMethod> {
 	}
 
 	@Override
-	protected Class<DaoMethod> getEntity() {
+	public Class<DaoMethod> getEntity() {
 		return DaoMethod.class;
 	}
 	

@@ -1,6 +1,5 @@
 package com.windf.plugins.manage.web.controler;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,20 +17,17 @@ import com.windf.core.util.StringUtil;
 import com.windf.plugins.manage.Constant;
 import com.windf.plugins.manage.entity.GridConfig;
 import com.windf.plugins.manage.service.ManageGirdService;
-import com.windf.plugins.web.BaseControler;
 
-public abstract class ManagerGridControler<T> extends BaseControler {
+public abstract class ManagerGridControler<T> extends BaseManagerControler<T> {
 	protected final static String MANAGE_PATH = Constant.WEB_BASE_PATH;
 	
 	@RequestMapping(value = "", method = {RequestMethod.GET})
 	public String index() {
-		SessionContext.set(Constant.SESSION_TEMPLATE, "ext");
-		
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("queryString", request.getQueryString());
 		data.put(Constant.SESSION_TEMPLATE, SessionContext.get(Constant.SESSION_TEMPLATE));
 
-		responseReturn.page(Constant.WEB_BASE_VIEW + SessionContext.get(Constant.SESSION_TEMPLATE) + "_grid");
+		responseReturn.page(this.getAdapter().getGridPage());
 		return responseReturn.successData(data);
 	}
 
@@ -44,7 +40,14 @@ public abstract class ManagerGridControler<T> extends BaseControler {
 		
 		GridConfig gridConfig = null;
 		try {
+			/*
+			 * 读取gridConfig信息
+			 */
 			gridConfig = this.getManagerGridService().getGridConfig(code, roleId, condition);
+			/*
+			 * 适配gridConfig信息
+			 */
+			gridConfig = this.getAdapter().resetGridConfig(gridConfig);
 		} catch (UserException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -53,7 +56,6 @@ public abstract class ManagerGridControler<T> extends BaseControler {
 		return responseReturn.successData(gridConfig);
 	}
 	
-	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/list", method = {RequestMethod.GET})
 	public String list() {
 		Map<String, Object> condition = paramenter.getMap("condition");
@@ -63,10 +65,8 @@ public abstract class ManagerGridControler<T> extends BaseControler {
 		
 		Map<String, Object> result = null;
 		try {
-			Page page = this.getManagerGridService().list(condition, pageNo, pageSize);
-			result = new HashMap<String, Object>();
-			result.put("models", page.getData());
-			result.put("totalCount", page.getTotal());
+			Page<T> page = this.getManagerGridService().list(condition, pageNo, pageSize);
+			result = this.getAdapter().pageDataAdapter(page);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseReturn.error(e.getMessage());
@@ -81,12 +81,8 @@ public abstract class ManagerGridControler<T> extends BaseControler {
 		
 		Object data = null;
 		try {
-			Object d = this.getManagerGridService().detail(id);
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("entity", d);
-			List<Object> list = new ArrayList<Object>();
-			list.add(map);
-			data = list;
+			T entity = this.getManagerGridService().detail(id);
+			data = this.getAdapter().entityDataAdapter(entity);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return responseReturn.error(e.getMessage());
@@ -96,9 +92,10 @@ public abstract class ManagerGridControler<T> extends BaseControler {
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/save", method = {RequestMethod.POST})
 	public String save() {
-		T entity = paramenter.getObject("entity", this.getEntity());
+		T entity = (T) this.getAdapter().getEntity(this);
 		
 		try {
 			this.getManagerGridService().save(entity);
@@ -109,9 +106,10 @@ public abstract class ManagerGridControler<T> extends BaseControler {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/update", method = {RequestMethod.POST})
 	public String update() {
-		T entity = paramenter.getObject("entity", this.getEntity());
+		T entity = (T) this.getAdapter().getEntity(this);
 		
 		try {
 			this.getManagerGridService().update(entity);
@@ -145,51 +143,16 @@ public abstract class ManagerGridControler<T> extends BaseControler {
 	}
 	
 	/**
-	 * 获取实体，可能是map，可以是实体类
+	 * 获取实体类，如果不为空，则用实体初始化表格
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	protected Object getParamenterEntity() {
-		Object entity = paramenter.getMap("param");
-		if (entity != null) {	// 如果是param，则是直接转换为map
-			entity = this.filterMapValue((Map<String, Object>) entity);
-		} else {
-			// 否则可能是entity里传参数
-			Class<? extends Object> clazz = this.getEntity();
-			if (clazz != null) {
-				entity = paramenter.getObject("entity", clazz);
-			} else {
-				entity = paramenter.getMap("entity");
-				entity = this.filterMapValue((Map<String, Object>) entity);
-			}
-			
-			// 如果都没有，直接把属性名作为key或者字段名
-			if (entity == null) {
-				if (clazz != null) {
-					entity = paramenter.getObject("", clazz);
-				} else {
-					entity = paramenter.getAll();
-					entity = this.filterMapValue((Map<String, Object>) entity);
-				}
-			}
-		}
-		
-		return entity;
-	}
+	public abstract Class<T> getEntity();
 	
 	/**
 	 * 获取管理表格服务
 	 * @return
 	 */
 	protected abstract ManageGirdService<T> getManagerGridService();
-	
-	/**
-	 * 获取实体类，如果不为空，则用实体初始化表格
-	 * @return
-	 */
-	protected Class<T> getEntity() {
-		return null;
-	}
 
 	/**
 	 * 获得请求地址，生成的code

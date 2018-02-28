@@ -33,7 +33,7 @@ public class ServiceMethodControler extends ManagerGridControler<ServiceMethod> 
 	}
 
 	@Override
-	protected Class<ServiceMethod> getEntity() {
+	public Class<ServiceMethod> getEntity() {
 		return ServiceMethod.class;
 	}
 	

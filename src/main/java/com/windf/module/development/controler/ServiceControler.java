@@ -27,7 +27,7 @@ public class ServiceControler extends ManagerGridControler<Service>{
 	}
 
 	@Override
-	protected Class<Service> getEntity() {
+	public Class<Service> getEntity() {
 		return Service.class;
 	}
 
