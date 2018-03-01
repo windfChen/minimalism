@@ -3,7 +3,7 @@ $(function () {
     layui.use(['form','element'],
     function() {
         layer = layui.layer;
-        element = layui.element();
+        element = layui.element;
     });
 
 	// 选项卡
@@ -12,20 +12,23 @@ $(function () {
           //新增一个Tab项
           element.tabAdd('xbs_tab', {
             title: title 
-            ,content: '<iframe tab-id="'+id+'" frameborder="0" src="'+url+'" scrolling="yes" class="x-iframe"></iframe>'
+            ,content: '<div class="x-content" tab-id="' + id + '" id="tab_content_' + id + '"></div>'
             ,id: id
           })
+		  
+		  $.get(url, function(data) {
+			  $('#tab_content_' + id).html(data);
+		  });
         }
         ,tabDelete: function(othis){
           //删除指定Tab项
-          element.tabDelete('xbs_tab', '44'); //删除：“商品管理”
-          
-          
+          element.tabDelete('xbs_tab', '44');
+                    
           othis.addClass('layui-btn-disabled');
         }
         ,tabChange: function(id){
           //切换到指定Tab项
-          element.tabChange('xbs_tab', id); //切换到：用户管理
+          element.tabChange('xbs_tab', id);
         }
       };
 	
@@ -41,9 +44,7 @@ $(function () {
             }
     	}
     }
-
     bgint();
-
 	//背景主题功能
 	var changerlist = new Swiper('.changer-list', {
 		initialSlide :5,
@@ -59,7 +60,6 @@ $(function () {
             slideShadows : false
         }
     });
-
 	//背景主题设置展示
     is_show_change=true;
     $('#changer-set').click(function(event) {
@@ -73,7 +73,6 @@ $(function () {
     	}
     	
     });
-
     //背景主题切换
     $('.bg-changer img.item').click(function(event) {
     	if(!localStorage.bglist){
@@ -85,47 +84,41 @@ $(function () {
     	$('body').css('background-image', 'url('+src+')');
 
     	url = location.href;
-
-        // 单个背景逻辑
-    	// arr[url]=src;
         
         // 全局背景统一
         arr['bgSrc'] = src;
-        // console.log(arr);
 
     	localStorage.bglist = JSON.stringify(arr);
 
     });
-
     //背景初始化
     $('.reset').click(function  () {
         localStorage.clear();
         layer.msg('初如化成功',function(){});
     });
-
-
     //背景切换点击空白区域隐藏
-    $('.bg-out').click(function  () {
-        $('.bg-changer').animate({top: '-110px'}, 500);
-            is_show_change=true;
-        $(this).hide();
-    })
+	$(document).click(function(e){
+	  var _con = $('.bg-changer-target');   // 设置目标区域
+	  if(!_con.is(e.target) && _con.has(e.target).length === 0){
+		   $('.bg-changer').animate({top: '-110px'}, 500);
+           $('.bg-out').hide();
+	  }
+	});
 
 
     //判断是否显示左侧菜单
     $(window).resize(function(){
         width=$(this).width();
         if(width>1024){
-            $('#side-nav').show();
+            $('#left-nav').show();
         }
     });
-
     //窄屏下的左侧菜单隐藏效果
     $('.container .open-nav i').click(function(event) {
-        $('#side-nav').toggle(400);
+        $('.left-nav').animate({width: 'toggle'});
     });
-
-    //左侧菜单效果
+	
+    //左侧菜单效果，切换标签
 	$('.left-nav #nav li').click(function (event) {
 
         if($(this).children('.sub-menu').length){
@@ -148,8 +141,8 @@ $(function () {
             var title = $(this).find('cite').html();
             var index  = $('.left-nav #nav li').index($(this));
 
-            for (var i = 0; i <$('.x-iframe').length; i++) {
-                if($('.x-iframe').eq(i).attr('tab-id')==index+1){
+            for (var i = 0; i <$('.x-content').length; i++) {
+                if($('.x-content').eq(i).attr('tab-id')==index+1){
                     tab.tabChange(index+1);
                     event.stopPropagation();
                     return;
@@ -163,7 +156,6 @@ $(function () {
         event.stopPropagation();
          
     })
-
     //初始化菜单展开样式
     $('.left-nav #nav li .opened').siblings('a').find('.nav_right').html('&#xe6a6;');
 
