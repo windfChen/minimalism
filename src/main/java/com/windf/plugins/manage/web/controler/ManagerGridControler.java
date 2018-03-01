@@ -25,6 +25,7 @@ public abstract class ManagerGridControler<T> extends BaseManagerControler<T> {
 	public String index() {
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("queryString", request.getQueryString());
+		data.put("controlerPath", path.getControlerPath());
 		data.put(Constant.SESSION_TEMPLATE, SessionContext.get(Constant.SESSION_TEMPLATE));
 
 		responseReturn.page(this.getAdapter().getGridPage());

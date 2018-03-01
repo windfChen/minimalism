@@ -11,7 +11,14 @@
 	<script type="text/javascript" src="${rc.contextPath}/resources/common/plugins/jquery/jquery.js"></script>
 	<script type="text/javascript" src="${rc.contextPath}/resources/common/plugins/swiper/swiper.jquery.min.js"></script>
 	<script type="text/javascript" src="${rc.contextPath}/resources/plugins/manage/plugins/layui/lib/layui/layui.js"></script>
+	<script type="text/javascript">
+		var basePath = '${rc.contextPath}';
+		var moduleCode = '${module.code}';
+		var mBasePath = '${module.basePath}';
+		var resourceBasePath = '${rc.contextPath}/resources/';
+	</script>
 	<script type="text/javascript" src="${rc.contextPath}/resources/plugins/manage/plugins/layui/js/xadmin.js"></script>
+	<script type="text/javascript" src="${rc.contextPath}/resources/plugins/manage/plugins/layui/js/grid.js"></script>
 </head>
 <body>
     <!-- 顶部开始 -->
@@ -53,7 +60,7 @@
                     </a>
                     <ul class="sub-menu">
                         <li>
-                            <a _href="${rc.contextPath}/dev/module/" href="javascript:void(0);">
+                            <a _href="${rc.contextPath}/dev/module/" class="first" href="javascript:void(0);">
                                 <i class="iconfont">&#xe6a7;</i>
                                 <cite>模块管理</cite>
                             </a>
@@ -251,5 +258,10 @@
         <div class="bg-out"></div>
     </div>
     <!-- 背景切换结束 -->
+	<script>
+		$(function(){
+			setTimeout('$(".first").trigger("click")',100);
+		})
+	</script>
 </body>
 </html>

@@ -143,7 +143,7 @@
 	"isPrepared" : true,
 	"canAdd" : true,
 	"canBatchAdd" : false,
-	"canDelete" : false,
+	"canDelete" : true,
 	"canUpdate" : true,
 	"canSearch" : false
 }
