@@ -45,7 +45,6 @@ public class Imports {
 				boolean isExclude = false;
 				for (int k = 0; k < excludePackage.length; k++) {
 					if (classLine.startsWith(excludePackage[k])) {
-						System.out.println(classLine + "--" + excludePackage[k]);
 						isExclude = true;
 						break;
 					}
