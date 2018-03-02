@@ -183,11 +183,18 @@ Grid.prototype = {
 		
 		// 添加删除按钮
 		if (this.gridConfig.canAdd) {
-			$(obj.config.menusDiv).append('<button class="layui-btn" onclick="member_add()"><i class="layui-icon">&#xe608;</i>添加</button>');
+			$(obj.config.menusDiv).append('<button class="layui-btn" id="grid_data_add"><i class="layui-icon">&#xe608;</i>添加</button>');
+			$('grid_data_add').click(function({
+				obj.showSavePage();
+			}));
 		}
 		if (this.gridConfig.canDelete) {
-			$(obj.config.menusDiv).append('<button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button>');
+			$(obj.config.menusDiv).append('<button class="layui-btn layui-btn-danger" id="grid_data_del"><i class="layui-icon">&#xe640;</i>批量删除</button>');
+			$('grid_data_del').click(function({
+				obj.del();
+			}));
 		}
+		// TODO 修改按钮
 		
 		for (var i = 0; i < this.gridConfig.menus.length; i++) {
 			var menu = this.gridConfig.menus[i];
@@ -410,16 +417,226 @@ Grid.prototype = {
 	del : function() {
 	},
 	
-	initSavePage : function(isUpdate){
-		
-	},
-	
 	detail : function(id) {
 		var obj = this;
 		
 	},
 	
 	showSavePage : function(isUpdate) {
+		x_admin_show('添加', this._initSavePage(isUpdate));
+	},
+	
+	_initSavePage : function(isUpdate){
+		if (!this.config.userSavePage) {
+			var h = '<form id="grid_form" action="' + (isUpdate? 'update': 'save') + '.json' + queryString + '" method="post">\
+						<div id="form_inputs"></div>\
+						<div class="clearfix work_table">\
+							<div class="col-md-12 col-xs-12"><button type="submit" class="work_save trans" >保存</button></div>\
+						</div>\
+					</form>';
+			$('body').append(h);
+			// 绑定事件					
+			var obj = this;
+			$('#grid_form').submit(function() {
+				obj.save();
+				return false;
+			});
+			// 生成列	
+			for (var i = 0; i < this.gridConfig.columns.length; i++) {
+				var c = this.gridConfig.columns[i];
+				// 不能添加修改的，返回
+				if (!isUpdate && !c.canAdd) {
+					continue;
+				}
+				// 编辑时设置Id
+				if (isUpdate && !c.canUpdate) {
+					var a = '<input type="hidden" name="entity.' + c.dataIndex + '" />';
+					$('#form_inputs').append(a);
+					continue;
+				}
+				// 文本域
+				if (c.type == 'TextField') {
+					var a = '<div class="clearfix work_table">\
+						<div class="col-md-1 col-xs-2 center_table_t">*' + c.name + ':</div>\
+						<div class="col-md-11 col-xs-10">\
+							<div class="center_table_input"><input type="text" name="entity.' + c.dataIndex + '" placeholder="请输入' + c.name + '" class="work_input"/></div>\
+						</div>\
+					</div>';
+					$('#form_inputs').append(a);
+				} else if (c.type == 'TextArea') {
+					var a = '<div class="clearfix work_table">\
+						<div class="col-md-1 col-xs-2 center_table_t">*' + c.name + ':</div>\
+						<div class="col-md-11 col-xs-10">\
+							<div class="center_table_text"><textarea name="entity.' + c.dataIndex + '" placeholder="请输入' + c.name + '" class="work_input"></textarea></div>\
+						</div>\
+					</div>';
+					$('#form_inputs').append(a);
+				} else if (c.type == 'ComboBox') {
+					var _dataIndex = c.dataIndex.replace('.', '');
+					var a = '<div class="clearfix work_table">\
+						<div class="col-md-1 col-xs-2 center_table_t">*' + c.name + ':</div>\
+						<div class="col-md-11 col-xs-10">\
+							<div class="center_table_input"><select name="entity.' + (c.dataIndex.replace('.name', '.id')) + '" id="combox_' + _dataIndex + '"></select></div>\
+							<input name="' + c.name + 'temp" style="display:none" value=""/>\
+						</div>\
+					</div>';
+					if('priorityRolename' == _dataIndex || 'organizationname' == _dataIndex){
+						a = '<div class="clearfix work_table">\
+						<div class="col-md-1 col-xs-2 center_table_t">*' + c.name + ':</div>\
+						<div class="col-md-11 col-xs-10">\
+							<div class="center_table_input"><select name="entity.' + (c.dataIndex.replace('.name', '.id')) + '" id="combox_' + _dataIndex + 'temp"></select></div>\
+							<input name="' + c.name + 'temp" style="display:none" value=""/>\
+						</div>\
+					</div>';
+					}
+					var nameTemp = c.name;
+					var selectName = c.dataIndex.replace('.name', '.id');
+					$('#form_inputs').append(a);
+					if (c.comboUrl) {
+						var a = function (_dataIndex, comboUrl) {
+							return function(_dataIndex, comboUrl) {
+								$.getJSON(basePath + comboUrl, function(data) {
+									var b = '';
+									for (var j = 0; j < data.length; j++) {
+										var d = data[j];
+										b += '<option value="' + d[0] + '">' + d[1] + '</option>';
+									}
+									$('#combox_' + _dataIndex + 'temp').append(b);
+									var newDataIndex = c.dataIndex.replace('.name', '.id');
+									var value = $('#form').find('[name="' + nameTemp + 'temp"]').val();
+									if(!(value == '' || value == undefined)){
+										$('#form').find('[name="entity.'+ selectName+'"]').val(value);
+									}
+								});
+							}(_dataIndex, comboUrl);
+						};
+						a(_dataIndex, c.comboUrl);
+						
+					} else {// [{"id":"F","name":"女"},{"id":"M","name":"男"}],
+						var b = '';
+						for (var j = 0; j < c.comboDataArray.length; j++) {
+							var d = c.comboDataArray[j];
+							b += '<option value="' + d.id + '">' + d.name + '</option>';
+						}
+						$('#combox_' + _dataIndex).append(b);
+					}
+				} else if (c.type == 'Hidden') {
+					var a = '<input type="hidden" name="entity.' + c.dataIndex + '" value="' + c.display + '" />';
+					$('#form_inputs').append(a);
+				}else if(c.type == 'datePicker'){
+					var a = '<div class="clearfix work_table">\
+						<div class="col-md-1 col-xs-2 center_table_t">*' + c.name + ':</div>\
+						<div class="col-md-3 col-xs-4">\
+						<div class="center_table_input"><input name="entity.' + c.dataIndex + '" type="text" class="work_input work_date" name="entity.' + c.dataIndex + '"  onClick="WdatePicker()"/></div>\
+					</div>';
+					$('#form_inputs').append(a);
+				}else if(c.type == 'radio'){
+					if(c.comboUrl){
+						var a = function (c) {
+							return function(c) {
+								$.getJSON(basePath + c.comboUrl, function(data) {
+									var b = '<div class="clearfix work_table">\
+									<div class="col-md-1 col-xs-2 center_table_t">*' + c.name + ':</div>\
+									<div class="col-md-8">\
+										<span class="table">';
+									for (var j = 0; j < data.data.length; j++) {
+										var d = data.data[j];
+										if(j == 0){
+											b += '<label class="label_radio ell col-md-8 r_on">\
+											<div class="btn_radio"></div>\
+											<input type="radio" name="entity.' + c.dataIndex + '" checked="checked" value="' + d.id + '"/>' + d.name +'</label>';
+										}else{
+											b += '<label class="label_radio ell col-md-8">\
+												<div class="btn_radio"></div>\
+												<input type="radio" name="entity.' + c.dataIndex + '" value="' + d.id + '"/>' + d.name +'</label>';
+										}
+									}
+									b += '</span></div></div>';
+									//$('#radio').append(b);
+									$('#form_inputs').append(b);
+									gridEvent();
+								});
+							}(c);
+						};
+						a(c);
+					} else if(c.type == 'checkbox'){
+						if(c.comboUrl){
+							var a = function (c) {
+								return function(c) {
+									$.getJSON(basePath + c.comboUrl, function(data) {
+										var b = '<div class="clearfix work_table">\
+										<div class="col-md-1 col-xs-2 center_table_t">*' + c.name + ':</div>\
+										<div class="col-md-8">\
+											<span class="table">';
+										for (var j = 0; j < data.data.length; j++) {
+											var d = data.data[j];
+											if(j == 0){
+												b += '<label class="label_check ell col-md-8 r_on">\
+												<div class="btn_check"></div>\
+												<input type="checkbox" name="entity.' + c.dataIndex + '" checked="checked" value="' + d.id + '"/>' + d.name +'</label>';
+											}else{
+												b += '<label class="label_check ell col-md-8">\
+													<div class="btn_check"></div>\
+													<input type="checkbox" name="entity.' + c.dataIndex + '" value="' + d.id + '"/>' + d.name +'</label>';
+											}
+										}
+										b += '</span></div></div>';
+										//$('#radio').append(b);
+										$('#form_inputs').append(b);
+										gridEvent();
+									});
+								}(c);
+							};
+							a(c);
+						}
+					}else{
+						var b = '<div class="clearfix work_table">\
+									<div class="col-md-1 col-xs-2 center_table_t">*' + c.name + ':</div>\
+									<div class="col-md-8">\
+										<span class="table">';
+						for (var j = 0; j < c.comboDataArray.length; j++) {
+							var d = c.comboDataArray[j];
+							if(j == 0){
+								b += '<label class="label_radio r_on">\
+								<div class="btn_radio"></div>\
+								<input type="radio" checked="checked" \
+								value="'+ d.id +'" name="entity.' + c.dataIndex + '"/>'+d.name+'</label>';
+							}else{
+								b += '<label class="label_radio">\
+								<div class="btn_radio"></div>\
+								<input type="radio"  \
+								value="'+ d.id +'" name="entity.' + c.dataIndex + '"/>'+d.name+'</label>';
+							}
+							
+						}
+						b += '</span></div></div>';
+						$('#form_inputs').append(b);
+						gridEvent();
+					}
+				} else if(c.type == 'editor'){
+					var a = '<div class="clearfix work_table">\
+								<div class="col-md-1 col-xs-2 center_table_t">*'+c.name+':</div>\
+								<div class="col-md-11 col-xs-10">\
+									<div><textarea id="editor_'+c.dataIndex+'" name="entity.' + c.dataIndex + '" class="work_text" ></textarea></div>\
+								</div>\
+							</div>';
+					$('#form_inputs').append(a);
+					//ueditor start
+					initUEditor("#editor_"+c.dataIndex);
+					
+				} else if (c.type == 'TextFieldCanEmpty') {
+					var a = '<div class="clearfix work_table">\
+						<div class="col-md-1 col-xs-2 center_table_t">' + c.name + ':</div>\
+						<div class="col-md-11 col-xs-10">\
+							<div class="center_table_input"><input type="text" name="entity.' + c.dataIndex + '" placeholder="请输入' + c.name + '" class="work_input"/></div>\
+						</div>\
+					</div>';
+					$('#form_inputs').append(a);
+				} 
+				
+			}
+		}
+		
 	},
 	
 	save : function() {

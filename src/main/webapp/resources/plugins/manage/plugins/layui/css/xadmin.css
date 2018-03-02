@@ -22,6 +22,10 @@ body{
 
 /*layer弹出层背景设置*/
 
+.layui-layer-title {
+	background-color: rgba(0, 0, 0, 0);
+}
+
 .layui-layer{
 	background-image: url(../images/h.jpg);
 	background-size: cover;
