@@ -2,6 +2,7 @@ package com.windf.plugins.manage.entity;
 
 public class ColumnConfig extends FieldConfig {
 
+	private boolean required;
 	private boolean canList;
 	private boolean canSearch;
 	private boolean canAdd;
@@ -74,6 +75,14 @@ public class ColumnConfig extends FieldConfig {
 
 	public void setCanList(boolean canList) {
 		this.canList = canList;
+	}
+
+	public boolean isRequired() {
+		return required;
+	}
+
+	public void setRequired(boolean required) {
+		this.required = required;
 	}
 
 }

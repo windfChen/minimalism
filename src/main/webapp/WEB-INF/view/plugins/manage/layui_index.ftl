@@ -224,7 +224,6 @@
 			  </ul>
 			  <div class="layui-tab-content">
 				<div class="layui-tab-item layui-show">
-          
 				</div>
 			  </div>
 			</div>

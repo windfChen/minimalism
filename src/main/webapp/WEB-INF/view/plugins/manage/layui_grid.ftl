@@ -1,30 +1,13 @@
 <div class="content">
 	<!-- 右侧内容框架，更改从这里开始 -->
-	<form class="layui-form xbs" action="" >
-		<div class="layui-form-pane" style="text-align: center;">
-		  <div class="layui-form-item" style="display: inline-block;">
-			<label class="layui-form-label xbs768">日期范围</label>
-			<div class="layui-input-inline xbs768">
-			  <input class="layui-input" placeholder="开始日" id="LAY_demorange_s">
-			</div>
-			<div class="layui-input-inline xbs768">
-			  <input class="layui-input" placeholder="截止日" id="LAY_demorange_e">
-			</div>
-			<div class="layui-input-inline">
-			  <input type="text" name="username"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
-			</div>
-			<div class="layui-input-inline" style="width:80px">
-				<button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
-			</div>
+	<form class="layui-form xbs" id="grid-search-form" >
+		<div class="layui-form-pane" style="text-align: center;">  
+		  <div class="layui-form-item" id="grid-search" style="display: inline-block;">
 		  </div>
 		</div> 
 	</form>
 	<xblock>
 		<div id="grid-menus">
-			<!--
-			<button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon">&#xe640;</i>批量删除</button>
-			<button class="layui-btn" onclick="member_add('添加用户','member-add.html','600','500')"><i class="layui-icon">&#xe608;</i>添加</button>
-			-->
 		</div>
 		<!--
 		<span class="x-right" style="line-height:40px">共有数据：<span id=""></span>条</span>
@@ -92,7 +75,7 @@
   </div>
   <script>
 	$(function(){
-		
+			
 		var queryString = '${data.queryString}';
 		queryString = queryString == ''? '': '?' + queryString;
 		var controlerPath = '${rc.contextPath}${data.controlerPath}';

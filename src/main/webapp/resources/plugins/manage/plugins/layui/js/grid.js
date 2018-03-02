@@ -23,7 +23,8 @@ function Grid(config) {
 		savePage : '#savePage',
 		userSavePage : false,
 		saveTdHtmls : [],
-		searchDiv : '#table_search',
+		searchDiv : '#grid-search',
+		searchFormDiv : '#grid-search-form',
 		detailOnchange : false
 	}
 	
@@ -69,10 +70,71 @@ Grid.prototype = {
 	},
 	
 	initSearch : function () {
-		
+		if(!this.gridConfig.canSearch){
+			return;
+		}
+		var listIndex = 0;
+		for (var i = 0; i < this.gridConfig.columns.length; i++) {
+			var c = this.gridConfig.columns[i];
+			if (c.canSearch) {
+				if (c.type == 'ComboBox') {
+						// 生成Id
+						var id = 'combox_' + c.dataIndex.replace('.', '');
+						// 生成input
+						var h = '<label class="layui-form-label">' + c.name + '</label>\
+								<div class="layui-input-inline">\
+									<select name="search_' + (c.dataIndex) + '" id="' + id + '">\
+										<option value="">请选择</option>\
+									</select>\
+								</div>';
+						$(this.config.searchDiv).append(h);
+						// 绑定combox控件事件
+						initCombox(id, c.comboUrl?c.comboUrl :c.comboDataArray);
+				} else if (c.type == 'Date' || c.type == 'DateTime') {
+					// 生成Id
+					var dateInputId = 'date_input_' + c.dataIndex;
+					// 生成input
+					var h = '<label class="layui-form-label xbs768">' + c.name + '</label>\
+							<div class="layui-input-inline xbs768">\
+							  <input class="layui-input" placeholder="' + c.name + '" id="' + dateInputId + '">\
+							</div>';
+					$(this.config.searchDiv).append(h);
+					// 绑定日历控件事件
+					initDate(dateInputId, c.type,false);
+				} else if (c.type == 'TextField') {
+					var h = '<label class="layui-form-label">' + c.name + '</label>\
+							 <div class="layui-input-inline">\
+							   <input type="text" name="search_' + c.dataIndex + '" placeholder="请输入' + c.name + '" autocomplete="off" class="layui-input">\
+							 </div>';
+					$(this.config.searchDiv).append(h);
+				}
+			}
+		}
+		// 搜索按钮
+		var a = '<div class="layui-input-inline" style="width:80px">\
+					<button class="layui-btn searchBtn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>\
+				</div>';
+		$(this.config.searchDiv).append(a);
+		// 搜索事件设置
+		var obj = this;
+		$(this.config.searchFormDiv).submit(function(){
+			obj.search();
+			return false;
+		});
 	},
 
-	searchBtn : function () {
+	search : function () {
+		var listIndex = 0;
+		var searchData = {};
+		for (var i = 0; i < this.gridConfig.columns.length; i++) {
+			var c = this.gridConfig.columns[i];
+			if (c.canSearch) {
+				var value = $('[name="search_'+c.dataIndex+'"]').val();
+				searchData['condition.' + c.dataIndex] = value;
+			}
+		}
+		//请求
+		this.load(this.pageNum,searchData);
 	},
 
 	initTitle : function () {
@@ -246,6 +308,8 @@ Grid.prototype = {
 			success: function (data) {
 				// 初始化头部
 				obj.initTitle();
+				// 清除数据
+				$(obj.config.tableBodyDiv).html('');
 				// 加载数据
 				if (data.data && data.data.length > 0) {
 					var searchDataTemp = [];
@@ -260,7 +324,7 @@ Grid.prototype = {
 							var c = obj.gridConfig.columns[j];
 							if (c.canList) {
 								var display = obj._getColumnDisplay(d, c);
-								var searchName = searchData[c.dataIndex];
+								var searchName = searchData['condition.' + c.dataIndex];
 								// 判断该列是否有搜索
 								if(!(searchName == '' || searchName == undefined) && display.indexOf(searchName) >= 0){	// 如果有搜索，关键字变红
 									searchDataTemp[j]=c.dataIndex + "_" + searchName;
@@ -287,7 +351,7 @@ Grid.prototype = {
 					// 加载表格事件 TODO
 					// gridEvent();
 				}else{
-					$(obj.config.pageDiv).html(getPageHtml(1, data.totalCount, 1,[]));	
+					$(obj.config.tableBodyDiv).html(getPageHtml(1, data.totalCount, 1,[]));	
 				}
 				
 			},
@@ -375,4 +439,60 @@ Grid.prototype = {
 function initUEditor(dom){
 		
 }//end ueditor
+
+function initDate(dateInputId, dateType, isRange) {
+	layui.use(['laydate'], function(){
+		laydate = layui.laydate;//日期插件
+		
+		laydate.render({ 
+			elem: '#' + dateInputId,
+			type: dateType? dateType.toLowerCase(): 'date',
+			range: !!isRange? '~': false
+		});
+
+	});
+}
+
+function initCombox(id, data) {
+	// 判断数据类型
+	var comboUrl = '';
+	var comboDataArray = '';
+	if (data instanceof Array) {
+		comboDataArray = data;
+	} else {
+		comboUrl = data;
+	}
+	// 绑定数据
+	if (comboUrl) {	// 动态获取数据 TODO 待验证
+		var a = function (id, comboUrl) {
+			return function(id, comboUrl) {
+				$.getJSON(basePath + comboUrl, function(data) {
+					var b = '';
+					$('#' + id).append('<option value="">' + "全部" + '</option>');
+					for (var j = 0; j < data.length; j++) {
+						var d = data[j];
+						b += '<option value="' + d[1] + '">' + d[1] + '</option>';
+					}
+					$('#' + id).append(b);
+					
+				});
+			}(id, comboUrl);
+		};
+		a(id, comboUrl);
+	} else {// 静态数组数据：[{"id":"F","name":"女"},{"id":"M","name":"男"}],
+		var a = function (id, comboDataArray) {
+				return function(id, comboDataArray) {
+					var b = '';
+					for (var j = 0; j < comboDataArray.length; j++) {
+						var d = comboDataArray[j];
+						b += '<option value="' + d.id + '">' + d.name + '</option>';
+					}
+					$('#' + id).append(b);
+				}(id, comboDataArray);
+		};
+		a(id, comboDataArray);
+	}
+	// 重新渲染表单
+	form.render();
+}
 	

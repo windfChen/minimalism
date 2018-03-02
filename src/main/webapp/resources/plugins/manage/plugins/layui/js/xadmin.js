@@ -2,6 +2,7 @@ $(function () {
     //加载弹出层
     layui.use(['form','element'],
     function() {
+        form = layui.form;
         layer = layui.layer;
         element = layui.element;
     });

@@ -24,6 +24,7 @@
 		"canUpdate" : false,
 		"canReport" : true,
 		"canOrder" : true,
+		"required":true,
 		"display" : null,
 		"orderNum" : 1
 	},
@@ -38,6 +39,7 @@
 		"canUpdate" : true,
 		"canReport" : true,
 		"canOrder" : true,
+		"required":true,
 		"display" : null,
 		"orderNum" : 4
 	},
@@ -52,6 +54,7 @@
 		"canUpdate" : true,
 		"canReport" : true,
 		"canOrder" : true,
+		"required":true,
 		"display" : null,
 		"orderNum" : 3
 	},
@@ -66,6 +69,7 @@
 		"canUpdate" : true,
 		"canReport" : true,
 		"canOrder" : true,
+		"required":false,
 		"display" : null,
 		"orderNum" : 3
 	},
@@ -145,5 +149,5 @@
 	"canBatchAdd" : false,
 	"canDelete" : true,
 	"canUpdate" : true,
-	"canSearch" : false
+	"canSearch" : true
 }
