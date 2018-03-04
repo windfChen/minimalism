@@ -61,7 +61,7 @@
 	{
 		"name" : "描述",
 		"dataIndex" : "info",
-		"type" : "TextField",
+		"type" : "TextArea",
 		"canList" : true,
 		"canSearch" : false,
 		"canAdd" : true,
