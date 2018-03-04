@@ -9,6 +9,7 @@
 	<link rel="stylesheet" type="text/css" href="${rc.contextPath}/resources/plugins/manage/plugins/layui/css/xadmin.css" />
 	<link rel="stylesheet" type="text/css" href="${rc.contextPath}/resources/common/plugins/swiper/swiper.min.css" />
 	<script type="text/javascript" src="${rc.contextPath}/resources/common/plugins/jquery/jquery.js"></script>
+    <script type="text/javascript" src="${rc.contextPath}/resources/common/plugins/jquery/jquery.form.js"></script>
 	<script type="text/javascript" src="${rc.contextPath}/resources/common/plugins/swiper/swiper.jquery.min.js"></script>
 	<script type="text/javascript" src="${rc.contextPath}/resources/plugins/manage/plugins/layui/lib/layui/layui.js"></script>
 	<script type="text/javascript">

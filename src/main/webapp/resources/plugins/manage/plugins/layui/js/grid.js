@@ -19,7 +19,7 @@ function Grid(config) {
 		tableTitles : undefined,
 		tableTrHtml : undefined,
 		tableTdHtmls : [],
-		listPage : '#listPage',
+		gridPage : '#grid-page',
 		savePage : '#savePage',
 		userSavePage : false,
 		saveTdHtmls : [],
@@ -336,11 +336,11 @@ Grid.prototype = {
 								// 判断该列是否有搜索
 								if(!(searchName == '' || searchName == undefined) && display.indexOf(searchName) >= 0){	// 如果有搜索，关键字变红
 									searchDataTemp[j]=c.dataIndex + "_" + searchName;
-									var str_before = obj._getColumnDisplay(d, c).split(searchName)[0];
-									var str_after = obj._getColumnDisplay(d, c).split(searchName)[1];
+									var str_before = display.split(searchName)[0];
+									var str_after = display.split(searchName)[1];
 									h += '<td>'+str_before+'<span style="color:#F00">' + searchName + '</span>'+str_after+'</td>';
 								}else{	// 否则，正常显示
-									h += '<td>' + obj._getColumnDisplay(d, c) + '</td>';
+									h += '<td>' + display + '</td>';
 								}
 							}
 						}
@@ -353,7 +353,21 @@ Grid.prototype = {
 					
 					// 分页 TODO
 					if (true || data.totalCount > obj.pageSize) {
-						// $(obj.config.pageDiv).html(getPageHtml(pageNum, data.totalCount, obj.pageSize,searchDataTemp));
+						laypage.render({
+						  elem: 'grid-page',
+						  count: data.totalCount,
+						  limits:[10,20,50,100],
+						  jump: function(obj, first){
+						    //obj包含了当前分页的所有参数，比如：
+						    console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+						    console.log(obj.limit); //得到每页显示的条数
+						    
+						    //首次不执行
+						    if(!first){
+						      //do something
+						    }
+						  }
+						});
 					}
 					
 					// 加载表格事件 TODO
@@ -361,12 +375,36 @@ Grid.prototype = {
 				}else{
 					$(obj.config.tableBodyDiv).html(getPageHtml(1, data.totalCount, 1,[]));	
 				}
-				
 			},
 			error:function(XHR, textStatus, errorThrown){
 				alert('error: ' + errorThrown);
 			}
 		});
+	},
+	
+	save : function(isUpdate) {
+		var obj = this;
+		if (!this.submiting) {
+			$('#' + obj.config.saveFormId).attr('action', obj.config.gridPath + (isUpdate? 'update': 'save') + '.json' + this.config.queryString);
+			// 提交
+			$('#' + obj.config.saveFormId).ajaxSubmit({
+				dataType: "json",
+				beforeSubmit : function(){
+					this.submiting = true;
+				},
+				success : function(data){
+					$('#' + obj.config.saveFormId)[0].reset();
+					this.submiting = false;
+					if (data.success == 'Y') {
+						alert('保存成功');
+						obj.load();
+						x_admin_close();
+					} else {
+						alert(data.tip);
+					}
+				}
+			});
+		}
 	},
 	
 	_getColumnDisplay : function (d, c, dataIndex) {
@@ -376,29 +414,32 @@ Grid.prototype = {
 		if (c.display) {
 			result = c.display;
 			result = result.replace('$' + '{value}', this._getValue(d, dataIndex));
-			
+
 			result = this._replaceValue(result, d);
-			
+
 			if (result.indexOf('href="/') > 0 || result.indexOf('href=\'/') > 0) {
 				result = result.replace(/href=\"\//g, 'href="' + basePath + '/').replace(/href=\'\//g, 'href=\'' + basePath + '/');
 			}
 			
 			if (result.startsWith('function')) {
 				eval('result = ' + result + '().toString();');
-			}						
+			}					
 		}
 		return (result == '' || result == undefined)? '&nbsp;': result;
 	},
-	
 	_replaceValue : function (html, d) {
 		var result = html;
-		for (var i = 0; i < this.gridConfig.columns.length; i++) {
-			var c1 = this.gridConfig.columns[i];
-			var reg = new RegExp('\\${' + c1.dataIndex + '}',"g");   
-			result = result.replace(reg, this._getValue(d, c1.dataIndex));
-			reg = new RegExp('@{' + c1.dataIndex + '}',"g");   
-			result = result.replace(reg, this._getValue(d, c1.dataIndex));
+		
+		if (result.indexOf('\\${') > 0 || result.indexOf('\\${') > 0 ) {
+			for (var i = 0; i < this.gridConfig.columns.length; i++) {
+				var c1 = this.gridConfig.columns[i];
+				var reg = new RegExp('\\${' + c1.dataIndex + '}',"g");   
+				result = result.replace(reg, this._getValue(d, c1.dataIndex));
+				reg = new RegExp('@{' + c1.dataIndex + '}',"g");   
+				result = result.replace(reg, this._getValue(d, c1.dataIndex));
+			}
 		}
+		
 		return result;
 	},
 	
@@ -435,7 +476,7 @@ Grid.prototype = {
 			return $('#' + this.config.saveFormId);
 		}
 		// 创建表单
-		$('body').append('<form class="layui-form" style="display:none; padding:10px 20px;" id="' + this.config.saveFormId + '" action="' + (isUpdate? 'update': 'save') + '.json' + this.config.queryString + '" method="post"></form>');
+		$('body').append('<form class="layui-form" style="display:none; padding:10px 20px;" id="' + this.config.saveFormId + '" onsubmit="return false;" method="post"></form>');
 		// 绑定事件
 		var obj = this;
 		$('#' + this.config.saveFormId).submit(function() {
@@ -523,10 +564,6 @@ Grid.prototype = {
 		$('#' + this.config.saveFormId).attr('inited', 'true');
 		return $('#' + this.config.saveFormId);
 		
-	},
-	
-	save : function() {
-		var obj = this;
 	},
 	
 	getSelections : function () {

@@ -1,9 +1,10 @@
 $(function () {
     //加载弹出层
-    layui.use(['form','element'],
+    layui.use(['form','element','laypage'],
     function() {
         form = layui.form;
         layer = layui.layer;
+        laypage = layui.laypage;
         element = layui.element;
     });
 
@@ -196,6 +197,5 @@ function x_admin_show(title,data,w,h){
 
 /*关闭弹出框口*/
 function x_admin_close(){
-    var index = parent.layer.getFrameIndex(window.name);
-    parent.layer.close(index);
+	layer.close(layer.index);
 }

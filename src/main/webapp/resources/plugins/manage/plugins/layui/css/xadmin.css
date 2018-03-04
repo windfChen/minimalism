@@ -68,6 +68,10 @@ body{
     animation:play 3s linear infinite;
 }
 
+.layui-disabled, .layui-disabled:hover {
+	 color: #bbb!important;
+}
+
 @-webkit-keyframes play{
 	0%  {
 	    -webkit-transform:rotateZ(0deg);
