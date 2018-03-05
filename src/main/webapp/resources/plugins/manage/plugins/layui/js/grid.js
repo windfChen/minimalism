@@ -11,7 +11,6 @@ function Grid(config) {
 		titleDiv : '#title',
 		tableTitleDiv : '#grid-thead',
 		tableBodyDiv : '#grid-data',
-		tableSelectAllInput : '#select_all_input',
 		tableSelectInput : '.grid_id',
 		pageDiv : '#grid-page-count',
 		menusDiv : '#grid-menus',
@@ -143,7 +142,7 @@ Grid.prototype = {
 			// 行开始
 			var tableTitle = '<tr>';
 			// 复选框
-			tableTitle += '<th><input type="checkbox" name="" value=""></th>';
+			tableTitle += '<th><input type="checkbox" id="table_select_all"  name="" value=""></th>';
 			// 数据项
 			for (var i = 0; i < this.gridConfig.columns.length; i++) {
 				var c = this.gridConfig.columns[i];
@@ -160,6 +159,16 @@ Grid.prototype = {
 			this.config.tableTitles = tableTitle;
 		}
 		$(this.config.tableTitleDiv).html(this.config.tableTitles);
+		// 全选选中事件
+		$('#table_select_all').click(function(){
+			if ($('[name=ids]').not(':checked').length != 0) {
+				$('[name=ids]').prop('checked', true);
+			} else {
+				$('[name=ids]').each(function(){
+					$('[name=ids]').removeAttr("checked");
+				});
+			}
+		});
 		// 点击事件 TODO 现在无效，需要修改checkbox样式
 		var obj = this;
 		$(this.config.tableSelectAllInput).click(function(){
@@ -345,8 +354,13 @@ Grid.prototype = {
 						// 修改操作
 						var opts = '';
 						if (obj.gridConfig.canUpdate) {
-							opts = '<a style="text-decoration:none" onclick="grid.detail(\'' + d.id + '\')" data-id="' + d.id + '" href="javascript:;" title="修改">\
+							opts += '<a style="text-decoration:none" onclick="grid.detail(\'' + d.id + '\')" data-id="' + d.id + '" href="javascript:;" title="修改">\
 	                            				<i class="layui-icon">&#xe642;</i>\
+	                         			</a>';
+						}
+						if (obj.gridConfig.canDelete) {
+							opts += '<a style="text-decoration:none" onclick="grid.del(\'' + d.id + '\')" data-id="' + d.id + '" href="javascript:;" title="删除">\
+	                            				<i class="layui-icon">&#xe640;</i>\
 	                         			</a>';
 						}
 						// 其他操作
@@ -462,7 +476,48 @@ Grid.prototype = {
 		})
 	},
 	
-	del : function() {
+	del : function(ids) {
+		// 如果没有ids，获取所有选中的ids
+		if (!ids) {
+			// 获取所有选中的ids
+			var selectedIds = '';
+			$('[name=ids]').each(function(){
+				if ($(this).is(":checked")) {
+					selectedIds += $(this).val() + ',';
+				}
+			});
+			// 至少选择一条记录
+			if (ids == '') {
+				alert('至少选择一条记录');
+				return;
+			}
+			// 组织参数，赋值
+			selectedIds = selectedIds.substring(0, selectedIds.length - 1);
+			ids = selectedIds;
+		}
+		// 提示,确认后删除
+		var obj = this;
+		if (confirm('确定删除？删除后无法恢复！')) {
+			$.ajax({
+				url: obj.config.gridPath + 'delete.json' + obj.config.queryString,
+				type: "POST",
+				dataType: 'json',
+				data: {'ids':ids},
+				beforeSend: function(){
+				},
+				success: function (data) {
+					if (data.success == 'Y') {
+						alert('删除成功');
+					} else {
+						alert(data.tip);
+					}
+					obj.load();
+				},
+				error:function(XHR, textStatus, errorThrown){
+					alert('error: ' + errorThrown);
+				}
+			});
+		}
 	},
 	
 	showSavePage : function(isUpdate) {
