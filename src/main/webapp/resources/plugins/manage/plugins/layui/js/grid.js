@@ -3,8 +3,10 @@ String.prototype.startsWith = function(str) {
 	return reg.test(this);
 }
 
-function Grid(config) {	
+function Grid(config, index) {	
 	var defaultConfig = {
+		index: index? index: '',
+		tabId: index? '#tab_content_' + index: 'body',
 		gridPath:'',
 		queryString:'',
 		tableDiv : '#grid-table',
@@ -12,10 +14,13 @@ function Grid(config) {
 		tableTitleDiv : '#grid-thead',
 		tableBodyDiv : '#grid-data',
 		tableSelectInput : '.grid_id',
+		tableSelectAllId: 'table_select_all',
 		pageDiv : '#grid-page-count',
 		menusDiv : '#grid-menus',
 		tableTitles : undefined,
 		gridPage : '#grid-page',
+		gridAddId:'grid_data_add',
+		gridDelId:'grid_data_del',
 		savePage : '#savePage',
 		userSavePage : false,
 		saveTdHtmls : [],
@@ -76,7 +81,7 @@ Grid.prototype = {
 			if (c.canSearch) {
 				if (c.type == 'ComboBox') {
 						// 生成Id
-						var id = 'combox_' + c.dataIndex.replace('.', '');
+						var id = this.config.index + 'combox_' + c.dataIndex.replace('.', '');
 						// 生成input
 						var h = '<label class="layui-form-label">' + c.name + '</label>\
 								<div class="layui-input-inline">\
@@ -89,7 +94,7 @@ Grid.prototype = {
 						initCombox(id, c.comboUrl?c.comboUrl :c.comboDataArray);
 				} else if (c.type == 'Date' || c.type == 'DateTime') {
 					// 生成Id
-					var dateInputId = 'date_input_' + c.dataIndex;
+					var dateInputId = this.config.index + 'date_input_' + c.dataIndex;
 					// 生成input
 					var h = '<label class="layui-form-label xbs768">' + c.name + '</label>\
 							<div class="layui-input-inline xbs768">\
@@ -127,7 +132,7 @@ Grid.prototype = {
 		for (var i = 0; i < this.gridConfig.columns.length; i++) {
 			var c = this.gridConfig.columns[i];
 			if (c.canSearch) {
-				var value = $('[name="search_'+c.dataIndex+'"]').val();
+				var value = $(this.config.tabId).find('[name="search_'+c.dataIndex+'"]').val();
 				searchData['condition.' + c.dataIndex] = value;
 			}
 		}
@@ -142,7 +147,7 @@ Grid.prototype = {
 			// 行开始
 			var tableTitle = '<tr>';
 			// 复选框
-			tableTitle += '<th><input type="checkbox" id="table_select_all"  name="" value=""></th>';
+			tableTitle += '<th><input type="checkbox" id="' + this.config.tableSelectAllId + '"  name="" value=""></th>';
 			// 数据项
 			for (var i = 0; i < this.gridConfig.columns.length; i++) {
 				var c = this.gridConfig.columns[i];
@@ -160,12 +165,12 @@ Grid.prototype = {
 		}
 		$(this.config.tableTitleDiv).html(this.config.tableTitles);
 		// 全选选中事件
-		$('#table_select_all').click(function(){
-			if ($('[name=ids]').not(':checked').length != 0) {
-				$('[name=ids]').prop('checked', true);
+		$('#' + this.config.tableSelectAllId).click(function(){
+			if ($(this.config.tabId).find('[name=ids]').not(':checked').length != 0) {
+				$(this.config.tabId).find('[name=ids]').prop('checked', true);
 			} else {
-				$('[name=ids]').each(function(){
-					$('[name=ids]').removeAttr("checked");
+				$(this.config.tabId).find('[name=ids]').each(function(){
+					$(this.config.tabId).find('[name=ids]').removeAttr("checked");
 				});
 			}
 		});
@@ -191,14 +196,14 @@ Grid.prototype = {
 		
 		// 添加删除按钮
 		if (this.gridConfig.canAdd) {
-			$(obj.config.menusDiv).append('<button class="layui-btn" id="grid_data_add"><i class="layui-icon">&#xe608;</i>添加</button>');
-			$('#grid_data_add').click(function(){
+			$(obj.config.menusDiv).append('<button class="layui-btn" id="' + obj.config.gridAddId + '"><i class="layui-icon">&#xe608;</i>添加</button>');
+			$('#' + obj.config.gridAddId).click(function(){
 				obj.showSavePage();
 			});
 		}
 		if (this.gridConfig.canDelete) {
-			$(obj.config.menusDiv).append('<button class="layui-btn layui-btn-danger" id="grid_data_del"><i class="layui-icon">&#xe640;</i>批量删除</button>');
-			$('#grid_data_del').click(function(){
+			$(obj.config.menusDiv).append('<button class="layui-btn layui-btn-danger" id="' + obj.config.gridDelId + '"><i class="layui-icon">&#xe640;</i>批量删除</button>');
+			$('#' + obj.config.gridDelId).click(function(){
 				obj.del();
 			});
 		}
@@ -301,6 +306,15 @@ Grid.prototype = {
 				}
 			}
 		}
+	},
+	
+	locationPage : function (url) {
+		var obj = this;
+		alert(obj.config.tabId)
+		$.get(url, function(data) {
+			alert(data);
+			$(obj.config.tabId).html(data);
+		});
 	},
 	
 	load : function (pageNum,searchData){
@@ -626,7 +640,7 @@ Grid.prototype = {
 				$('#' + this.config.saveFormId).append(a);
 			} else if (c.type == 'ComboBox') {
 				// 生成Id
-				var id = 'save_combox_' + c.dataIndex.replace('.', '');
+				var id = this.config.index + 'save_combox_' + c.dataIndex.replace('.', '');
 				// 生成input
 				var a = '<div class="layui-form-item">\
 							<label class="layui-form-label">' + labelName + '</label>\
@@ -644,7 +658,7 @@ Grid.prototype = {
 				$('#' + this.config.saveFormId).append(a);
 			}else if(c.type == 'DateTime' || c.type == 'Date'){
 				// 生成Id
-				var dateInputId = 'save_date_input_' + c.dataIndex;
+				var dateInputId = this.config.index + 'save_date_input_' + c.dataIndex;
 				// 生成input
 				var a = '<div class="layui-form-item">\
 							<label class="layui-form-label xbs768">' + labelName + '</label>\
@@ -743,4 +757,5 @@ function initCombox(id, data) {
 	// 重新渲染表单
 	form.render();
 }
+
 	
