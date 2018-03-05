@@ -6,7 +6,7 @@ import java.util.List;
 import com.windf.core.util.reflect.SerializableBaseTypeParameter;
 
 public class Module extends com.windf.core.bean.Module {
-
+	
 	@SerializableBaseTypeParameter
 	private List<Entity> entitys = new ArrayList<Entity>();
 	@SerializableBaseTypeParameter
@@ -16,6 +16,10 @@ public class Module extends com.windf.core.bean.Module {
 	@SerializableBaseTypeParameter
 	private List<Controler> controlers = new ArrayList<Controler>();
 
+	public String getId() {
+		return this.getCode();
+	}
+	
 	public List<Entity> getEntitys() {
 		return entitys;
 	}

@@ -14,11 +14,8 @@ function Grid(config) {
 		tableSelectAllInput : '#select_all_input',
 		tableSelectInput : '.grid_id',
 		pageDiv : '#grid-page-count',
-		tableForm : '#form',
 		menusDiv : '#grid-menus',
 		tableTitles : undefined,
-		tableTrHtml : undefined,
-		tableTdHtmls : [],
 		gridPage : '#grid-page',
 		savePage : '#savePage',
 		userSavePage : false,
@@ -327,7 +324,7 @@ Grid.prototype = {
 						// 行开始
 						var h = '<tr>';
 						// 复选框
-						h += '<td><input type="checkbox" value="1" name=""></td>';
+						h += '<td><input type="checkbox" value="' + d.id + '" name="ids"></td>';
 						var listIndex = 0;
 						for (var j = 0; j < obj.gridConfig.columns.length; j++) {
 							var c = obj.gridConfig.columns[j];
@@ -345,8 +342,17 @@ Grid.prototype = {
 								}
 							}
 						}
+						// 修改操作
+						var opts = '';
+						if (obj.gridConfig.canUpdate) {
+							opts = '<a style="text-decoration:none" onclick="grid.detail(\'' + d.id + '\')" data-id="' + d.id + '" href="javascript:;" title="修改">\
+	                            				<i class="layui-icon">&#xe642;</i>\
+	                         			</a>';
+						}
+						// 其他操作
 						// 操作列
-						h += '<td class="td-manage"></td>';
+						h += '<td class="td-manage">' + opts + '</td>';
+										
 						// 行结束
 						h += '</tr>';
 						$(obj.config.tableBodyDiv).append(h);
@@ -410,6 +416,61 @@ Grid.prototype = {
 		}
 	},
 	
+	detail : function(id) {
+		var obj = this;
+		// 弹出窗口
+		obj.showSavePage(true);
+		// 构建获取详情的地址
+		var detailUrl = obj.config.gridPath + 'detail.json' + obj.config.queryString;
+		if (detailUrl.indexOf('?') < 0) {
+			detailUrl += '?id=' + id;
+		} else {
+			detailUrl += '&id=' + id;
+		}
+		// 请求数据，填充表单
+		$.getJSON(detailUrl, function(json){
+			var data = json.data;
+			for (var i = 0; i < obj.gridConfig.columns.length; i++) {
+				var g = obj.gridConfig.columns[i];
+				if (g.type == 'ComboBox' || g.type == 'ComboBox') {
+					var newDataIndex = g.dataIndex.replace('.name', '.id');
+					$('#' + obj.config.saveFormId).find('[name="entity.' + newDataIndex + '"]').val(obj._getValue(data, newDataIndex));	
+					$('#' + obj.config.saveFormId).find('[name="'+g.name+'temp"]').attr("value",obj._getValue(data, newDataIndex));	
+				} else if (g.type == 'Date' || g.type == 'DateTime'){
+					$('#' + obj.config.saveFormId).find('[name="entity.' + g.dataIndex + '"]').val(obj._getValue(data, g.dataIndex));
+				} else if (g.type == 'editor'){
+					var ue = UE.getEditor($("#editor_"+g.dataIndex).attr("id"));
+					var text = obj._getValue(data, g.dataIndex);
+					try {
+						ue.execCommand('inserthtml', ''+text+'');
+					} catch(e) {
+						
+					}
+					ue.addListener("ready", function (text) {
+						var obj = this;
+						return function(text){
+							obj.focus();
+							ue.execCommand('inserthtml', ''+text+'');
+						}
+					}(text));
+				} else {
+					// TODO 暂不处理checkbox，redio
+					$('#' + obj.config.saveFormId).find('[name="entity.' + g.dataIndex + '"]').val(obj._getValue(data, g.dataIndex));
+				}
+			}
+			
+		})
+	},
+	
+	del : function() {
+	},
+	
+	showSavePage : function(isUpdate) {
+		x_admin_show('添加', this._initSavePage(isUpdate));
+		// 重新渲染表单
+		form.render();
+	},
+	
 	_getColumnDisplay : function (d, c, dataIndex) {
 		dataIndex = dataIndex? dataIndex: c.dataIndex;
 		var obj = this;
@@ -430,16 +491,21 @@ Grid.prototype = {
 		}
 		return (result == '' || result == undefined)? '&nbsp;': result;
 	},
+	
 	_replaceValue : function (html, d) {
 		var result = html;
 		
-		if (result.indexOf('\\${') > 0 || result.indexOf('\\${') > 0 ) {
+		if (result.indexOf('${') > 0 || result.indexOf('@{') > 0 ) {
 			for (var i = 0; i < this.gridConfig.columns.length; i++) {
 				var c1 = this.gridConfig.columns[i];
 				var reg = new RegExp('\\${' + c1.dataIndex + '}',"g");   
 				result = result.replace(reg, this._getValue(d, c1.dataIndex));
 				reg = new RegExp('@{' + c1.dataIndex + '}',"g");   
 				result = result.replace(reg, this._getValue(d, c1.dataIndex));
+				
+				if (result.indexOf('${') < 0 && result.indexOf('@{') < 0 ) {
+					break;
+				}
 			}
 		}
 		
@@ -459,31 +525,17 @@ Grid.prototype = {
 	_btnStyle : function(name) {
 	},
 	
-	del : function() {
-	},
-	
-	detail : function(id) {
-		var obj = this;
-		
-	},
-	
-	showSavePage : function(isUpdate) {
-		x_admin_show('添加', this._initSavePage(isUpdate));
-		// 重新渲染表单
-		form.render();
-	},
-	
 	_initSavePage : function(isUpdate){
-		// 如果存在，直接返回
-		if ($('#' + this.config.saveFormId).attr('inited')) {
-			return $('#' + this.config.saveFormId);
+		// 如果存在，删除
+		if ($('#' + this.config.saveFormId)) {
+			$('#' + this.config.saveFormId).remove();
 		}
 		// 创建表单
 		$('body').append('<form class="layui-form" style="display:none; padding:10px 20px;" id="' + this.config.saveFormId + '" onsubmit="return false;" method="post"></form>');
 		// 绑定事件
 		var obj = this;
 		$('#' + this.config.saveFormId).submit(function() {
-			obj.save();
+			obj.save(isUpdate);
 			return false;
 		});
 		// 生成列	
@@ -563,10 +615,8 @@ Grid.prototype = {
 			          </div>\
 			        </div>';
 		$('#' + this.config.saveFormId).append(h);
-		// 设置已经初始化
-		$('#' + this.config.saveFormId).attr('inited', 'true');
+		// 返回jquery对象
 		return $('#' + this.config.saveFormId);
-		
 	},
 	
 	getSelections : function () {
