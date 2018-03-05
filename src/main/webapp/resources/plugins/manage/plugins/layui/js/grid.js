@@ -13,7 +13,7 @@ function Grid(config) {
 		tableBodyDiv : '#grid-data',
 		tableSelectAllInput : '#select_all_input',
 		tableSelectInput : '.grid_id',
-		pageDiv : '#page',
+		pageDiv : '#grid-page-count',
 		tableForm : '#form',
 		menusDiv : '#grid-menus',
 		tableTitles : undefined,
@@ -124,7 +124,8 @@ Grid.prototype = {
 		});
 	},
 
-	search : function () {
+	search : function (pageNum) {
+		pageNum = pageNum? pageNum: this.pageNum;
 		var listIndex = 0;
 		var searchData = {};
 		for (var i = 0; i < this.gridConfig.columns.length; i++) {
@@ -135,7 +136,7 @@ Grid.prototype = {
 			}
 		}
 		//请求
-		this.load(this.pageNum,searchData);
+		this.load(pageNum,searchData);
 	},
 
 	initTitle : function () {
@@ -351,20 +352,22 @@ Grid.prototype = {
 						$(obj.config.tableBodyDiv).append(h);
 					}
 					
-					// 分页 TODO
-					if (true || data.totalCount > obj.pageSize) {
+					// 分页
+					$(obj.config.pageDiv).text(data.totalCount);	// 总数
+					if (data.totalCount > obj.pageSize) {
 						laypage.render({
 						  elem: 'grid-page',
 						  count: data.totalCount,
+						  curr: obj.pageNum,
 						  limits:[10,20,50,100],
-						  jump: function(obj, first){
-						    //obj包含了当前分页的所有参数，比如：
-						    console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
-						    console.log(obj.limit); //得到每页显示的条数
+						  jump: function(pageObj, first){
+						  	// 设置分页大小和当前分页
+						    obj.pageSize = pageObj.limit;
+						    obj.pageNum = pageObj.curr;
 						    
 						    //首次不执行
 						    if(!first){
-						      //do something
+						    	obj.search(pageObj.curr);
 						    }
 						  }
 						});

@@ -7,11 +7,8 @@
 		</div> 
 	</form>
 	<xblock>
-		<div id="grid-menus">
-		</div>
-		<!--
-		<span class="x-right" style="line-height:40px">共有数据：<span id=""></span>条</span>
-		-->
+		<span id="grid-menus"></span>
+		<span class="x-right" style="line-height:40px">共有数据：<span id="grid-page-count"></span>条</span>
 	</xblock>
 	<table class="layui-table" id="grid-table">
 		<thead id="grid-thead">
