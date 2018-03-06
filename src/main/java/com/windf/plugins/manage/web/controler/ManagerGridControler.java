@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.windf.core.bean.Page;
 import com.windf.core.exception.UserException;
-import com.windf.core.frame.SessionContext;
 import com.windf.core.util.CollectionUtil;
 import com.windf.core.util.StringUtil;
 import com.windf.plugins.manage.Constant;
@@ -26,7 +25,6 @@ public abstract class ManagerGridControler<T> extends BaseManagerControler<T> {
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("queryString", request.getQueryString());
 		data.put("controlerPath", path.getControlerPath());
-		data.put(Constant.SESSION_TEMPLATE, SessionContext.get(Constant.SESSION_TEMPLATE));
 
 		responseReturn.page(this.getAdapter().getGridPage());
 		return responseReturn.successData(data);

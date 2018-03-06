@@ -17,6 +17,13 @@ $(function () {
             ,content: '<div class="x-content" tab-id="' + id + '" id="tab_content_' + id + '"></div>'
             ,id: id
           })
+
+         // 地址中添加tabId参数
+         if (url.indexOf('?') == -1) {
+         	url = url + '?tabId=' + id;
+         } else {
+         	url = url + '&tabId=' + id;
+         }
 		  
 		  $.get(url, function(data) {
 			  $('#tab_content_' + id).html(data);
@@ -151,7 +158,7 @@ $(function () {
                 }
             };
             
-            tab.tabAdd(title,url,index+1);
+            tab.tabAdd(title,url, index+1);
             tab.tabChange(index+1);
         }
         

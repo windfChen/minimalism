@@ -4,29 +4,30 @@ String.prototype.startsWith = function(str) {
 }
 
 function Grid(config, index) {	
+	index = index? index: '';
 	var defaultConfig = {
-		index: index? index: '',
-		tabId: index? '#tab_content_' + index: 'body',
+		index: index,
+		tabId: index!=''? '#tab_content_' + index: 'body',
 		gridPath:'',
 		queryString:'',
-		tableDiv : '#grid-table',
-		titleDiv : '#title',
-		tableTitleDiv : '#grid-thead',
-		tableBodyDiv : '#grid-data',
-		tableSelectInput : '.grid_id',
-		tableSelectAllId: 'table_select_all',
-		pageDiv : '#grid-page-count',
-		menusDiv : '#grid-menus',
+		tableDiv : '#' + index + '-grid-table',
+		titleDiv : '#' + index + '-title',
+		tableTitleDiv : '#' + index + '-grid-thead',
+		tableBodyDiv : '#' + index + '-grid-data',
+		tableSelectInput : '.' + index + '-grid-id',
+		tableSelectAllId: index + '-table-select-all',
+		pageDiv : '#' + index + '-grid-page-count',
+		menusDiv : '#' + index + '-grid-menus',
 		tableTitles : undefined,
-		gridPage : '#grid-page',
-		gridAddId:'grid_data_add',
-		gridDelId:'grid_data_del',
-		savePage : '#savePage',
+		gridPage : '#' + index + '-grid-page',
+		gridAddId: index + '-grid-data-add',
+		gridDelId: index + '-grid-data-del',
+		savePage : '#' + index + 'savePage',
 		userSavePage : false,
 		saveTdHtmls : [],
-		searchDiv : '#grid-search',
-		searchFormDiv : '#grid-search-form',
-		saveFormId : 'grid-save-form',
+		searchDiv : '#' + index + 'grid-search',
+		searchFormDiv : '#' + index + 'grid-search-form',
+		saveFormId : index + '-grid-save-form',
 		detailOnchange : false
 	}
 	
@@ -289,7 +290,7 @@ Grid.prototype = {
 								if(menu.name == '自定义表单'){
 									window.open(actionAddress,'_blank')
 								}else{
-									window.location = actionAddress;
+									obj.locationPage(actionAddress);
 								}
 							}
 						}
@@ -309,11 +310,34 @@ Grid.prototype = {
 	},
 	
 	locationPage : function (url) {
+		// 构建url
+		if (url.startsWith('../')) {
+			var gridPath = this.config.gridPath;
+			if (gridPath[gridPath.length - 1] == '/') {
+				gridPath = gridPath.substring(0, gridPath.length - 1);
+			}
+			while (url.startsWith('../')) {
+				url = url.substring(3);
+				gridPath = gridPath.substring(0, gridPath.lastIndexOf('/'));
+			}
+			url = gridPath + '/' + url;
+		} else 	if (url.startsWith('/')) {
+			url = basePath + url
+		}
+		// url添加tabId
+		if (url.indexOf('tabId=') == -1) {
+			if (url.indexOf('?') == -1) {
+				url = url + '?tabId=' + this.config.index;
+			} else {
+				url = url + '&tabId=' + this.config.index;
+			}
+		}
 		var obj = this;
-		alert(obj.config.tabId)
-		$.get(url, function(data) {
-			alert(data);
-			$(obj.config.tabId).html(data);
+		$.ajax({
+			url: url,
+			complete: function(xmlHttpRequest, textStatus){
+                $(obj.config.tabId).html(xmlHttpRequest.responseText);
+            }
 		});
 	},
 	
@@ -368,12 +392,12 @@ Grid.prototype = {
 						// 修改操作
 						var opts = '';
 						if (obj.gridConfig.canUpdate) {
-							opts += '<a style="text-decoration:none" onclick="grid.detail(\'' + d.id + '\')" data-id="' + d.id + '" href="javascript:;" title="修改">\
+							opts += '<a style="text-decoration:none" onclick="grid' + obj.gridConfig.index + '.detail(\'' + d.id + '\')" data-id="' + d.id + '" href="javascript:;" title="修改">\
 	                            				<i class="layui-icon">&#xe642;</i>\
 	                         			</a>';
 						}
 						if (obj.gridConfig.canDelete) {
-							opts += '<a style="text-decoration:none" onclick="grid.del(\'' + d.id + '\')" data-id="' + d.id + '" href="javascript:;" title="删除">\
+							opts += '<a style="text-decoration:none" onclick="grid' + obj.gridConfig.index + '.del(\'' + d.id + '\')" data-id="' + d.id + '" href="javascript:;" title="删除">\
 	                            				<i class="layui-icon">&#xe640;</i>\
 	                         			</a>';
 						}
@@ -390,7 +414,7 @@ Grid.prototype = {
 					$(obj.config.pageDiv).text(data.totalCount);	// 总数
 					if (data.totalCount > obj.pageSize) {
 						laypage.render({
-						  elem: 'grid-page',
+						  elem: obj.config.gridPage.substring(1),
 						  count: data.totalCount,
 						  curr: obj.pageNum,
 						  limits:[10,20,50,100],
@@ -407,10 +431,10 @@ Grid.prototype = {
 						});
 					}
 					
-					// 加载表格事件 TODO
-					// gridEvent();
+					// 重置表格事件
+					obj._gridEvent($(obj.config.tableBodyDiv));
 				}else{
-					$(obj.config.tableBodyDiv).html(getPageHtml(1, data.totalCount, 1,[]));	
+					$(obj.config.tableBodyDiv).html('暂时无数据');	
 				}
 			},
 			error:function(XHR, textStatus, errorThrown){
@@ -550,10 +574,6 @@ Grid.prototype = {
 
 			result = this._replaceValue(result, d);
 
-			if (result.indexOf('href="/') > 0 || result.indexOf('href=\'/') > 0) {
-				result = result.replace(/href=\"\//g, 'href="' + basePath + '/').replace(/href=\'\//g, 'href=\'' + basePath + '/');
-			}
-			
 			if (result.startsWith('function')) {
 				eval('result = ' + result + '().toString();');
 			}					
@@ -686,6 +706,18 @@ Grid.prototype = {
 		$('#' + this.config.saveFormId).append(h);
 		// 返回jquery对象
 		return $('#' + this.config.saveFormId);
+	},
+	
+	_gridEvent: function(target) {
+		var obj = this;
+		// 如果没有目标，设置为标签下的所有
+		target = target? target: $(tabId);
+		// 链接跳转事件
+		target.find('a').click(function(){
+			var url = $(this).attr('href');
+			obj.locationPage(url);
+			return false;
+		});
 	},
 	
 	getSelections : function () {
