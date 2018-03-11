@@ -20,6 +20,10 @@
 	</script>
 	<script type="text/javascript" src="${rc.contextPath}/resources/plugins/manage/plugins/layui/js/xadmin.js"></script>
 	<script type="text/javascript" src="${rc.contextPath}/resources/plugins/manage/plugins/layui/js/grid.js"></script>
+
+
+    <link rel="stylesheet" type="text/css" href="${rc.contextPath}/resources/module/development/css/manage.css" />
+    <script type="text/javascript" src="${rc.contextPath}/resources/module/development/js/manage.js"></script>
 </head>
 <body>
     <!-- 顶部开始 -->
