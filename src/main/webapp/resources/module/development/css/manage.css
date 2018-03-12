@@ -1,1 +1,7 @@
 @charset "UTF-8";
+#manage_dev_form {
+	position: absolute;
+    top: 0px;
+    right: 0px;
+    background-color: #333;
+}

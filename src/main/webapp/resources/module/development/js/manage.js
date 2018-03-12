@@ -1,37 +1,27 @@
 $(function(){
-	var md = new ManageDevWindow();
-	md.init();
+	//var md = new ManageDevelopmentControler();
+	//md.init();
 })
 
-function ManageDevWindow(config) {
+function ManageDevelopmentControler(config) {
 	var defaultConfig = {
 		boxId: 'manage_dev_box',
-		formId: 'manage_dev_form'
+		formId: 'manage_dev_form',
+		queryString:'',
+		parentDiv:'.x-content',
+		basePath: basePath,
 	}
 	this.config = $.extend(defaultConfig, config);
   
 }
 
-ManageDevWindow.prototype = {
-	html: '<div id="' + this.config.boxId + '">\
-			<form id="' +  + '" class="layui-form">\
-				\
-			</form>\
-		   </div>',
+ManageDevelopmentControler.prototype = {
 	init: function() {
-		if ($('#' + this.config.boxId).length == 0) {
-			$('body').append(this.html);
-		}
-	},
-	createInput: function(obj){
-		var h = '\
-			<div class="layui-form-item">\
-			    <label class="layui-form-label">obj.labelName</label>\
-			    <div class="layui-input-block">\
-			      <input type="text" name="title" required placeholder="请输入' + obj.labelName + '" autocomplete="off" class="layui-input">\
-			    </div>\
-			</div>';
-
-		return h;
+		var obj = this;
+		 $.get(obj.config.basePath + '/dev/manage/' +'' , function(data) {
+			  $(obj.config.parentDiv).append(data);
+			   // 重新渲染表单
+			   form.render();
+		  });
 	},
 }

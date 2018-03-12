@@ -65,7 +65,13 @@
                     </a>
                     <ul class="sub-menu">
                         <li>
-                            <a _href="${rc.contextPath}/dev/module/" class="first" href="javascript:void(0);">
+                            <a _href="${rc.contextPath}/test/" class="first" href="javascript:void(0);">
+                                <i class="iconfont">&#xe6a7;</i>
+                                <cite>添加模型</cite>
+                            </a>
+                        </li>
+                        <li>
+                            <a _href="${rc.contextPath}/dev/module/" href="javascript:void(0);">
                                 <i class="iconfont">&#xe6a7;</i>
                                 <cite>模块管理</cite>
                             </a>

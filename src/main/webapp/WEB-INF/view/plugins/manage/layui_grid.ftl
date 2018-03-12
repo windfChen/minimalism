@@ -19,6 +19,13 @@
 	<div id="${RequestParameters["tabId"]}-grid-page" ></div>
 	<!-- 右侧内容框架，更改从这里结束 -->
 </div>
+
+<script type="text/javascript">
+	var basePath = '${rc.contextPath}';
+	var moduleCode = '${module.code}';
+	var mBasePath = '${module.basePath}';
+	var resourceBasePath = '${rc.contextPath}/resources/';
+</script>
   <script>
 	$(function(){
 		var queryString = '${data.queryString}';
@@ -30,5 +37,8 @@
 			queryString: queryString
 		},'${RequestParameters["tabId"]}');
 		grid${RequestParameters["tabId"]}.init();
+		
+		md = new ManageDevelopmentControler();
+		md.init();
 	})
   </script>
