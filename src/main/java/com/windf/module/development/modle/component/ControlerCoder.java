@@ -1,11 +1,14 @@
 package com.windf.module.development.modle.component;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import com.windf.core.exception.UserException;
 import com.windf.module.development.Constant;
 import com.windf.module.development.entity.Controler;
 import com.windf.module.development.entity.ControlerMethod;
+import com.windf.module.development.entity.Module;
 import com.windf.module.development.entity.Parameter;
 import com.windf.module.development.modle.file.java.Annotation;
 import com.windf.module.development.modle.file.java.CodeBlock;
@@ -15,6 +18,7 @@ import com.windf.module.development.modle.file.java.Method;
 import com.windf.module.development.modle.file.java.MethodReturn;
 import com.windf.module.development.modle.file.java.code.ParameterGetCoder;
 import com.windf.module.development.modle.file.java.code.ParameterVerifyCoder;
+import com.windf.module.development.util.TemplateUtil;
 
 public class ControlerCoder {
 	private JavaCoder javaCoder;
@@ -117,5 +121,24 @@ public class ControlerCoder {
 		 * 写入
 		 */
 		javaCoder.write();
+	}
+	
+	/**
+	 * 读取模板，获得执行后的模板
+	 * @param templateName
+	 * @param dataMap
+	 * @return
+	 */
+	private List<String> getCodesByTemplate(String templateName, Map<String,Object> dataMap) {
+		List<String> result = null;
+		
+		String templatePath = Module.getConfigPath(Module.getCurrentMoudle(ControlerCoder.class).getCode());
+		try {
+			result = TemplateUtil.getStringByTemplate(templatePath, templateName, dataMap);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 }

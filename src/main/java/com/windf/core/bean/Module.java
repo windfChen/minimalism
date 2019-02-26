@@ -56,9 +56,18 @@ public class Module {
 	 * @return
 	 */
 	public static File getMoudleConfigFileByCode(String code) {
-		String configFilePath = FileUtil.getConfigPath() + Constant.DEFAULT_MODULE_DESCRIPT_PATH + File.separator + code
-				 + File.separator + MODULE_XML_FILE_NAME;
+		String configFilePath = getConfigPath(code) + File.separator + MODULE_XML_FILE_NAME;
 		return FileUtil.getFile(configFilePath);
+	}
+	
+	/**
+	 * 获得模块配置文件根目录
+	 * @param code
+	 * @return
+	 */
+	public static String getConfigPath(String code) {
+		String configFilePath = FileUtil.getConfigPath() + Constant.DEFAULT_MODULE_DESCRIPT_PATH + File.separator + code;
+		return configFilePath;
 	}
 
 	/**

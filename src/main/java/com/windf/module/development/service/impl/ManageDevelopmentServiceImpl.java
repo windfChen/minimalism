@@ -10,7 +10,6 @@ import com.windf.module.development.service.EntityService;
 import com.windf.module.development.service.FieldService;
 import com.windf.module.development.service.ManageDevelopmentService;
 import com.windf.module.development.service.ServiceService;
-import com.windf.plugins.manage.service.ManageGirdService;
 
 @Service
 public class ManageDevelopmentServiceImpl implements ManageDevelopmentService {
@@ -23,9 +22,7 @@ public class ManageDevelopmentServiceImpl implements ManageDevelopmentService {
 	private ServiceService serviceService;
 	@Resource
 	private ControlerService controlerService;
-	@Resource
-	private ManageGirdService<? extends Object> manageGirdService;
-
+	
 	@Override
 	public void saveField(Field field) throws Exception {
 		/*

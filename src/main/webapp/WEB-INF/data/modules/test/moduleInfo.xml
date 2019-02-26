@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<moduleInfo>
+  <entitys>
+    <item>
+      <id>com.windf.module.test.dao.Test</id>
+      <name>Test</name>
+      <parent>AbstractBean</parent>
+      <comment>测试</comment>
+    </item>
+  </entitys>
+  <daos/>
+  <services/>
+  <controlers/>
+  <code>test</code>
+  <name>测试</name>
+  <basePath>/test</basePath>
+  <info>测试</info>
+</moduleInfo>

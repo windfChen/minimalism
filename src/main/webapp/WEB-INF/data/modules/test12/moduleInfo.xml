@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<moduleInfo>
+  <entitys/>
+  <daos/>
+  <services/>
+  <controlers/>
+  <code>test12</code>
+  <name>测试12</name>
+  <basePath>/test12</basePath>
+  <info>测试12</info>
+</moduleInfo>

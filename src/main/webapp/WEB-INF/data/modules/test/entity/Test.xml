@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Test>
+  <fields>
+  </fields>
+  <id>com.windf.module.test.dao.Test</id>
+  <name>Test</name>
+  <parent>AbstractBean</parent>
+  <comment>测试</comment>
+</Test>
